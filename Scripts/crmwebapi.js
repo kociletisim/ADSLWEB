@@ -241,7 +241,11 @@
          },
          getSerialsOnPersonel: function(data, onsucces, onerror, before) {
              getData("POST", "Filter/getSerialsOnPersonel", data, onsucces, onerror, before)
-         }
+         },
+         getDocumentIds: function (data, onsucces, onerror, before) {
+             getData("POST", "Document/getDocumentIds", data, onsucces, onerror, before)
+     },
+         
      }
  })();
 

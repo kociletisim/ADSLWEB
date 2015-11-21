@@ -43,6 +43,7 @@ var dataModel = {
     il: ko.observable(),
     ilce: ko.observable(),
     user: ko.observable(),
+   
 
     queryButtonClick: function() {
         self.getFilter(1, dataModel.rowsPerPage());
@@ -311,6 +312,8 @@ var dataModel = {
             dataModel.navigate.gotoPage(pc);
         },
     },
+  
+
 
     renderBindings: function() {
         var self = this;

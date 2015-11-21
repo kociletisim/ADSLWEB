@@ -86,6 +86,7 @@ var dataModel = {
     info:ko.observable(),//eğer müşterinin dökümanları geliyorsa kaydet butonunu disable yapalım
     closedTaskqueueResponseMessage: ko.observable(),
     user:ko.observable(),
+    docIds: ko.observableArray(),
 
     getcategory: function () {
         var self = this;
@@ -324,6 +325,17 @@ var dataModel = {
         console.log(postdata);
     },
 
+    getDocs: function () {
+        var self = this;
+        var data = {
+            taskid: 41,
+            taskstate: 9117,
+            campaignid: null,
+            productIds: null
+        };
+        crmAPI.getDocumentIds(data, function (a, b, c) { self.docIds(a); }, null, null);
+
+    },
     renderBindings: function () {
         var self = this;
 
