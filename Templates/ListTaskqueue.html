@@ -1,0 +1,435 @@
+﻿<style>
+        #taskquetable {
+            cursor: pointer;
+            color: #000;
+        }
+            #taskquetable tr:hover {
+                background: #00ffff;
+            }
+        .selected {
+            background: #6fc679;
+        }
+
+        .a { position: relative; padding:0 }
+      .a i {
+        position: absolute; bottom: 10px; right: 24px; top: auto; cursor: pointer;
+      }
+    </style>	
+    <div id="bindingContainer" class="container-fluid" style="background-color: lightcyan">
+			<div class="col-md-12 container" style="padding: 0 !important; margin: 20px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
+				<div class="panel-group" id="accordion">
+					<div class="panel" id="panel2" style="border: 1px solid #fff !important;">
+						<div class="panel-heading filter-gradient">
+                            <a data-toggle="collapse" data-target="#collapse1"
+                               href="javascript:void(0)" class="collapsed filtertitle">
+                                <h4 class="panel-title">
+                                    Filtreleme
+                                    <span class="glyphicon glyphicon glyphicon-filter" aria-hidden="true"></span>
+                                </h4>
+                            </a>
+						</div>
+						<div id="collapse1" class="panel-collapse collapse">
+							<div class="panel-body">
+							<div class="col-xs-12 col-sm-4 col-md-4">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<label class="control-label" for="durumtanimi">İl</label>
+                                    <input type="text" class="form-control" id="Text1" data-bind="value: il, valueUpdate: 'keydown', event: { keypress: enterfilter }" />
+								<!--	 <span id="site" class="kth col-md-12 form-control" data-bind="value:sitename"></span>-->
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<div class="col-md-12" style="padding: 0;">
+										<label class="control-label" for="blokadi">İlçe</label>
+									</div>
+									<div class="col-md-12" style="padding: 0;">
+                                        <input type="text" class="form-control" id="Text1" data-bind="value: ilce, valueUpdate: 'keydown', event: { keypress: enterfilter }" />
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<label class="control-label" for="durumtanimi">Abone Ad-Soyad</label>
+									<input type="text" class="form-control" id="Text2" data-bind="value: customername, valueUpdate: 'keydown', event: { keypress: enterfilter }" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<label class="control-label" for="durumtanimi">Atanma Tarihi</label>
+									<div class="col-md-12 a">
+                                        <input type="text" id="daterangepicker1" class="form-control" data-bind="value:attachmentDate, valueUpdate: 'keydown', event: { keypress: enterfilter }">
+                                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                    </div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<label class="control-label" for="durumtanimi">Randevu Tarihi</label>
+									<div class="col-md-12 a">
+                                        <input type="text" id="daterangepicker2" class="form-control" data-bind="value: appointmentDate, valueUpdate: 'keydown', event: { keypress: enterfilter }">
+                                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                    </div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<label class="control-label" for="durumtanimi">Sonlanma Tarihi</label>
+									 <div class="col-md-12 a">
+                                        <input type="text" id="daterangepicker3" class="form-control" data-bind="value: consummationDate, valueUpdate: 'keydown', event: { keypress: enterfilter }">
+                                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                    </div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<div class="col-md-12">
+										<label class="control-label" for="taskNameFilter">Task Adı</label>
+									</div>
+									<div class="col-md-12">
+										<select id="taskNameFilter" data-bind="options: tasks, optionsText: 'taskname', optionsValue: 'taskname', value: selectedTaskname, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple"></select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<div class="col-md-12">
+										<label class="control-label" for="taskadi">İnternet Servis Sağlayıcı</label>
+									</div>
+									<div class="col-md-12">
+										<select id="servissaglayici" data-bind="options: isslist, optionsText: 'issText', optionsValue: 'issText', value: selectedIss, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple">
+										
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<div class="col-md-12">
+										<label class="control-label" for="taskadi">Abone Durumu</label>
+									</div>
+									<div class="col-md-12">
+										<select id="abonedurumu" data-bind="options: ctstatuslist, optionsText: 'Text', optionsValue: 'Text', value: selectedCustomerstatus, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple">
+											
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<div class="col-md-12">
+										<label class="control-label" for="personel">Personel</label>
+									</div>
+									<div class="col-md-12">
+										<select data-size="10" id="personel" data-bind="options: personellist,
+                                                                                        optionsText: 'personelname',
+                                                                                        optionsValue: 'personelname',
+                                                                                        value: selectedPersonelname,
+                                                                                        valueUpdate: 'keydown',
+                                                                                        event: { keypress: enterfilter }" multiple="multiple">										
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
+								<div class="form-group-sm has-info cls-margin-bottom">
+									<div class="col-md-12">
+										<label class="control-label" for="taskdurumu">Task Durumu</label>
+									</div>
+									<div class="col-md-12">
+										<select id="taskdurumu"  data-bind="options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstate', value: selectedTaskstatus, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple" >										    
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4" style="margin-top: 21px;">
+<!--								 <input  type="checkbox" data-bind="checked:atanmamistasklar" />Atanmamış Tasklar </input>-->
+                                <div class="btn-group pull-right" role="group">
+									<button data-bind="click: getFilter(1,dataModel.rowsPerPage())"  type="button" class="btn btn-success">Sorgula</button>
+									<button  data-bind="click: clean" type="button" class="btn btn-primary">Temizle</button>
+								</div>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="col-md-6 col-md-offset-3" data-bind="visible: isLoading() == false && taskqueuelist().length==0" style="position: absolute; top: 150px;" id="id_alert" onclick="setTimeout(function () { $('#id_alert').css({ display: 'none' }); }, 1000)">
+		            <div class="alert alert-danger alert-dismissible cls_alert" role="alert" style="height: 100px;">
+			            <button type="button"class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			           <span class="glyphicon glyphicon-search"> <strong>Bence Yanlış Filtreleme Yaptın.</strong> </span>
+                        <br /><strong>Ya da böyle bir kayıt yok</strong>
+
+		            </div>
+	            </div>
+
+			<div class="col-md-12 container" style="padding: 0 !important; margin: 20px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
+				<div class="panel-group">
+					<div class="panel" style="border: 1px solid #fff !important;">
+						<div class="panel-heading task-gradient">
+							<div class="row cls-padding-0px">
+								<div class="col-xs-6 col-sm-6 col-md-6" data-bind="ifnot: isLoading" >
+									Task İşlemleri
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    Toplam sorgu süresi 
+                                    <span id="querytime" data-bind="text: querytime"></span> saniye -&nbsp;&nbsp;
+                                    Toplam
+                                    <span id="totalCount" style="color:#000 ;font-family:'Comic Sans MS', cursive" data-bind="text: totalRowCount"></span> kayıttan  &nbsp;&nbsp;
+                                    <span id="Span1" style="color:#000;font-family:'Comic Sans MS', cursive " data-bind="text: taskqueuelist().length"></span> adet görüntülüyorsunuz  &nbsp;&nbsp;
+                                    <span class="glyphicon   glyphicon glyphicon-dashboard " aria-hidden="true"></span>
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6">
+									<!--pagination Starts-->
+									<nav class="text-center" style="margin: 0px !important;padding: 0px !important;">
+										<ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
+											<li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); } ,enable:pageNo>1">&lt;&lt;</a></li>
+											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage();}">&lt;</a></li>
+                                            <li><select> <option >1</option> </select></li>
+											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
+											<li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+										</ul>
+									</nav>
+									<!--pagination finish-->
+								</div>
+							</div>
+						</div>
+						<div class="panel-body" style="margin: 0 15px 0 15px !important; padding: 0px !important;">
+							<div class="container-fluid cls-padding-0px cls-deneme-height ">
+								<div class="row cls-margin-task">
+									<div class="col-lg-12 cls-padding-0px">
+										<div class="col-lg-12 cls-task cls-padding-0px table-responsive">
+											<table class="table table-bordered table-hover" id="taskquetable" data-pagination="true" data-search="true">
+												<thead>
+													<tr>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">
+															<div class="dropdown">
+																<a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" style="padding: 2px 15px;">
+																	İşlemler <span class="caret"></span>
+																</a>
+																<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+																	<li class="dropdown-submenu">
+																		<a tabindex="-1" href="#">Seçim</a>
+																		<ul class="dropdown-menu">
+																			<li><a tabindex="-1" href="#">Tümünü Seç</a></li>
+																			<li><a href="#">Seçimi Çevir</a></li>
+																			<li><a href="#">Seçimi Temizle</a></li>
+																		</ul>
+																	</li>
+                                                                    <li class="divider"></li>
+                                                                    <li><a href="#randevu" role="button" data-toggle="modal">Randevu Tarihi</a></li>
+											                        <li><a href="#personelatama" data-bind="click:attacheablecontrol" role="button" data-toggle="modal">Personel Ata</a></li>
+											                        <li><a href="#sonlandir" role="button" data-toggle="modal">Taskları Sonlandır</a></li>
+                                                                    <li class="divider"></li>
+                                                                      <li class="dropdown-submenu">
+												                            <a tabindex="-1" href="#">Kat Ziyaret İşlemleri</a>
+												                            <ul class="dropdown-menu">
+													                            <li><a href="#katziyareti1" role="button" class="btn" data-toggle="modal" style="float: left;">Kat Ziyaret Sonuçlarını Toplu Gir</a></li>
+													                            <li><a href="#katziyareti2" role="button" class="btn" data-toggle="modal" style="float: left;">Müşteri Statülerini Toplu Değiştir</a></li>
+													                            <li><a href="#katziyareti3" role="button" class="btn" data-toggle="modal" style="float: left;">Müşteri Kat Ziyareti Toplu Task Kapama</a></li>
+												                            </ul>
+                                                                     </li>
+                                                                    	<li class="divider"></li>
+																	<li><a href="#">Excel'e Kaydet</a></li>
+																</ul>
+															</div>
+														</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Task</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">İl</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">İlçe</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Müşteri Ad-Soyad</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Müşteri Statü</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">ISS</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Atanma Tarihi</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Randevu Tarihi</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Personel</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Durum</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Sonlanma Tarihi</th>
+														<th class="col-md-1" style="border-right: 1px solid #ddd;">Açıklama</th>
+													</tr>                                                   
+													
+												</thead>
+												<tbody>
+                                                    <tr style="height:500px" data-bind="visible:isLoading">
+														<td data-bind="visible: isLoading" colspan="12" style="background: url('/img/load.gif')  center no-repeat;"></td>
+													</tr>
+													<!-- ko foreach: taskqueuelist -->
+													<tr data-bind="attr:{class :attachedpersonel==null? 'danger' : (taskstatepool==null ?'info' :'success' )}" style="line-height: 50px;" >
+													
+														<td><a href="#TaskQueueEditForm" data-bind="attr: {href:'#TaskQueueEditForm?'+taskorderno}">
+																<button data-bind="visible:attachedpersonel && attachedpersonel.personelname" id="duzenle" type="button" class="btn btn-primary btn-lg" style="padding: 3px; border-radius: 0px; font-size:14px;">
+																	Düzenle
+																</button>
+														    </a>
+																<input class="sel"  type="checkbox" data-bind="value:taskorderno" />
+														</td>
+														<td  style=" color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" data-bind="text:task.taskname"></td>
+														<td data-bind="text: attachedcustomer && (attachedcustomer.il && attachedcustomer.il.ad || '&lt;boş&gt;') " ></td>
+														<td data-bind="text: attachedcustomer && (attachedcustomer.ilce && attachedcustomer.ilce.ad || '&lt;boş&gt;') "></td>
+														<td style="color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" data-bind="text: attachedcustomer && (attachedcustomer.customername && (attachedcustomer.customername) || '&lt;boş&gt;')"></td>
+														<td data-bind="text: attachedcustomer && (attachedcustomer.customer_status && attachedcustomer.customer_status.Text || '&lt;boş&gt;') "></td>
+														<td data-bind="text: attachedcustomer && (attachedcustomer.issStatus && attachedcustomer.issStatus.issText || '&lt;boş&gt;')"></td>
+														<td data-bind="text: attachmentdate ? moment(attachmentdate).calendar() : '&lt;boş&gt;'" ></td>
+														<td data-bind="text: (appointmentdate ? moment(appointmentdate).calendar() : '&lt;boş&gt;' )"></td>
+														<td data-bind="text: (attachedpersonel && attachedpersonel.personelname || '&lt;atanmamış&gt;') "></td>
+														<td style="font-size:large;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" data-bind="text:(taskstatepool &&taskstatepool.taskstate || 'AÇIK')"></td>
+														<td data-bind="text: consummationdate ? moment(consummationdate).calendar() : '&lt;boş&gt;'"></td>
+														<td data-bind="text: description"></td> 
+                                                         </tr>
+                                                    <!-- /ko -->                                                    
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--pagination Starts-->
+							<nav class="text-center" style="margin: 0px !important;padding: 0px !important;">
+										<ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
+											<li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); }, enable: pageNo > 1">&lt;&lt;</a></li>
+											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage(); }">&lt;</a></li>
+                                            <li><select >
+                                            <option value="0">0</option>
+                                            </select></li>
+											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
+											<li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+										</ul>
+									</nav>
+							<!--pagination finish-->
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+    <!-- İşlemler *personel atama* For Modal Start -->
+     <div class="modal fade" id="personelatama" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="margin-top: 50px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" data-bind="click:redirect" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Personel Atama</h4>
+                    </div>
+                    <div class="modal-body" style="display: inline-block; position: absolute; min-height: 50px;">
+                        <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: !errorcode()">
+                            <select id="personelatamacombo" data-bind="options: dataModel.attacheablePersonelList, optionsText: 'personelname', optionsValue: 'personelname', value: selectedAttachmentPersonelname " multiple="multiple"></select>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: errorcode()">
+                            <span class="label label-success" data-bind="text: errormessage , visible:errorcode()==1" ></span>
+                            <span class="label label-danger" data-bind="text: errormessage, visible: errorcode() != 1" ></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bind="click:getFilter(1,dataModel.rowsPerPage())" data-dismiss="modal">Kapat</button>
+                        <button type="button" data-bind="click: attachmentpersonel" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+	<!-- İşlemler *personel atama* For Modal Finish-->
+    <!-- Kat Ziyaret Sonuçlarını Toplu Gir For Modal Start-->
+	<div class="modal fade" id="katziyareti1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="H1">Kat Ziyaret Sonuçlarını Toplu Gir</h4>
+				</div>
+				<div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+						<p>Kat Ziyaret Sonucu</p>
+					</div>
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+						<select class="form-control">
+							<option></option>
+							<option>KZS1</option>
+							<option>KZS2</option>
+							<option>KZS3</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+					<button type="button" class="btn btn-primary">Kaydet</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Kat Ziyaret Sonuçlarını Toplu Gir For Modal Finish-->
+    <!--Müşteri durumlarını Toplu Gir For Modal Start-->
+	<div class="modal fade" id="katziyareti2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="H2">Müşteri Durumlarını Toplu Gir</h4>
+				</div>
+				<div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+						<p>Müşteri Statüsünü Seçiniz</p>
+					</div>
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+						<select class="form-control">
+							<option></option>
+							<option>MSS1</option>
+							<option>MSS2</option>
+							<option>MSS3</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+					<button type="button" class="btn btn-primary">Kaydet</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Müşteri durumlarını Toplu Gir For Modal Finish-->
+    <!-- Müşteri ve Kat Ziyaret Sonuçlarını Toplu Gir For Modal Start-->
+	<div class="modal fade" id="katziyareti3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document" style="margin-top: 50px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="H3">Müşteri Ve Kat Ziyareti Sonuçlarını Toplu Gir</h4>
+				</div>
+				<div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+						<p>Müşteri Statüsünü Seçiniz</p>
+					</div>
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+						<select class="form-control">
+							<option></option>
+							<option>MSS1</option>
+							<option>MSS2</option>
+							<option>MSS3</option>
+						</select>
+					</div>
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+						<p>Kat Ziyaret Sonucu</p>
+					</div>
+					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+						<select class="form-control">
+							<option></option>
+							<option>KZS1</option>
+							<option>KZS2</option>
+							<option>KZS3</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+					<button type="button" class="btn btn-primary">Kaydet</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Müşteri ve Kat Ziyaret Sonuçlarını Toplu Gir For Modal Finish-->
+   </div>
+
+
+<script>
+    $(document).ready(function () {
+        moment.locale('tr');
+    }); 
+</script>
+<script src="../Scripts/daterangepicker.js"></script>
+<script type="text/javascript" src="Templates/ListTaskqueue.js"></script>
