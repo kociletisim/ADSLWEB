@@ -152,7 +152,7 @@
          getProductList: function(onsuccess, onerror, before) {
              getData("POST", "Filter/getProductList", {}, onsuccess, onerror, before)
          },
-         getTaskQueues: function(data, onsuccess, onerror, before) {
+         getTaskQueues: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/getTaskQueues", data, onsuccess, onerror, before)
          },
          closeTaskQueues: function(data, onsuccess, onerror, before) {
