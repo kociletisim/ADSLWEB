@@ -44,6 +44,9 @@ var dataModel = {
     ilce: ko.observable(),
     user: ko.observable(),
 
+    queryButtonClick: function() {
+        self.getFilter(1, dataModel.rowsPerPage());
+    },
     getTasks: function() {
         var self = this;
         var data = {
@@ -265,7 +268,7 @@ var dataModel = {
                 self.selectedtaskorderno(ids);
             });
 
-        }, null, null)
+        }, null, null);
 
     },
     select: function(d, e) {
@@ -287,7 +290,7 @@ var dataModel = {
     },
     navigate: {
         gotoPage: function(pageNo) {
-            if (pageNo == dataModel.pageNo() || pageNo <= 0 || pageNo > dataModel.pageCount()) return;
+            if (pageNo === dataModel.pageNo() || pageNo <= 0 || pageNo > dataModel.pageCount()) return;
             dataModel.getFilter(pageNo, dataModel.rowsPerPage());
             dataModel.isLoading(false);
         },
