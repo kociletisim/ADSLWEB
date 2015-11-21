@@ -43,6 +43,7 @@ var dataModel = {
     il: ko.observable(),
     ilce: ko.observable(),
     user: ko.observable(),
+   
 
     getTasks: function() {
         var self = this;
@@ -308,6 +309,8 @@ var dataModel = {
             dataModel.navigate.gotoPage(pc);
         },
     },
+  
+
 
     renderBindings: function() {
         var self = this;
