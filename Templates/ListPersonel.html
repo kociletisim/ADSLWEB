@@ -19,6 +19,18 @@
                                         <input data-bind="value:personelname" type="text" class="form-control" id="exampleInputName2" />
 									</div>
 								</div>
+                                <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <div class="form-group-sm has-info cls-margin-bottom">
+                                        <label class="control-label" for="u-1">İl</label>
+                                        <select id="sorguil" data-bind="options:ilList,optionsValue:'kimlikNo',optionsText:'ad',optionsCaption:'Seçiniz',value:selectil" class="form-control" multiple="multiple"></select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <div class="form-group-sm has-info cls-margin-bottom">
+                                        <label class="control-label" for="u-1">İlçe</label>
+                                        <select id="sorguilce" data-bind="options:ilceList,optionsValue:'kimlikNo',optionsText:'ad',optionsCaption:'Seçiniz',value:selectilce" class="form-control" multiple="multiple"></select>
+                                    </div>
+                                </div>
 								<div class="col-xs-12 col-sm-4 col-md-3" style="margin-top: 21px;">
 									<div class="btn-group pull-right" role="group">
 										<button data-bind="click:getPersonels(1,dataModel.rowsPerPage())" type="button" class="btn btn-success">Sorgula</button>
@@ -58,7 +70,7 @@
 								<div class="row cls-margin-task">
 									<div class="col-lg-12 cls-padding-0px">
 										<div class="col-lg-12 cls-task cls-padding-0px">
-											<table class="table" id="taskquetable" data-pagination="true" data-search="true">
+											<table class="table" id="personeltable" data-pagination="true" data-search="true">
 												<thead>
 													<tr>
 														<th class="col-md-1" style="border-right: 1px solid #ddd;">
@@ -81,14 +93,15 @@
 																		</ul>
 																	</li>
 																	<li class="divider"></li>
-																	<li><a href="#">Excel'e Kaydet</a></li>
+																	<li><a onClick ="$('#personeltable').tableExport({ type: 'excel', escape: 'false' });">Excel'e Kaydet</a></li>
 																</ul>
 															</div>
 														</th>
 														<th class="col-md-2" style="border-right: 1px solid #ddd;">Personel Adı</th>
 														<th class="col-md-2" style="border-right: 1px solid #ddd;">Görev</th>
 														<th class="col-md-2" style="border-right: 1px solid #ddd;">Şifre</th>
-														<th class="col-md-2" style="border-right: 1px solid #ddd;">Telefon</th>
+														<th class="col-md-2" style="border-right: 1px solid #ddd;">İl</th>
+                                                        <th class="col-md-2" style="border-right: 1px solid #ddd;">İlçe</th>
 														<th class="col-md-2" style="border-right: 1px solid #ddd;">E-Posta</th>
 														<th class="col-md-1">Notlar</th>
 													</tr>
@@ -105,7 +118,8 @@
 														<td data-bind="text:personelname"></td>
 														<td data-bind="text:category"></td>
 														<td data-bind="text:password"></td>
-														<td data-bind="text:mobile"></td>
+														<td data-bind="text: il ?il.ad : null"></td>
+                                                        <td data-bind="text:ilce ?ilce.ad:null"></td>
 														<td data-bind="text:email"></td>
 														<td data-bind="text:notes"></td>
 													</tr>
@@ -158,7 +172,7 @@
                         <p>Görev</p>
                     </div>
                     <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
-                        <select id="object" data-bind="options:$root.objectList,optionsValue:'typeid',optionsText:'typname',optionsCaption:'Seçiniz',value:category" class="form-control" multiple="multiple">                         
+                        <select id="object" data-bind="selectedOptions: $root.getRoles(),options:$root.objectList,optionsValue:'typeid',optionsText:'typname',optionsCaption:'Seçiniz'" class="form-control" multiple="multiple">                         
                         </select>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
@@ -178,6 +192,18 @@
                     </div>
                     <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
                         <input data-bind="value:email" type="email" class="form-control" id="Text7" />
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>İl</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="editil" data-bind="options:$root.ilList,optionsValue:'kimlikNo',optionsText:'ad',optionsCaption:'Seçiniz',value:ilKimlikNo" class="form-control" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>İlce</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="editilce" data-bind="options:$root.ilceList,optionsValue:'kimlikNo',optionsText:'ad',optionsCaption:'Seçiniz',value:ilceKimlikNo" class="form-control" multiple="multiple"></select>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Notlar</p>
@@ -236,6 +262,18 @@
                     </div>
                     <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
                         <input data-bind="value:newemail" type="text" class="form-control" id="Text11"  />
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>İl</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="newil" data-bind="options:$root.ilList,optionsValue:'kimlikNo',optionsText:'ad',optionsCaption:'Seçiniz',value:selectedIl" class="form-control" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>İlce</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="newilce" data-bind="options:$root.ilceList,optionsValue:'kimlikNo',optionsText:'ad',optionsCaption:'Seçiniz',value:selectedIlce" class="form-control" multiple="multiple"></select>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Notlar</p>

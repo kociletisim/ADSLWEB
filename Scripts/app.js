@@ -28,6 +28,10 @@ $(window).bind("hashchange", function () {
     $("#newccsales").click(function () {
         $("#ModalContainer").loadTemplate("Templates/New/CCSales.html");
     });
+    $("#worklist").click(function () {
+        $("#templateContainer").loadTemplate("Templates/Worklist.html");
+    });
+    
 
     //$("#fibersatis").click(function () {
     //    $("#ModalContainer").loadTemplate("Templates/New/FiberSales.html");
@@ -54,8 +58,7 @@ $(window).bind("hashchange", function () {
 
     });
 
-
-    $(document).ready(function () { 
+    $(document).ready(function () {
         crmAPI.userInfo(function (a, b, c) {
             $("#username").text(a.userFullName);
             if (a.userRole != 2147483647) {

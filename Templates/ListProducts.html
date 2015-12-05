@@ -170,6 +170,12 @@
                     <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <select id="autotask" data-bind="options:$root.autoTaskList,optionsValue:'taskid',optionsText:'taskname',optionsCaption:'Seçiniz'" multiple="multiple"></select>
                     </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Dökümanlar</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <select id="editdocs" data-bind="options:$root.docList,optionsValue:'documentid',optionsText:'documentname',optionsCaption:'Seçiniz'" multiple="multiple"></select>
+                    </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: $root.savemessagecode()">
                         <span class="label label-success" data-bind="text: $root.savemessage , visible:$root.savemessagecode()==1"></span>
                         <span class="label label-danger" data-bind="text: $root.savemessage, visible: $root.savemessagecode() != 1"></span>
@@ -216,6 +222,12 @@
                     <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <select id="newautotask" data-bind="options:$root.autoTaskList,optionsText:'taskname',optionsValue:'taskid',optionsCaption:'Seçiniz'" multiple="multiple">                           
                         </select>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Dökümanlar</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <select id="newdocs" data-bind="options:$root.docList,optionsValue:'documentid',optionsText:'documentname',optionsCaption:'Seçiniz'" multiple="multiple"></select>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: $root.savemessagecode()">
                         <span class="label label-success" data-bind="text: $root.savemessage , visible:$root.savemessagecode()==1"></span>

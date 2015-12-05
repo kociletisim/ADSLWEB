@@ -16,7 +16,7 @@ var dataModel = {
     selectedObjectType: ko.observable(),
     personelTypeList:ko.observableArray([]),
     selectedPersonelType: ko.observable(),
-    taskTypeList:ko.observableArray([]),
+    taskTypeList: ko.observableArray([]),
     savemessage: ko.observable(),
     saveerrorcode:ko.observable(),
     newtaskname: ko.observable(),
@@ -112,6 +112,7 @@ var dataModel = {
             });
         }, null, null);
     },
+   
     //getTaskType: function () {
     //    var self = this;
     //    var data = {

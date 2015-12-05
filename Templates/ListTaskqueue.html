@@ -86,34 +86,11 @@
 										<label class="control-label" for="taskNameFilter">Task Adı</label>
 									</div>
 									<div class="col-md-12">
-										<select id="taskNameFilter" data-bind="options: tasks, optionsText: 'taskname', optionsValue: 'taskname', value: selectedTaskname, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple"></select>
+										<select id="taskNameFilter" data-bind="options: tasks, optionsText: 'taskname', optionsValue: 'taskid',  valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple"></select>
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
-								<div class="form-group-sm has-info cls-margin-bottom">
-									<div class="col-md-12">
-										<label class="control-label" for="taskadi">İnternet Servis Sağlayıcı</label>
-									</div>
-									<div class="col-md-12">
-										<select id="servissaglayici" data-bind="options: isslist, optionsText: 'issText', optionsValue: 'issText', value: selectedIss, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple">
-										
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
-								<div class="form-group-sm has-info cls-margin-bottom">
-									<div class="col-md-12">
-										<label class="control-label" for="taskadi">Abone Durumu</label>
-									</div>
-									<div class="col-md-12">
-										<select id="abonedurumu" data-bind="options: ctstatuslist, optionsText: 'Text', optionsValue: 'Text', value: selectedCustomerstatus, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple">
-											
-										</select>
-									</div>
-								</div>
-							</div>
+							
 							<div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
 								<div class="form-group-sm has-info cls-margin-bottom">
 									<div class="col-md-12">
@@ -121,9 +98,10 @@
 									</div>
 									<div class="col-md-12">
 										<select data-size="10" id="personel" data-bind="options: personellist,
-                                                                                        optionsText: 'personelname',
-                                                                                        optionsValue: 'personelname',
-                                                                                        value: selectedPersonelname,
+                                                                                        optionsText:function(item) {
+                                                                                           return item.personelname +(item.il!=null? ' ['+item.il.ad+']':'') +(item.ilce!=null?' ['+item.ilce.ad+']':'')
+                                                                                       },
+                                                                                        optionsValue: 'personelid',
                                                                                         valueUpdate: 'keydown',
                                                                                         event: { keypress: enterfilter }" multiple="multiple">										
 										</select>
@@ -136,12 +114,12 @@
 										<label class="control-label" for="taskdurumu">Task Durumu</label>
 									</div>
 									<div class="col-md-12">
-										<select id="taskdurumu"  data-bind="options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstate', value: selectedTaskstatus, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple" >										    
+										<select id="taskdurumu"  data-bind="options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstateid',value:defaultstatus, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple" >										    
 										</select>
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-4 col-md-4" style="margin-top: 21px;">
+							<div class="col-xs-12 col-sm-4 col-md-4 pull-right" style="margin-top: 21px;">
 <!--								 <input  type="checkbox" data-bind="checked:atanmamistasklar" />Atanmamış Tasklar </input>-->
                                 <div class="btn-group pull-right" role="group">
 									<button data-bind="click: queryButtonClick"  type="button" class="btn btn-success">Sorgula</button>
@@ -183,9 +161,9 @@
 										<ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
 											<li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); } ,enable:pageNo>1">&lt;&lt;</a></li>
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage();}">&lt;</a></li>
-                                            <li><select> <option >1</option> </select></li>
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
 											<li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+                                            <li><button data-bind="click: clean" type="button" class="btn btn-primary">Temizle</button></li>
 										</ul>
 									</nav>
 									<!--pagination finish-->
@@ -216,7 +194,7 @@
 																	</li>
                                                                     <li class="divider"></li>
                                                                     <li><a href="#randevu" role="button" data-toggle="modal">Randevu Tarihi</a></li>
-											                        <li><a href="#personelatama" data-bind="click:attacheablecontrol" role="button" data-toggle="modal">Personel Ata</a></li>
+											                        <li><a href="#personelatama" id="atama" data-bind="click:attacheablecontrol" role="button" data-toggle="modal">Personel Ata</a></li>
 											                        <li><a href="#sonlandir" role="button" data-toggle="modal">Taskları Sonlandır</a></li>
                                                                     <li class="divider"></li>
                                                                       <li class="dropdown-submenu">
@@ -255,7 +233,7 @@
 													<tr data-bind="attr:{class :attachedpersonel==null? 'danger' : (taskstatepool==null ?'info' :'success' )}" style="line-height: 50px;" >
 													
 														<td><a href="#TaskQueueEditForm" data-bind="attr: {href:'#TaskQueueEditForm?'+taskorderno}">
-																<button data-bind="visible:attachedpersonel && attachedpersonel.personelname" id="duzenle" type="button" class="btn btn-primary btn-lg" style="padding: 3px; border-radius: 0px; font-size:14px;">
+																<button data-bind="visible:attachedpersonel && attachedpersonel.personelname, text: editable?'Düzenle': 'Gör'" id="duzenle" type="button" class="btn btn-primary btn-lg" style="padding: 3px; border-radius: 0px; font-size:14px;">
 																	Düzenle
 																</button>
 														    </a>
@@ -264,7 +242,11 @@
 														<td  style=" color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" data-bind="text:task.taskname"></td>
 														<td data-bind="text: attachedcustomer && (attachedcustomer.il && attachedcustomer.il.ad || '&lt;boş&gt;') " ></td>
 														<td data-bind="text: attachedcustomer && (attachedcustomer.ilce && attachedcustomer.ilce.ad || '&lt;boş&gt;') "></td>
-														<td style="color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" data-bind="text: attachedcustomer && (attachedcustomer.customername && (attachedcustomer.customername) || '&lt;boş&gt;')"></td>
+                                                        <td style="color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+                                                            <a href="#customerinfo" class="customer" role="button" data-toggle="modal" data-bind=" value:attachedcustomer.customerid" >
+                                                                <span data-bind="text: attachedcustomer && (attachedcustomer.customername && (attachedcustomer.customername) || '&lt;boş&gt;')"></span>
+                                                            </a>
+                                                        </td> 
 														<td data-bind="text: attachedcustomer && (attachedcustomer.customer_status && attachedcustomer.customer_status.Text || '&lt;boş&gt;') "></td>
 														<td data-bind="text: attachedcustomer && (attachedcustomer.issStatus && attachedcustomer.issStatus.issText || '&lt;boş&gt;')"></td>
 														<td data-bind="text: attachmentdate ? moment(attachmentdate).calendar() : '&lt;boş&gt;'" ></td>
@@ -286,11 +268,9 @@
 										<ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
 											<li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); }, enable: pageNo > 1">&lt;&lt;</a></li>
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage(); }">&lt;</a></li>
-                                            <li><select >
-                                            <option value="0">0</option>
-                                            </select></li>
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
 											<li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+                                            <li><button data-bind="click: clean" type="button" class="btn btn-primary">Temizle</button></li>
 										</ul>
 									</nav>
 							<!--pagination finish-->
@@ -310,7 +290,12 @@
                     </div>
                     <div class="modal-body" style="display: inline-block; position: absolute; min-height: 50px;">
                         <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: !errorcode()">
-                            <select id="personelatamacombo" data-bind="options: dataModel.attacheablePersonelList, optionsText: 'personelname', optionsValue: 'personelname', value: selectedAttachmentPersonelname " multiple="multiple"></select>
+                            <select id="personelatamacombo" data-bind="options: dataModel.attacheablePersonelList,
+                                        optionsText:function(item) {
+                    return item.personelname +(item.il!=null? ' ['+item.il.ad+']':'') +(item.ilce!=null?' ['+item.ilce.ad+']':'')
+                                                       },
+                                        optionsValue: 'personelid', 
+                                        value: selectedAttachmentPersonelid " multiple="multiple"></select>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: errorcode()">
                             <span class="label label-success" data-bind="text: errormessage , visible:errorcode()==1" ></span>
@@ -423,6 +408,74 @@
 		</div>
 	</div>
 	<!--Müşteri ve Kat Ziyaret Sonuçlarını Toplu Gir For Modal Finish-->
+
+        <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Müşteri Kimlik Kartı</h4>
+                    </div>
+                    <div class="modal-body" data-bind="with: selectedCustomer" style="display: inline-block; position: relative; min-height: 50px;">
+
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Müşteri No:</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <p><label data-bind="text:customerid"></label></p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Adı Soyadı</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <p><input class="form-control" data-bind="value:customername"></p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Tc Kimlik No</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <p><input class="form-control" data-bind="value:tc"></p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>GSM</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <p><input class="form-control" data-bind="value:gsm"></p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Sabit Tel</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <p><input data-bind="value:phone" class="form-control"></p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Doğum Tarihi</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <p> <input data-bind="value:birthdate" class="form-control"></p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>İl</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select class="form-control" id="ilcombo" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>İlçe</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="ilcecombo" data-bind="options: $root.ilceList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilceKimlikNo,optionsCaption:'Seçiniz'" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                        <button type="button" data-bind="click:saveCustomer" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </div>
+
+            </div>
+            <!-- müşteri bilgilerini düzenleme For Modal Finish-->
+        </div>
    </div>
 
 

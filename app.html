@@ -32,6 +32,7 @@
     <script src="Scripts/koc-typehead-v1.0.js"></script>
     <script src="Scripts/app.js"></script>
     <script type="text/javascript" src="/Scripts/moment.js"></script>
+
 	<style>
 		.panel-heading > h4 > a:after {
 			font-family: 'Glyphicons Halflings';
@@ -146,10 +147,28 @@
 						</label>
 					</div>
                     <div class="col-xs-8 col-sm-8 col-md-8">
-                        <label id="labeltaskqueue">
+                        <!--<label id="labeltaskqueue">
                             <a href="#ListTaskqueue" id="listTaskqueue2"  role="button" class="btn btn-success btn-xs" style="border-radius: 0px;">Anasayfa</a>
-                           
                         </label>
+                        <label id="labeltaskqueue">
+                            <a href="#Worklist" id="worklist" role="button" class="btn btn-success btn-xs" style="border-radius: 0px;">İş Emri</a>
+                        </label>-->
+                        <div class="col-md-6">
+                            <div class="btn-group col-md-6" role="group" aria-label="...">
+                                <button onclick="" type="button" class="btn btn-success"><a href="#ListTaskqueue" id="listTaskqueue2">Anasayfa</a></button>
+                                <div class="dropdown col-md-6">
+                                    <button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Bayi İşlemler
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#Worklist" id="worklist">İş Emri</a></li>
+                                        <li><a href="Content/evraklar.xlsx" id="worklist">Alınması Gereken Evraklar</a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="pull-right">
                         <button id="exit" role="button" class="btn btn-danger">Çıkış</button>
@@ -159,7 +178,9 @@
                         </label>
                     </div>
 				</div>
-				<div class="content" id="templateContainer"></div>
+				<div class="content" id="templateContainer">
+                   
+                </div>
 			</div>
 			<br class="clear-fix" />
 		</div>
@@ -1068,6 +1089,7 @@
 	</div>
 	<!-- Yeni Kanal Şikayeti For Modal Finish-->
 
+    <script src="Scripts/bootstrap-maxlengths.js"></script>
     <script src="Scripts/fileinput.js"></script>
     <script src="Scripts/fileinput_locale_tr.js"></script>
     <script src="Scripts/canvas-to-blob.min.js"></script>

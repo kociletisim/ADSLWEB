@@ -1,4 +1,5 @@
-﻿
+﻿/// <reference path="../Scripts/_references.js" />
+
 var dataModel = {
 
     taskorderno: ko.observable(),
@@ -30,44 +31,124 @@ var dataModel = {
     taskstatuslist: ko.observableArray([]),
     personellist:ko.observableArray([]),
     ctstatuslist: ko.observableArray([]),
-    issStatusList: ko.observableArray([]),
-    netStatusList: ko.observableArray([]),
-    telStatusList: ko.observableArray([]),
-    tvStatusList: ko.observableArray([]),
-    TurkcellTvStatusList: ko.observableArray([]),
-    gsmStatusList: ko.observableArray([]),
     message: ko.observable(),
     flag: ko.observable(false),
+    customerdocument:ko.observableArray([]),
+    ilList: ko.observableArray([]),
+    ilceList: ko.observableArray([]),
+    editable: ko.observable(),
+    tasktype: ko.observable(),
+    errormessage: ko.observable(),
+    campaignEditable: ko.pureComputed(function () {
+        var b = true;
+        $.each(dataModel.productlist(), function (index, cp) {
+            b &= cp.selectedProduct() == 0;
+        });
+        return (dataModel.editable() || b) && (dataModel.tasktype() === 1);
+    }),
+    campaignIsValid: ko.pureComputed(function () {
+        var b = true;
+        $.each(dataModel.productlist(), function (index, cp) {
+            b &= cp.selectedProduct() > 0;
+        });
+        return !dataModel.campaignEditable() || (b && dataModel.productlist().length > 0);
+    }),
+    smEditable: ko.pureComputed(function () {
+        var b = true;
+        $.each(dataModel.stockmovement(), function (index, sm) {
+            b &= sm.movementid == 0;
+        });
+        return b || dataModel.editable();
+    }),
+    smIsValid: ko.pureComputed(function () {
+        var b = true;
+        $.each(dataModel.stockmovement(), function (index, sm) {
+            b &= sm.used() > 0;
+        });
+        return !dataModel.smEditable() || b;
+    }),
+    cdEditable: ko.pureComputed(function () {
+        var b = true;
+        $.each(dataModel.customerdocument(), function (index, cd) {
+            b &= cd.id == 0;
+        });
+        return b || dataModel.editable();
+    }),
+    cdIsValid: ko.pureComputed(function () {
+        var b = true;
+        $.each(dataModel.customerdocument(), function (index, cd) {
+            b &= cd.documenturl() && cd.documenturl().length > 0;
+        });
+        return !dataModel.cdEditable() || b;
+    }),
+    modelIsValid: ko.pureComputed(function () {
+        return dataModel.campaignIsValid() && dataModel.smIsValid() && dataModel.cdIsValid();
+    }),
 
-    //abone ürün kampanya bilgileri işlemleri
-
-    //yon: function () {
-    //    var self = this;
-    //    var tempPage = document.location.hash.replace("#", "").split("?")[0];
-    //    $("#editContainer").loadTemplate("Templates/New/AboneUrunBilgileri.html");
-    //},
-   getCustomerCard : function () {
+    productlist: ko.observableArray([]),
+    selectedProducts: ko.pureComputed(function () {
+        var self = dataModel;
+        var res = [];
+        for (var i = 0; i < self.productlist().length; i++) {
+            res.push({
+                productid: self.productlist()[i].selectedProduct(),
+                campaignid: self.campaignid(),
+                taskid: self.taskorderno(),
+                customerid: self.customerid()
+            });
+        }
+        return res;
+    }),
+    selectedProductIds: ko.pureComputed(function () {
+        var self = dataModel;
+        var res = [];
+        for (var i = 0; i < self.selectedProducts().length; i++) {
+            res.push(self.selectedProducts()[i].productid);
+        }
+        return res;
+    }),
+    getIl: function () {
+        self = this;
+        var data = {
+            adres: { fieldName: "ad", op: 6, value: "" },
+        };
+        crmAPI.getAdress(data, function (a, b, c) {
+            self.ilList(a);        
+            $("#ilcombo").multiselect("setOptions", self.ilList()).multiselect("rebuild");
+        }, null, null)
+    },
+    getIlce: function () {
+        var self = this;
+        var data = {
+            adres: { fieldName: "ilKimlikNo", op: 6, value: '' },
+        };
+        crmAPI.getAdress(data, function (a, b, c) {
+            self.ilceList(a);         
+            $("#ilcecombo").multiselect("setOptions", self.ilceList()).multiselect("rebuild");
+        }, null, null)
+    },
+    getCustomerCard : function () {
        var self = this;
-       self.getIssStatus();
-       self.getGsmStatus();
-       self.getNetStatus();
-       self.getTvKullanımıStatus();
-       self.getTurkcellTvStatus();
-       self.getTelStatus();
-        var obj = self.customer();
-        obj.closedKatZiyareti = false;
-        self.selectedCustomer(obj);
-        //getCustomerCard.CustomerCard(self.customerid(),function (a, b, c) {self.customerCardList(a) });
+       var data = {
+           customername:{fieldName:'customerid',op:2,value:self.customerid()},
+       };
+       crmAPI.getCustomer(data, function (a, b, c) {
+           self.selectedCustomer(a.data.rows[0]);
+           $("#ilcombo,#ilcecombo").multiselect({
+               selectAllValue: 'select-all-value',
+               maxHeight: 250,
+               buttonWidth: '100%',
+               nonSelectedText: ' Seçiniz',
+               nSelectedText: ' Seçildi!',
+               numberDisplayed: 2,
+               selectAllText: 'Tümünü Seç!',
+               enableFiltering: true,
+               filterPlaceholder: 'Ara'
+           });
+       },null,null);
    },
-   saveCustomer: function () {
+    saveCustomer: function () {
        var self = this;
-       self.selectedCustomer().customer_status = { id: $("#abonedurumuinfo").val() };
-       self.selectedCustomer().issStatus = { id: $("#issstatus").val() };
-       self.selectedCustomer().netStatus = { id: $("#netstatus").val() };
-       self.selectedCustomer().gsmKullanımıStatus = { id: $("#gsmstatus").val() };
-       self.selectedCustomer().telStatus = { id: $("#telstatus").val() };
-       self.selectedCustomer().TvKullanımıStatus = { id: $("#tvstatus").val() };
-       self.selectedCustomer().TvKullanımıStatus = { id: $("#telstatus").val() };
        var data = self.selectedCustomer();
        crmAPI.saveCustomerCard(data, function (a, b, c) {
            if (a == "ok")
@@ -77,8 +158,6 @@ var dataModel = {
     subcategorylist: ko.observableArray([]),
     categorylist: ko.observableArray([]),
     campaignlist: ko.observableArray([]),
-    productlist: ko.observableArray([]),
-    selectedProductIds:ko.observableArray([]),
     category: ko.observable(),
     subcategory: ko.observable(),
     campaignid: ko.observable(),
@@ -87,6 +166,7 @@ var dataModel = {
     closedTaskqueueResponseMessage: ko.observable(),
     user:ko.observable(),
     docIds: ko.observableArray(),
+    uploadControl:ko.observable(),
 
     getcategory: function () {
         var self = this;
@@ -141,17 +221,33 @@ var dataModel = {
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             $.each(a, function (index, category) {
                 category.selectedProduct = ko.observable("0");
-                category.selectedProduct.subscribe(function (v) {
-                    self.selectedProductIds.push(v);
-                    console.log(v);
+                category.selectedProduct.subscribe(function () {
+                    dataModel.getTQDocuments();
                 });
                 $.each(category.products, function (pindex, product) {
                     $.each(self.customerProductList(), function (cpIndex, customerProduct) {
-                        if (product.productid === customerProduct.productid) category.selectedProduct(product.productid+"");
+                        if (product.productid === customerProduct.productid)
+                        {
+                            category.selectedProduct(product.productid + "");
+                        } 
                     });
                 });
             });
             self.productlist(a);
+            var data = {
+                taskorderno: dataModel.taskorderno(),
+                taskid: dataModel.taskid(),
+                stateid: dataModel.taskstatus(),
+                campaignid: dataModel.campaignid(),
+                customerproducts: dataModel.selectedProductIds(),
+                isSalesTask: dataModel.tasktype() == 1
+            };
+            crmAPI.getTQDocuments(data, function (a, b, c) {
+                $.each(a, function (index, doc) {
+                    doc.documenturl = ko.observable(doc.documenturl);
+                });
+                dataModel.customerdocument(a);
+            });
         }, null, null)
     },
     stockcardlist: ko.observableArray([]),
@@ -230,44 +326,26 @@ var dataModel = {
             });
         }, null, null)
     },
-    getIssStatus: function () {
+    getTQDocuments: function () {
         var self = this;
-        crmAPI.getIssStatus(function (a, b, c) {
-            self.issStatusList(a);
-    }, null, null);
-    },
-    getNetStatus: function () {
-        var self = this;
-        crmAPI.getNetStatus(function (a, b, c) {
-            self.netStatusList(a);
-        }, null, null)
-    },
-    getTelStatus: function () {
-        var self = this;
-        crmAPI.getTelStatus(function (a, b, c) {
-            self.telStatusList(a);
-        }, null, null)
-    },
-    getTvKullanımıStatus: function () {
-        var self = this;
-        crmAPI.getTvKullanımıStatus(function (a, b, c) {
-            self.tvStatusList(a);
-        }, null, null)
-    },
-    getTurkcellTvStatus: function () {
-        var self = this;
-        crmAPI.getTurkcellTvStatus(function (a, b, c) {
-            self.TurkcellTvStatusList(a);
-        }, null, null)
-    },
-    getGsmStatus: function () {
-        var self = this;
-        crmAPI.getGsmStatus(function (a, b, c) {
-            self.gsmStatusList(a);
-        }, null, null)
+        var data = {
+            taskorderno: dataModel.taskorderno(),
+            taskid: dataModel.taskid(),
+            stateid: dataModel.taskstatus(),
+            campaignid: dataModel.campaignid(),
+            customerproducts: dataModel.selectedProductIds(),
+            isSalesTask: dataModel.tasktype() == 1
+        };
+        crmAPI.getTQDocuments(data, function (a, b, c) {
+            $.each(a, function (index, doc) {
+                doc.documenturl = ko.observable(doc.documenturl);
+            });
+            self.customerdocument(a);
+        });
     },
     saveTaskQueues: function () {
         var self = this;
+        if (!dataModel.modelIsValid()) return alert("Eksik veriler var. Lütfen gerekli tüm alanları doldurunuz.");
         data = {
             taskorderno: self.taskorderno(),
             task:{taskid:self.taskid()},
@@ -276,69 +354,151 @@ var dataModel = {
                     taskstateid: self.taskstatus() ? self.taskstatus() : null,
                 taskstate: $("#taskdurumu option:selected").text() ? $("#taskdurumu option:selected").text():null
                 },
-
-            description: self.description() ? self.description() : null,
+            customerdocument: self.customerdocument(),
+            stockmovement: self.stockmovement(),
+            customerproduct: self.selectedProducts(),
+            description: self.description() ? self.description() == "" ? null : (self.description() + " " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")") : null,
             asistanPersonel: { personelid: self.assistantpersonel()>0? self.assistantpersonel() : null },
             appointmentdate: self.appointmentdate() ? moment(self.appointmentdate()).format() : null,
             consummationdate: self.consummationdate() ? moment(self.consummationdate()).format() : null,
             creationdate: self.creationdate() ? moment(self.creationdate()).format() : null,
             attachmentdate: self.attachmentdate() ? moment(self.attachmentdate()).format() : null,
         };
-        crmAPI.saveTaskQueues(data, function (a, b, c) {
-            self.message(a);
-        }, null, null)
+        if (dataModel.cdEditable()) {
+            var fi = $('#fileUpload').data().fileinput;
+            var fu = $('#fileUpload')[0];
+            fu.multiple = true;
+            fi.filestack = [];
+            if (fi.kocData) {
+                var b = true;
+                $.each(dataModel.customerdocument(), function (index, doc) {
+                    b &= fi.kocData.hasOwnProperty("_" + doc.documentid);
+                    if (b) fi.filestack.push(fi.kocData["_" + doc.documentid]);
+                })
+                if (!b) return alert("Tüm Belgeleri Yükleyiniz");
+            }
+            else {
+                b = false;
+                $.each(dataModel.customerdocument(), function (index, doc) {
+                    b |= doc.id = 0;
+                })
+                if(b)
+                    return alert("Tüm Belgeleri Yükleyiniz...");
+                else
+                  return  crmAPI.saveTaskQueues(data, function (a, b, c) {
+                        self.message(a);
+                        window.setTimeout(function () {
+                            $("#id_alert").alert('close');
+                            self.redirect();
+                        }, 1250);
+                    }, null, null);
+            }
 
-    },
-    closeTaskQueues: function () {
-        var self = this;
-        var data = {
-            campaignid: self.campaignid(),
-            selectedProductsIds: self.selectedProductIds(),
-            taskorderno: self.taskorderno(),
-        };
-        crmAPI.closeTaskQueues(data, function (a,b,c) {
-            self.closedTaskqueueResponseMessage(a);
-        }, null, null);
-
-    },
-
-    saveStockMovements: function () {
-        var self = this;
-        var postdata = [];
-        for (var i = 0; i < dataModel.stockcardlist().length; i++) {
-            var pd =  {
-                movementid: self.stockcardlist()[i].movementid,
-                relatedtaskqueue:self.taskorderno(),// self.stockcardlist()[i].relatedtaskqueue,
-                amount: self.stockcardlist()[i].serial()?1: self.stockcardlist()[i].used(),
-                serialno:self.stockcardlist()[i].serial(),
-                fromobjecttype:self.user().userRole, //self.stockcardlist()[i].fromobjecttype,
-                fromobject: self.user().userId,//self.stockcardlist()[i].fromobject,
-                toobjecttype:self.stockcardlist()[i].toobjecttype,
-                toobject: self.customerid(), //self.stockcardlist()[i].toobject,
-                stockcardid:self.stockcardlist()[i].stockid,               
-            };
-            postdata.push(pd);
+            $("#fileUpload").fileinput("upload");
         }
-        crmAPI.SaveStockMovementMultiple(postdata, function (a, b, c) {
-            self.message(a);
-        }, null, null);
-        console.log(postdata);
-    },
-
-    getDocs: function () {
-        var self = this;
-        var data = {
-            taskid: 41,
-            taskstate: 9117,
-            campaignid: null,
-            productIds: null
-        };
-        crmAPI.getDocumentIds(data, function (a, b, c) { self.docIds(a); }, null, null);
+        else
+            crmAPI.saveTaskQueues(data, function (a, b, c) {
+                self.message(a);
+                window.setTimeout(function () {
+                    $("#id_alert").alert('close');
+                    self.redirect();
+                }, 1250);
+            }, null, null);
 
     },
+    //closeTaskQueues: function () {
+    //    var self = this;
+    //    var data = {
+    //        campaignid: self.campaignid(),
+    //        selectedProductsIds: self.selectedProductIds(),
+    //        taskorderno: self.taskorderno(),
+    //    };
+    //    crmAPI.closeTaskQueues(data, function (a,b,c) {
+    //        self.closedTaskqueueResponseMessage(a);
+    //        self.getDocs();
+    //    }, null, null);
+    //},
+    //saveStockMovements: function () {
+    //    var self = this;
+    //    var postdata = [];
+    //    for (var i = 0; i < dataModel.stockcardlist().length; i++) {
+    //        var pd =  {
+    //            movementid: self.stockcardlist()[i].movementid,
+    //            relatedtaskqueue:self.taskorderno(),// self.stockcardlist()[i].relatedtaskqueue,
+    //            amount: self.stockcardlist()[i].serial()?1: self.stockcardlist()[i].used(),
+    //            serialno:self.stockcardlist()[i].serial(),
+    //            fromobjecttype:self.user().userRole, //self.stockcardlist()[i].fromobjecttype,
+    //            fromobject: self.user().userId,//self.stockcardlist()[i].fromobject,
+    //            toobjecttype: 16777217,
+    //            toobject: self.customerid(), //self.stockcardlist()[i].toobject,
+    //            stockcardid:self.stockcardlist()[i].stockid,               
+    //        };
+    //        postdata.push(pd);
+    //    }
+    //    crmAPI.SaveStockMovementMultiple(postdata, function (a, b, c) {
+    //        self.message(a);
+    //    }, null, null);
+    //    console.log(postdata);
+    //},
+
+    selectFile: function(documentid){
+        var fu = $("#fileUpload")[0];
+        fu.documentid = documentid;
+        $(fu).trigger('click');
+    },
+
+    //fileUpload: function () {
+    //    var self = this;
+    //    var count = 0;
+    //    for (var i = 0; i < self.docIds().length; i++) {
+    //        if ($("#" + self.docIds()[i].documentid + "").val() != '') {
+    //            console.log(self.docIds()[i].documentid + ' inci dosya yüklenebilir');
+    //            count++;
+    //        }
+    //        else {
+    //            alert('Tüm Dosyaları Yüklemeden İşleme Devam Edemezsiniz');
+    //            console.log('Tüm Dosyaları Yüklemeden İşleme Devam Edemezsiniz');
+    //        }
+    //        if(count==self.docIds().length)
+    //        self.uploadControl(true);
+    //        else self.uploadControl(false);
+    //    }
+    //},
+    //getDocs: function () {
+    //    var self = this;
+    //    var data = {
+    //        taskid: self.taskid(),
+    //        taskstate: self.taskstatus(),
+    //        campaignid: self.campaignid(),
+    //        productIds: self.selectedProductIds(),
+    //    };
+    //    crmAPI.getDocumentIds(data, function (a, b, c) {
+    //        self.docIds(a);
+    //        for (var i = 0; i < self.docIds().length; i++) {
+    //            $('#' + self.docIds()[i].documentid+ '').fileinput({
+    //                uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Fiber/Upload/upload", // server upload action
+    //                uploadAsync: true,
+    //                minFileCount: 1,
+    //                maxFileCount: 10,
+    //                showUpload:true,
+    //                overwriteInitial: false,
+    //                uploadExtraData: function () {
+    //                    return {
+    //                        img_key: self.customerid() + "-" + self.customername(),
+    //                        il: self.il(),
+    //                        ilce:self.ilce(),
+    //                        tqid: self.taskorderno(),
+    //                        docid: this.id,
+    //                        updatedby:self.user().userId
+    //                    };
+    //                }
+    //            });
+    //        }
+    //       // $(".fileinput-upload-button").attr("style", "visibility: hidden")
+    //    }, null, null);
+    //},
     renderBindings: function () {
         var self = this;
-
         var hashSearches = document.location.hash.split("?");
         if(hashSearches.length > 1) { 
             $("#kategori").multiselect({
@@ -377,19 +537,67 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
-            $("#input-702").fileinput({
-                uploadUrl: "http://localhost:50752/api/Adsl/Task/upload", // server upload action
-                uploadAsync: true,
+            $("#fileUpload").fileinput({
+                uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Adsl/TaskQueues/upload", // server upload action
+                uploadAsync: false,
                 minFileCount: 1,
                 maxFileCount: 10,
+                showUpload: true,
                 overwriteInitial: false,
                 uploadExtraData: function () {
                     return {
-                        img_key: self.customerid() + "-" + self.customername(),
-                        tqid: self.taskorderno(),
-                        docid: 1
+                        customer: self.customerid() + "-" + self.customername(),
+                        il: self.il(),
+                        ilce: self.ilce(),
+                        documentids: (function () {
+                            var res = [];
+                            $.each(dataModel.customerdocument(), function (index, doc) {
+                                res.push(doc.documentid);
+                            });
+                            return JSON.stringify(res);
+                        })(),
+                        tq: JSON.stringify({
+                            taskorderno: self.taskorderno(),
+                            task: { taskid: self.taskid() },
+                            taskstatepool:
+                                {
+                                    taskstateid: self.taskstatus() ? self.taskstatus() : null,
+                                    taskstate: $("#taskdurumu option:selected").text() ? $("#taskdurumu option:selected").text() : null
+                                },
+                            customerdocument: self.customerdocument(),
+                            stockmovement: self.stockmovement(),
+                            customerproduct: self.selectedProducts(),
+                            description: self.description() ? self.description() : null,
+                            asistanPersonel: { personelid: self.assistantpersonel() > 0 ? self.assistantpersonel() : 0 },
+                            appointmentdate: self.appointmentdate() ? self.appointmentdate() : null,
+                            consummationdate: self.consummationdate() ?self.consummationdate() : null,
+                            creationdate: self.creationdate() ? self.creationdate(): null,
+                            attachmentdate: self.attachmentdate() ? self.attachmentdate() : null,
+                        })
                     };
                 }
+            });
+            $('#fileUpload').on('fileloaded', function (event, file, previewId, index, reader) {
+                var fi = $('#fileUpload').data().fileinput;
+                var fu = $('#fileUpload')[0];
+                var files = fi.filestack;
+                var filenames = fi.filenames;
+                fi.kocData = fi.kocData || {};
+                fi.kocData["_" + fu.documentid] = files[0];
+                $.each(self.customerdocument(), function (index, doc) {
+                    if (doc.documentid === fu.documentid) doc.documenturl(file.name);
+                });
+                //console.log(files.length - 1 + "=>" + $('#fileUpload').data().fileinput.filestack[files.length - 1].name);
+            })
+            $('#fileUpload').on('filebatchpreupload', function (event, data, previewId, index) {
+                data.jqXHR.setRequestHeader("X-KOC-Token", crmAPI.getCookie("token"));
+            });
+            $('#fileUpload').on('filebatchuploadsuccess', function (event, data, previewId, index) {
+                dataModel.message("ok");
+                window.setTimeout(function () {
+                    $("#id_alert").alert('close');
+                    self.redirect();
+                }, 1250);
             });
             var data = { taskOrderNo: hashSearches[1] };
             crmAPI.getTaskQueues(data, function (a, b, c) {
@@ -399,79 +607,96 @@ var dataModel = {
                 self.taskstatetype(a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.statetype || null)
                 var status = a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.taskstateid || null;
                 self.gettaskstatus(status);
-
                 self.previoustask(a.data.rows[0].previoustaskorderid);
                 self.relatedtask(a.data.rows[0].relatedtaskorderid);
                 self.creationdate(a.data.rows[0].creationdate);
                 self.attachmentdate(a.data.rows[0].attachmentdate && a.data.rows[0].attachmentdate || null);
                 self.appointmentdate(a.data.rows[0].appointmentdate ? a.data.rows[0].appointmentdate : null);
-                self.consummationdate(a.data.rows[0].consummationdate && moment(a.data.rows[0].consummationdate).format('lll') || null);
+                self.consummationdate(a.data.rows[0].consummationdate && a.data.rows[0].consummationdate || null);
                 self.personelname(a.data.rows[0].attachedpersonel && a.data.rows[0].attachedpersonel.personelname || 'atanmamış');
                 self.personelid(a.data.rows[0].attachedpersonel && a.data.rows[0].attachedpersonel.personelid || 0);
                 self.assistantpersonel(a.data.rows[0].asistanPersonel ? a.data.rows[0].asistanPersonel.personelid : 'atanmamış');
                 $("#assistantPersonel").multiselect("refresh");
                 self.il(a.data.rows[0].attachedcustomer.il && a.data.rows[0].attachedcustomer.il.ad || '');
                 self.ilce(a.data.rows[0].attachedcustomer.ilce && a.data.rows[0].attachedcustomer.ilce.ad || '');
-                //self.region(((a.data.rows[0].attachedobject.region || (a.data.rows[0].attachedobject.site && a.data.rows[0].attachedobject.site.region) ||
-                //               (a.data.rows[0].attachedobject.block && a.data.rows[0].attachedobject.block.site && a.data.rows[0].attachedobject.block.site.region)) ||
-                //              '&lt;boş&gt;'
-                //             ));
                 self.customername(a.data.rows[0].attachedcustomer.customername && (a.data.rows[0].attachedcustomer.customername) || '');
                 self.customerid(a.data.rows[0].attachedcustomer.customerid && (a.data.rows[0].attachedcustomer.customerid) || '');
                 self.customer(a.data.rows[0].attachedcustomer);
                 self.flat(a.data.rows[0].attachedcustomer && (a.data.rows[0].attachedcustomer.daire) || '');
                 self.customergsm(a.data.rows[0].attachedcustomer && a.data.rows[0].attachedcustomer.gsm || '');
-               // self.customerstatus(a.data.rows[0].attachedobject.customer_status && a.data.rows[0].attachedobject.customer_status.Text || '');
                 $("#abonedurumu").multiselect("refresh");
                 self.description(a.data.rows[0].description);
-                //  self.locationid(a.data.rows[0].attachedcustomer.locationid || (a.data.rows[0].attachedcustomer.block && a.data.rows[0].attachedcustomer.block.locationid) || '');
                 self.customerProductList(a.data.rows[0].customerproduct);
+                $.each(a.data.rows[0].customerdocument, function (index, doc) {
+                    doc.documenturl = ko.observable(doc.documenturl);
+                });
+                self.customerdocument(a.data.rows[0].customerdocument);
                 self.info(a.data.rows[0].customerproduct[0] ?a.data.rows[0].customerproduct[0].campaigns.category:null);
                 self.getcategory();
-                self.stockmovement(a.data.rows[0].stockmovement);
-                $.each(a.data.rows[0].stockcardlist, function (index, stockcard) {
-                    stockcard.movementid = 0;
-                    stockcard.fromobject = 0;
-                    stockcard.toobject = 0;
-                    stockcard.relatedtaskqueue = 0;
-                    stockcard.fromobjecttype = 0;
-                    stockcard.toobjecttype = 0;
-                    stockcard.used = ko.observable(0);
-                    stockcard.max = ko.observable(0);
-                    stockcard.available = ko.observable(0);
-                    stockcard.serial = ko.observable();
-                    stockcard.serials = ko.observableArray([]);
-                    stockcard.used.subscribe(function (v) {
-                        if (v > stockcard.max())
-                           stockcard.used(stockcard.max());
-                        else if (v < 0)
-                            stockcard.used(0);
-                        stockcard.available(stockcard.max() - stockcard.used());
+
+                $.each(a.data.rows[0].stockmovement, function (index, stockmovement) {
+                    var ssAmount = (stockmovement.stockStatus ? stockmovement.stockStatus.amount : 0);
+                    var ssSerials = (stockmovement.stockStatus ? stockmovement.stockStatus.serials : []);
+                    stockmovement.used = ko.observable(stockmovement.amount);
+                    stockmovement.max = ko.observable(stockmovement.amount + ssAmount);
+                    stockmovement.available = ko.observable(ssAmount);
+                    stockmovement.serial = ko.observable(stockmovement.serialno);
+                    stockmovement.serials = ko.observableArray(ssSerials);
+                    stockmovement.serial.subscribe(function (v) {
+                        stockmovement.used(v ? 1 : 0);
+                        stockmovement.serialno = v;
+                        stockmovement.amount=1;
                         return v;
                     });
-                    $.each(a.data.rows[0].attachedpersonel.stockstatus, function (sindex, status) {
-                        if (stockcard.stockid == status.stockcardid) {
-                            stockcard.available(status.amount);
-                            stockcard.serials(status.serials);
-                        }
+                    stockmovement.used.subscribe(function (v) {
+                        if (v > stockmovement.max())
+                            stockmovement.used(stockmovement.max());
+                        else if (v < 0)
+                            stockmovement.used(0);
+                        stockmovement.available(stockmovement.max() - stockmovement.used());
+                        return v;
                     });
-                    $.each(a.data.rows[0].stockmovement, function (mindex, movement) {
-                        if (stockcard.stockid == movement.stockcardid) {
-                            stockcard.movementid = movement.movementid;
-                            stockcard.fromobject = movement.fromobject;
-                            stockcard.toobject = movement.toobject;
-                            stockcard.relatedtaskqueue = movement.relatedtaskqueue;
-                            stockcard.fromobjecttype = movement.fromobjecttype;
-                            stockcard.toobjecttype = movement.toobjecttype;
-                            stockcard.max(stockcard.available() + movement.amount);
-                            if (stockcard.hasserial == true) stockcard.max(1);
-                            stockcard.used(movement.amount);
-                            if (movement.serialno) stockcard.serials.unshift(movement.serialno);
-                            stockcard.serial(movement.serialno);
-                        }
-                    });
-                   
                 });
+                self.editable(a.data.rows[0].editable);
+                self.tasktype(a.data.rows[0].task.tasktypes.TaskTypeId);
+                self.stockmovement(a.data.rows[0].stockmovement);
+                //$.each(a.data.rows[0].stockcardlist, function (index, stockcard) {
+                //    stockcard.movementid = 0;
+                //    stockcard.fromobject = 0;
+                //    stockcard.toobject = 0;
+                //    stockcard.relatedtaskqueue = 0;
+                //    stockcard.fromobjecttype = 0;
+                //    stockcard.toobjecttype = 0;
+                //    stockcard.used.subscribe(function (v) {
+                //        if (v > stockcard.max())
+                //           stockcard.used(stockcard.max());
+                //        else if (v < 0)
+                //            stockcard.used(0);
+                //        stockcard.available(stockcard.max() - stockcard.used());
+                //        return v;
+                //    });
+                //    $.each(a.data.rows[0].attachedpersonel.stockstatus, function (sindex, status) {
+                //        if (stockcard.stockid == status.stockcardid) {
+                //            stockcard.available(status.amount);
+                //            stockcard.serials(status.serials);
+                //        }
+                //    });
+                //    $.each(a.data.rows[0].stockmovement, function (mindex, movement) {
+                //        if (stockcard.stockid == movement.stockcardid) {
+                //            stockcard.movementid = movement.movementid;
+                //            stockcard.fromobject = movement.fromobject;
+                //            stockcard.toobject = movement.toobject;
+                //            stockcard.relatedtaskqueue = movement.relatedtaskqueue;
+                //            stockcard.fromobjecttype = movement.fromobjecttype;
+                //            stockcard.toobjecttype = movement.toobjecttype;
+                //            stockcard.max(stockcard.available() + movement.amount);
+                //            if (stockcard.hasserial == true) stockcard.max(1);
+                //            stockcard.used(movement.amount);
+                //            if (movement.serialno) stockcard.serials.unshift(movement.serialno);
+                //            stockcard.serial(movement.serialno);
+                //        }
+                //    });
+                //});
                 self.stockcardlist(a.data.rows[0].stockcardlist);
                 
             }, null, null);          
@@ -489,10 +714,14 @@ var dataModel = {
                 },
             });
             self.getUserInfo();
+           
             ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         }
+        self.getIl();
+        self.getIlce();
     }
 }
+
 
 dataModel.category.subscribe(function (v) {
     dataModel.getsubcategory();
@@ -507,10 +736,53 @@ dataModel.campaignid.subscribe(function (v) {
     if(v)
     dataModel.getproduct();
 });
-dataModel.campaignInfoIsVisible = ko.computed(function () {
-    if (dataModel.taskstatus() != null && dataModel.taskstatus() != 0 && dataModel.taskstatetype() != 2 && dataModel.consummationdate() !=null) {
-        return true;
-    }
-    return false;
-});
+//dataModel.campaignInfoIsVisible = ko.computed(function () {
+//    if (dataModel.taskstatus() != null && dataModel.taskstatus() != 0 && dataModel.taskstatetype() != 2 && dataModel.consummationdate() !=null) {
+//        return true;
+//    }
+//    return false;
+//});
+dataModel.taskstatus.subscribe(function () {
+    dataModel.errormessage(null);
+    var data = {
+        taskorderno: dataModel.taskorderno(),
+        taskid: dataModel.taskid(),
+        stateid: dataModel.taskstatus(),
+        campaignid: dataModel.campaignid(),
+        customerproducts: dataModel.selectedProductIds(),
+        isSalesTask: dataModel.tasktype() == 1
+    };
+    crmAPI.getTQStockMovements(data, function (a, b, c) {
+        if (a.errorMessage) dataModel.errormessage(a.errorMessage);
+        $.each(a, function (index, stockmovement) {
+            var ssAmount = (stockmovement.stockStatus ? stockmovement.stockStatus.amount : 0);
+            var ssSerials = (stockmovement.stockStatus ? stockmovement.stockStatus.serials : []);
+            stockmovement.used = ko.observable(stockmovement.amount);
+            stockmovement.max = ko.observable(stockmovement.amount + ssAmount);
+            stockmovement.available = ko.observable(ssAmount);
+            stockmovement.serial = ko.observable(stockmovement.serialno);
+            stockmovement.serials = ko.observableArray(ssSerials);
+            stockmovement.serial.subscribe(function (v) {
+                stockmovement.used(v ? 1 : 0);
+                stockmovement.serialno = v;
+                stockmovement.amount = 1;
+                return v;
+            });
+            stockmovement.used.subscribe(function (v) {
+                if (v > stockmovement.max())
+                    stockmovement.used(stockmovement.max());
+                else if (v < 0)
+                    stockmovement.used(0);
+                stockmovement.available(stockmovement.max() - stockmovement.used());
+                return v;
+            });
+        });
 
+        dataModel.stockmovement(a);
+    });
+    dataModel.getTQDocuments();
+});
+dataModel.uploadControl.subscribe(function (v) {
+    if(v==true)
+        $('.fileinput-upload-button').click()
+});

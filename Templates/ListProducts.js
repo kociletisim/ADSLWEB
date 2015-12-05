@@ -13,8 +13,8 @@ var dataModel = {
     selectedProduct: ko.observable(),
     autoTaskIds:ko.observableArray([]),
     autoTaskList:ko.observableArray([]),
-
-
+    docList: ko.observableArray([]),
+    docIds:ko.observableArray([]),
     productid: ko.observable(),
     category: ko.observable(),
     newcategory: ko.observable(),
@@ -49,6 +49,7 @@ var dataModel = {
         };
         crmAPI.getProducts(data, function (a, b, c) {
             self.selectedProduct(a.data.rows[0]);
+            self.getDocs();
         }, null, null);
     },
     getProductsCombo: function () {
@@ -72,7 +73,30 @@ var dataModel = {
             });
         }, null, null);
     },
+    getDocs: function () {
+        var self = this;
+        var data = {
+            documentname: { fieldName: 'documentname', op: 6, value: '' },
+        };
+        crmAPI.getDocuments(data, function (a, b, c) {
+            self.docList(a.data.rows);
+            $('#editdocs,#newdocs').multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: 'Belge Seçiniz',
+                nSelectedText: 'BelgeSeçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
 
+            });
+            if (self.docIds())
+            $('#editdocs').multiselect('select', self.docIds());
+        }, null, null);
+    },
     getTaskList: function () {
         var self = this;
         var data = {
@@ -104,12 +128,15 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
+            if(self.autoTaskIds())
             $('#autotask').multiselect('select', self.autoTaskIds());
         }, null, null)
     },
     saveProduct: function () {
         var self = this;
-        self.selectedProduct().automandatorytasks = $("#autotask").val()? $("#autotask").val().toString():null;
+        self.selectedProduct().automandatorytasks = $("#autotask").val() ? $("#autotask").val().toString() : null;
+        self.selectedProduct().documents = $("#editdocs").val() ? $("#editdocs").val().toString() : null;
+
         var data = self.selectedProduct();
         crmAPI.saveProduct(data, function (a, b, c) {
             self.savemessage(a.errorMessage);
@@ -126,7 +153,8 @@ var dataModel = {
             productname: self.newproductname(),
             category: self.newcategory(),
             maxduration: self.maxduration(),
-            automandatorytasks: $("#newautotask").val()? $("#newautotask").val().toString():null,
+            automandatorytasks: $("#newautotask").val() ? $("#newautotask").val().toString() : null,
+            documents: $("#newdocs").val() ? $("#newdocs").val().toString() : null,
         };
         crmAPI.insertProduct(data, function (a, b, c) {
             self.savemessage(a.errorMessage);
@@ -172,7 +200,9 @@ var dataModel = {
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         $('#new').click(function () {
             self.getTaskList();
+            self.getDocs();
         });
+      
         self.getProductsCombo();
        
     }
@@ -183,6 +213,10 @@ dataModel.selectedProduct.subscribe(function (v) {
         dataModel.autoTaskIds(v.automandatorytasks.split(","));
     else
         dataModel.autoTaskIds(null);
+    if (v.docuemnts != null)
+        dataModel.docIds(v.documents.split(","));
+    else
+        dataModel.docIds(null);
     dataModel.getTaskList();
 
 });

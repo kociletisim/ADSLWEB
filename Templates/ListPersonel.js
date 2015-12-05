@@ -13,7 +13,12 @@ var dataModel = {
     objectList:ko.observableArray([]),
     selectedPersonel: ko.observable(),
     rolesList:ko.observableArray([]),
-
+    ilList: ko.observableArray([]),
+    ilceList:ko.observableArray(),
+    selectedIl: ko.observable(),
+    selectedIlce:ko.observable(),
+    selectil: ko.observable(),
+    selectilce:ko.observable(),
 
     newpersonelname: ko.observable(),
     newcategory: ko.observable(),
@@ -28,6 +33,8 @@ var dataModel = {
             pageNo: pageno,
             rowsPerPage: rowsperpage,
             personel: self.personelname() ? { fieldName: 'personelname', op: 6, value: self.personelname() } : { fieldName: 'personelname', op: 6, value: '' },
+            il: self.selectil() ? { fieldName: 'ilKimlikNo', op: 2, value: self.selectil() } : null,
+            ilce: self.selectilce() ? { fieldName: 'ilceKimlikNo', op: 2, value: self.selectilce() } : null,
         };
         crmAPI.getPersonels(data, function (a, b, c) {
             self.personelList(a.data.rows);
@@ -48,7 +55,9 @@ var dataModel = {
         };
         crmAPI.getPersonels(data, function (a, b, c) {
             self.getObjects();
-            self.selectedPersonel(a.data.rows[0]);        
+            self.selectedPersonel(a.data.rows[0]);
+            self.getIl();
+            self.getIlce(a.data.rows[0].ilKimlikNo);
         }, null, null);
     },
     getObjects: function () {
@@ -84,8 +93,10 @@ var dataModel = {
     savePersonel: function () {
         var self = this;
         var rol = 0;
+        if ($("#object").val()) {
         for (var i = 0; i < $("#object").val().length; i++) {
             rol |= $("#object").val()[i];
+        }
         }
        
             self.selectedPersonel().category = rol;
@@ -115,6 +126,8 @@ var dataModel = {
             mobile: self.newmobile(),
             email: self.newemail(),
             notes: self.newnotes(),
+            ilKimlikNo: self.selectedIl(),
+            ilceKimlikNo:self.selectedIlce(),
         };
         crmAPI.insertPersonel(data, function (a, b, c) {
             self.savemessage(a.errorMessage);
@@ -125,10 +138,64 @@ var dataModel = {
             }, 1000);
         }, null, null);
     },
+    getRoles: ko.pureComputed(function(){
+        var roles = [];
+        for (var i = 0; i < dataModel.objectList().length; i++) {
+            if ((dataModel.selectedPersonel().category & dataModel.objectList()[i].typeid) == dataModel.objectList()[i].typeid)
+                roles.push(dataModel.objectList()[i].typeid);
+        }
+        return roles;
+    }),
+    getIl: function () {
+        self = this;
+        var data = {
+            adres: { fieldName: "ad", op: 6, value: "" },
+        };
+        crmAPI.getAdress(data, function (a, b, c) {
+            self.ilList(a);
+            $("#editil,#newil,#sorguil").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 3,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#editil,#newil").multiselect("setOptions", self.ilList()).multiselect("rebuild");
+        }, null, null)
+    },
+    getIlce: function (x) {
+        var self = this;
+        var data = {
+            adres: { fieldName: "ilKimlikNo", op: x?2:6, value: x?x:''},
+        };
+        crmAPI.getAdress(data, function (a, b, c) {
+            self.ilceList(a);
+            $("#editilce,#newilce,#sorguilce").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 3,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#editilce,#newilce").multiselect("setOptions", self.ilceList()).multiselect("rebuild");
+        }, null, null)
+    },
 
     clean: function () {
         var self = this;
         self.personelname(null);
+        self.selectil(null);
+        self.selectilce(null);
         self.getPersonels(dataModel.pageNo(), dataModel.rowsPerPage());
     },
     navigate: {
@@ -159,7 +226,11 @@ var dataModel = {
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         $('#new').click(function () {
             self.getObjects();
+            self.getIl();
+            self.getIlce();
         });
+        self.getIl();
+        self.getIlce();
        
     }
 }

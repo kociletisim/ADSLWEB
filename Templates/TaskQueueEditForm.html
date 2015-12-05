@@ -14,6 +14,7 @@
         }
 </style>
 <div id="bindingContainer" class="container-fluid" style="background-color: #D1E9F6 !important;">
+    <span style="display:none"><input type="file" id="fileUpload" value="Seç..." name="fileUpload[]" multiple data-bind="enable: editable() && (customerdocument().length>0)" /></span>
     <div class="col-md-12 container" style="padding: 0 !important; margin: 20px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
         <div class="panel-group">
             <div class="panel" style="border: 1px solid #fff !important;">
@@ -29,7 +30,7 @@
                             <div class='col-sm-6'>
                                 <div class="form-group">
                                     <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker3" class="form-control" data-bind="value: creationdate ? creationdate :null">
+                                        <input type="text" id="daterangepicker3" class="form-control" data-bind="enable: editable, value: creationdate ? creationdate :null">
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +56,7 @@
                             <div class='col-sm-6'>
                                 <div class="form-group">
                                     <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker1" class="form-control" data-bind="value: attachmentdate ? attachmentdate :null">
+                                        <input type="text" id="daterangepicker1" class="form-control" data-bind="enable: editable, value: attachmentdate ? attachmentdate :null">
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +83,7 @@
                             <div class='col-sm-6'>
                                 <div class="form-group">
                                     <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker2" class="form-control" data-bind="value:appointmentdate ? appointmentdate :null">
+                                        <input type="text" id="daterangepicker2" class="form-control" data-bind="enable: editable, value:appointmentdate ? appointmentdate :null">
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +108,7 @@
                             <div class='col-sm-6'>
                                 <div class="form-group">
                                     <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker4" class="form-control" data-bind="value: consummationdate ? consummationdate :null">
+                                        <input type="text" id="daterangepicker4" class="form-control" data-bind="enable: editable, value: consummationdate ? consummationdate :null">
                                     </div>
                                 </div>
                             </div>
@@ -127,30 +128,34 @@
                         <div class=" col-md-3 height-40">
                             <div class="col-md-6" style="padding: 10px 0 0 0;">Task Durumu<span style="float:right;">:</span></div>
                             <div class="col-md-6">
-                                <select id="taskdurumu" data-bind="options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstateid',value:taskstatus"></select>
+                                <select id="taskdurumu" data-bind="enable: editable, options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstateid',value:taskstatus"></select>
                             </div>
                         </div>
-                        <div class="col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Açıklama<span style="float:right;">:</span></div>
+                        <div class="col-md-9 height-40">
+                            <div class="col-md-1" style="padding: 10px 0 0 0;">Açıklama<span style="float:right;">:</span></div>
                             <div class="col-md-6" style="padding: 5px 0 0 0;">
-                                <textarea data-bind="value:description" class="form-control" rows="1"></textarea>
+                                <textarea data-bind="value:description" class="form-control" rows="3"></textarea>
                             </div>
                         </div>
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Öbek<span style="float:right;">:</span></div>
-                            <div data-bind="text: region" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
-                        </div>
-                        <div class="col-md-3 height-30">
+                       
+                        <!--<div class="col-md-3 height-30">
                             <button type="button" class="btn btn-primary" data-bind="click: saveTaskQueues">Kaydet</button>
-                        </div>
+                        </div>-->
 
+                    </div>
+                    <div class="col-md-12" style="padding: 1px 0 1px 0 !important; margin: 0 !important;">
+                        <div class="col-md-9 height-40">
+                            <div class="col-md-1" style="padding: 10px 0 0 0;"><span style="float:right;"></span></div>
+                            <div class="col-md-6" style="padding: 5px 0 0 0;"> 
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-md-offset-3" data-bind="visible : message" style="position: absolute; top: 150px;" id="id_alert" onclick="setTimeout(function () { $('#id_alert').css({ display: 'none' }); }, 1000)">
-        <div class="alert alert-success alert-dismissible cls_alert" role="alert" style="height: 100px;">
+    <div  class="col-md-6 col-md-offset-3" data-bind="visible : message" style="position: absolute; top: 150px;" onclick="setTimeout(function () { $('#id_alert').css({ display: 'none' }); }, 1000)">
+        <div class="alert alert-success alert-dismissible cls_alert" id="id_alert" role="alert" style="height: 100px;">
             <button type="button" data-bind="click :refresh" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <strong>İşlem Başarılı</strong>
         </div>
@@ -167,122 +172,134 @@
                         </h4>
                     </div>
 
-                    <div id="collapse2" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <div class=" row">
-                                <div class="col-md-4  form-group-sm has-info cls-margin-bottom">
-                                    <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Kategori Seçiniz...'"></select>
+                    <div id="collapse2" class="panel-collapse collapse" data-bind="css:{'in': campaignEditable}">
+                        <fieldset data-bind="enable: campaignEditable">
+                            <div class="panel-body">
+                                <div class=" row">
+                                    <div class="col-md-4  form-group-sm has-info cls-margin-bottom">
+                                        <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Kategori Seçiniz...'"></select>
+                                    </div>
+                                    <div data-bind="visible:category" class="col-md-4  form-group-sm has-info">
+                                        <select id="urun" data-bind="options:subcategorylist,optionsText:'subcategory',optionsValue:'subcategory',value:subcategory,optionsCaption: 'Alt Kategori Seçiniz...'"></select>
+                                    </div>
+                                    <div data-bind="visible:subcategory" class=" col-md-4 form-group-sm has-info">
+                                        <select id="kampanya" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
+                                    </div>
                                 </div>
-                                <div data-bind="visible:category" class="col-md-4  form-group-sm has-info">
-                                    <select id="urun" data-bind="options:subcategorylist,optionsText:'subcategory',optionsValue:'subcategory',value:subcategory,optionsCaption: 'Alt Kategori Seçiniz...'"></select>
-                                </div>
-                                <div data-bind="visible:subcategory" class=" col-md-4 form-group-sm has-info">
-                                    <select id="kampanya" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
-                                </div>
-                            </div>
-                            <div class="row" data-bind="foreach:{ data: productlist, as:'categories'}">
-                                <div class="col-md-3">
-                                    <div class="list-group">
-                                        <h4 data-bind="text:categories.category" class="list-group-item active"></h4>
-                                        <label class="list-group-item">
-                                            <input data-bind="attr:{name: ('category' + $index()), value: 0},checked:categories.selectedProduct" type="radio" name="optradio1">Yok
-                                        </label>
-                                        <!-- ko foreach:{ data: categories.products, as: 'product'} -->
-                                        <label class="list-group-item">
-                                            <input data-bind="attr:{name: ('category' + $parentContext.$index()), value: product.productid},checked:categories.selectedProduct" type="radio" name="optradio1">
-                                            <span data-bind="text: product.productname"></span>
-                                        </label>
-                                        <!-- /ko -->
+                                <div class="row" data-bind="foreach:{ data: productlist, as:'categories'}">
+                                    <div class="col-md-3">
+                                        <div class="list-group">
+                                            <h4 data-bind="text:categories.category" class="list-group-item active"></h4>
+                                            <label class="list-group-item">
+                                                <input data-bind="attr:{name: ('category' + $index()), value: 0},checked:categories.selectedProduct" type="radio" name="optradio1">
+                                            </label>
+                                            <!-- ko foreach:{ data: categories.products, as: 'product'} -->
+                                            <label class="list-group-item">
+                                                <input data-bind="attr:{name: ('category' + $parentContext.$index()), value: product.productid},checked:categories.selectedProduct" type="radio" name="optradio1">
+                                                <span data-bind="text: product.productname"></span>
+                                            </label>
+                                            <!-- /ko -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-
-                            <div class="col-md-12 cls-padding-0px">
-                                <div class="col-md-2 cls-panel-body cls-margin-top">
-                                    <button data-bind="visible:selectedProductIds().length>0 && info()==null, click:closeTaskQueues" type="button" class="btn btn-success cls-right cls-button-control">Kaydet</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-md-offset-3" data-bind="visible:closedTaskqueueResponseMessage" style="position: absolute; top: 150px;" id="id_alert" onclick="setTimeout(function () { $('#id_alert').css({ display: 'none' }); }, 1000)">
-                        <div class="alert alert-success alert-dismissible cls_alert" role="alert" style="height: 100px;">
-                            <button type="button" data-bind="click :redirect" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <strong>İşlem Başarılı</strong>
-                        </div>
+                        </fieldset>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Seri Numaralı Ürünler</a>
-                    </h4>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="container-fluid cls-padding-0px cls-deneme-height ">
-                            <div class="row cls-margin-task">
-                                <div class="col-lg-12 cls-padding-0px">
-                                    <div class="col-lg-12 cls-task cls-padding-0px">
-                                        <table class="table" id="taskquetable" data-pagination="true" data-search="true">
-                                            <thead>
-                                                <tr>
-                                                    <th class="warning">Hareket Tarihi</th>
-                                                    <th class="info">Çıkış Yapan Birim</th>
-                                                    <th class="info">Çıkış Yapılan Birim</th>
-                                                    <th class="info">ürün Adı</th>
-                                                    <th class="info">Adet</th>
-                                                    <th class="info">Serial No</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody data-bind="foreach:{ data:stockcardlist , as:'stockcard'}">
-                                                <tr class="cls_line" onclick="">
-                                                    <td data-bind="text:moment().format('lll')"></td>
-                                                    <td data-bind="text:$root.personelname"></td>
-                                                    <td data-bind="text:$root.customername"></td>
-                                                    <td data-bind="text:stockcard.productname"></td>
-                                                    <td>
-                                                        <input data-bind="value:stockcard.used,disable:stockcard.max()<=0, attr:{'max':stockcard.max},valueUpdate:'input'"
-                                                               type="text" class="form-control" id="exampleInputName2" style="height:30px;" placeholder="Default" /> / <span data-bind="text:stockcard.available"></span>
-                                                    </td>
-                                                    <td>
-                                                        <!--ko if:stockcard.hasserial-->
-                                                        <select id="serialno" data-bind="options:stockcard.serials,optionsCaption:'Seçiniz...', value:stockcard.serial"></select>
-                                                        <!--/ko-->
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
+                <div data-bind="visible: stockmovement().length>0" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Seri Numaralı Ürünler</a>
+                        </h4>
+                    </div>
+                    <div id="collapse3" class="panel-collapse collapse" data-bind="css:{'in': editable}">
+                        <fieldset data-bind="enable: smEditable">
+                            <div class="panel-body">
+                                <div class="container-fluid cls-padding-0px cls-deneme-height ">
+                                    <div class="row cls-margin-task">
+                                        <div class="col-lg-12 cls-padding-0px">
+                                            <div class="col-lg-12 cls-task cls-padding-0px">
+                                                <table class="table" id="taskquetable" data-pagination="true" data-search="true">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="warning">Hareket Tarihi</th>
+                                                            <th class="info">Çıkış Yapan Birim</th>
+                                                            <th class="info">Çıkış Yapılan Birim</th>
+                                                            <th class="info">ürün Adı</th>
+                                                            <th class="info">Adet/Serial No</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-bind="foreach:{ data:stockmovement , as:'sm'}">
+                                                        <tr class="cls_line" onclick="">
+                                                            <td data-bind="text:moment().format('lll')"></td>
+                                                            <td data-bind="text:$root.personelname"></td>
+                                                            <td data-bind="text:$root.customername"></td>
+                                                            <td data-bind="text:sm.stockcard.productname"></td>
+                                                            <td>
+                                                                <!--ko if:sm.stockcard.hasserial-->
+                                                                <select id="serialno" data-bind="disable: sm.max()<=0, options:sm.serials,optionsCaption:'Seçiniz...', value:sm.serial"></select>
+                                                                <!--/ko-->
+                                                                <!--ko ifnot:sm.stockcard.hasserial-->
+                                                                <input data-bind="value:sm.used,disable:sm.max()<=0, attr:{'max':sm.max},valueUpdate:'input'"
+                                                                       type="text" class="form-control" id="exampleInputName2" style="height:30px;" placeholder="Default" /> / <span data-bind="text:sm.available"></span>
+                                                                <!--/ko-->
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-12 cls-padding-0px">
-                            <div class="col-md-2 cls-panel-body cls-margin-top">
-                                <button  data-bind="click:saveStockMovements" type="button" class="btn btn-success cls-right cls-button-control">Kaydet</button>
-                            </div>
-                        </div>
+                        </fieldset>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Döküman Yükleme </a>
-                    </h4>
-                </div>
+                <div data-bind="visible: customerdocument().length>0" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Döküman Yükleme </a>
+                        </h4>
+                    </div>
+                    <div id="collapse4" class="panel-collapse collapse" data-bind="css:{'in': editable}">
+                        <fieldset data-bind="enable: cdEditable">
+                            <div class="panel-body" data-bind="visible:customerdocument().length>0">
+                                <table class="table" id="taskquetable" data-pagination="true" data-search="true">
+                                    <thead>
+                                        <tr>
+                                            <th class="warning">Döküman Adı</th>
+                                            <th class="info">Döküman Yolu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach:{ data:customerdocument}">
+                                        <tr class="cls_line" onclick="">
+                                            <td data-bind="text:adsl_document.documentname, attr:{'title': adsl_document.documentdescription}"></td>
+                                            <td>
+                                                <div>
+                                                    <input class="btn" type="button" value="Seç..." data-bind="click: function(){ $root.selectFile(adsl_document.documentid); }" />
+                                                    <span data-bind="text:documenturl"></span>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                <div id="collapse4" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <input id="input-702" name="kartik-input-702[]" type="file" class="file-loading">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div  class="col-md-3 height-30 navbar-form pull-right">
+        <span data-bind="visible:taskstatus()==0" class="label label-danger">Taskın Durumu Henüz Girilmemiş</span>
+        <span data-bind="visible:!campaignIsValid()" class="label label-danger">Kampanya Bilgileri Girilmemiş</span>
+        <span data-bind="visible:!cdIsValid()" class="label label-danger">Döküman Yüklemeniz Gerekiyor</span>
+        <span data-bind="visible:!smIsValid()" class="label label-danger">Donanım Girmeniz Gerekiyor</span>
+        <span data-bind="visible:errormessage(), text:errormessage" class="label label-danger"></span>
+        <button data-bind="click:function() {saveTaskQueues() }, enable: modelIsValid" type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
+   </div>
     <!-- müşteri bilgilerini düzenleme For Modal Start -->
     <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
@@ -300,107 +317,46 @@
                         <p><label data-bind="text:customerid"></label></p> 
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Blok</p>
+                        <p>Adı Soyadı</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p><label data-bind="text:block.blockid"></label></p> 
+                        <p><input class="form-control" data-bind="value:customername"></p>
                     </div>
                     <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Daire</p>
+                        <p>Tc Kimlik No</p>
                     </div>
                     <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p><label data-bind="text:flat"></label></p> 
+                        <p><input class="form-control" data-bind="value:tc"></p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Tc No</p>
+                        <p>GSM</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p><input class="form-control" data-bind="value:tckimlikno" ></p>
+                        <p><input class="form-control" data-bind="value:gsm" ></p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Ad</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p><input data-bind="value:customername" class="form-control"></p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Soyad</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p> <input data-bind="value:customersurname" class="form-control"></p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Gsm</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p><input data-bind="value:gsm" class="form-control"></p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Telefon</p>
+                        <p>Sabit Tel</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <p><input data-bind="value:phone" class="form-control"></p>
                     </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Doğum Tarihi</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <p> <input data-bind="value:birthdate" class="form-control"></p>
+                    </div>
                     <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Müşteri Statüsü</p>
+                        <p>İl</p>
                     </div>
                     <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="abonedurumuinfo" data-bind="options: $parent.ctstatuslist, optionsText: 'Text', optionsValue: 'ID', value: (customer_status && customer_status.ID || 0)" ></select>
+                        <select class="form-control" id="ilcombo" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'" ></select>
                     </div>
                     <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>İnternet SS</p>
+                        <p>İlçe</p>
                     </div>
                     <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select class="form-control" id="abonedurumuinfo" data-bind="options: $parent.issStatusList, optionsText: 'issText', optionsValue: 'id', value: (issStatus && issStatus.id || 0)" ></select>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>İnternet Ücreti</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="netstatus" class="form-control" data-bind="options: $parent.netStatusList, optionsText: 'netText', optionsValue: 'id', value: (netStatus && netStatus.id || 0)" ></select>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Telefon Ücreti</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                      <select id="telstatus" class="form-control" data-bind=" options: $parent.telStatusList,
-    optionsText: 'telText',
-    optionsValue: 'id',
-    value: (telStatus && telStatus.id || 0),
-    optionsCaption: 'Gsm Kullanımı Seçiniz...'" ></select>
-
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Televizyon Kullanımı</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="tvstatus" class="form-control" data-bind="options: $parent.tvStatusList,
-    optionsText: 'tvKullanımıText',
-    optionsValue: 'id',
-    value: (TvKullanımıStatus && TvKullanımıStatus.id || 0),
-    optionsCaption: 'Tv Kullanımı Seçiniz...'" ></select>
-
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Turkcell Tv</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="ttvstatus" class="form-control"data-bind="options: $parent.TurkcellTvStatusList,
-    optionsText: 'TurkcellTvText',
-    optionsValue: 'id',
-    value: (turkcellTv && TurkcellTVStatus.id || 0),
-    optionsCaption: 'TTV + Kullanımı Seçiniz...'" ></select>
-
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Gsm Kullanımı</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select id="gsmstatus" class="form-control" data-bind=" options: $parent.gsmStatusList,
-    optionsText: 'gsmText',
-    optionsValue: 'id',
-    value: (gsmKullanımıStatus && gsmKullanımıStatus.id || 0),
-    optionsCaption: 'Gsm Kullanımı Seçiniz...'" ></select>
+                        <select id="ilcecombo" data-bind="options: $root.ilceList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilceKimlikNo,optionsCaption:'Seçiniz'" class="form-control"></select>
                     </div>
                 </div>
                 <div class="modal-footer">

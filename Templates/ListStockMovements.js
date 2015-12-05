@@ -8,6 +8,7 @@ var dataModel = {
     savemessage: ko.observable(),
     savemessagecode: ko.observable(),
 
+    selectedmovementid:ko.observableArray([]),
     user: ko.observable(),
     newinputserial:ko.observable(),
     serialArray:ko.observableArray([]),
@@ -20,6 +21,7 @@ var dataModel = {
     toObjectName: ko.observable(),
     productName: ko.observable(),
     serialNo: ko.observable(),
+    isconfirmed:ko.observable(),
     movementdate: ko.observable(),
     objectList: ko.observableArray([]),
     objectsList: ko.observableArray([]),
@@ -36,6 +38,8 @@ var dataModel = {
     isSatinalma: ko.observable(),
     getStockMovements: function (pageno, rowsperpage) {
         var self = this;
+        self.savemessage(null);
+        self.savemessagecode(null);
         self.pageNo(pageno);
         self.rowsPerPage(rowsperpage);
         var data = {
@@ -45,6 +49,7 @@ var dataModel = {
             toobject: { value: self.toObjectName() ? self.toObjectName() : null },
             product: self.productName() ? { fieldName: 'productname', op: 6, value: self.productName() } : null,
             serialno: self.serialNo() ? { value: self.serialNo() } : null,
+            isconfirmed: self.isconfirmed() ? { value: self.isconfirmed() } : null,
             movementdate: self.movementdate() ? ($("#movementdate").val() ? { value: self.movementdate() } : null) : null,
         };
         crmAPI.getStockMovements(data, function (a, b, c) {
@@ -56,6 +61,17 @@ var dataModel = {
                 self.getStockCards();
                 self.getpersonel();
                 console.log($(this).val());
+            });
+            $('.sel').change(function () {
+                var ids = [];
+                $('.sel').each(function () {
+                    if ($(this).is(':checked')) {
+                        var id = $(this).val();
+                        ids.push(id);
+                        console.log("Seçim: " + id + "");
+                    }
+                });
+                self.selectedmovementid(ids);
             });
         }, null, null);
     },
@@ -272,6 +288,17 @@ var dataModel = {
         }, null, null);
         console.log(postdata);
     },
+    confirmAll: function () {
+        var self = this;
+        crmAPI.confirmSM(self.selectedmovementid(), function (a, b, c) {
+            self.savemessage(a.errorMessage);
+            self.savemessagecode(a.errorCode);
+            window.setTimeout(function () {
+                $('#myModal2').modal('hide');
+                self.getStockMovements(1, dataModel.rowsPerPage());
+            }, 1000);
+        });
+    },
     clean: function () {
         var self = this;
         self.fromObjectName(null);
@@ -324,6 +351,7 @@ var dataModel = {
             self.getpersonel();
            
         });
+        
         self.getUser();
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     }

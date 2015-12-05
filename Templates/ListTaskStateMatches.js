@@ -244,6 +244,7 @@ var dataModel = {
             self.getStates();
             self.getDocs();
         });
+      
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     }
 

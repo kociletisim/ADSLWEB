@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div>
+        <p>
+            <div class="panel-body" style="margin: 0 15px 0 15px !important; padding: 0px !important;">
+
+                <div class=" btn-navbar">
+                    <div class="btn-large">
+                        <button type="button"  data-bind="click:printWorkList" class="btn-danger" >İş Emrini Yazdır</button>
+                        <span data-bind="visible:workList().length>0" style="font-size:large">Size Ait Toplam <span class="label-success" data-bind="text:workList().length"></span> iş vardır.</span>
+                    </div> 
+                </div>
+                <div class="container-fluid cls-padding-0px cls-deneme-height ">
+                    <div class="row cls-margin-task">
+                        <div class="col-lg-12 cls-padding-0px">
+                            <div class="col-lg-12 cls-task cls-padding-0px">
+                                <table class="table" id="worklisttable" data-pagination="true" data-search="true">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-1" style="border-right: 1px solid #ddd;">
+                                            </th>
+                                            <th class="col-md-2" style="border-right: 1px solid #ddd;">Müşteri</th>
+                                            <th class="col-md-2" style="border-right: 1px solid #ddd;">Gsm</th>
+                                            <th class="col-md-2" style="border-right: 1px solid #ddd;">Açıklama</th>
+                                            <th class="col-md-2" style="border-right: 1px solid #ddd;">Task</th>
+                                            <th class="col-md-2" style="border-right: 1px solid #ddd;">Tarih</th>
+                                            <th class="col-md-2" style="border-right: 1px solid #ddd;">Kampanya</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- ko foreach: workList -->
+                                        <tr>
+                                            <td></td>
+                                            <td data-bind="text:attachedcustomer.customername"></td>
+                                            <td data-bind="text:attachedcustomer.gsm"></td>
+                                            <td data-bind="text:description"></td>
+                                            <td data-bind="text:task.taskname"></td>
+                                            <td data-bind="text:moment(attachmentdate).format('LLL')"></td>
+                                            <td data-bind="text:customerproduct.length>0? customerproduct[0].campaigns.name:null"></td>
+                                        </tr>
+                                        <!-- /ko-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p>
+    </div>
+</body>
+</html>
+<script src="Templates/Worklist.js"></script>
