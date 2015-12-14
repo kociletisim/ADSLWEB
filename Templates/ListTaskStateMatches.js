@@ -98,7 +98,7 @@ var dataModel = {
         };
         crmAPI.getTaskFilter(data, function (a, b, c) {
             self.taskList(a);
-            $('#durumtanimi,#editmandatorytask,#editoptask,#newoptask,#newmandatorytask,#newtask').multiselect({
+            $('#durumtanimi,#editmandatorytask,#editoptask,#newoptask,#newmandatorytask,#newtaskcombo').multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -184,7 +184,7 @@ var dataModel = {
         var self = this;
        
         var data = {
-            task: { taskid: $("#newtask").val().toString(), },
+            task: { taskid: $("#newtaskcombo").val().toString(), },
             taskstatepool: { taskstateid: $("#newstatus").val().toString(), },
             automandatorytasks: $("#newmandatorytask").val()?$("#newmandatorytask").val().toString():null,
             autooptionaltasks:$("#newoptask").val()? $("#newoptask").val().toString():null,

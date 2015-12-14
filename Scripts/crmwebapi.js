@@ -191,6 +191,12 @@
          saveAdslSalesTask: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/saveAdslSalesTask", data, onsuccess, onerror, before)
          },
+         insertTaskqueue: function (data, onsuccess, onerror, before) {
+             getData("POST", "TaskQueues/insertTaskqueue", data, onsuccess, onerror, before)
+         },
+         confirmCustomer: function (data, onsuccess, onerror, before) {
+             getData("POST", "TaskQueues/confirmCustomer", data, onsuccess, onerror, before)
+         },
          saveFaultTask: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/saveFaultTask", data, onsuccess, onerror, before)
          },
@@ -284,6 +290,7 @@
          saveCustomerCard: function (data, onsuccess, onerror, before) {
              getData("POST", "Customer/saveCustomerCard", data, onsuccess, onerror, before)
          },
+
          getPersonelWorkList: function (data, onsuccess, onerror, before) {
              getData("POST", "Reports/getPersonelWorks", data, onsuccess, onerror, before)
          },
@@ -292,4 +299,4 @@
 
 
 
-
+ 

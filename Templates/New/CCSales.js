@@ -33,6 +33,18 @@ var dataModel = {
     personellist: ko.observableArray([]),
     salespersonel: ko.observable(),
     loadingmessage: ko.observable(0),
+    subcategorylist: ko.observableArray([]),
+    categorylist: ko.observableArray([]),
+    campaignlist: ko.observableArray([]),
+    category: ko.observable(),
+    subcategory: ko.observable(),
+    campaignid: ko.observable(),
+    customerProductList: ko.observableArray([]),
+    productlist: ko.observableArray([]),
+    pids: ko.observableArray([]),
+    sesList:ko.observableArray([]),
+    selectedNet:ko.observable(),
+    selectedSes:ko.observable(),
     errorControl: ko.pureComputed(function () {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
@@ -118,6 +130,68 @@ var dataModel = {
 
         }, null, null)
     },
+
+    getcategory: function () {
+        var self = this;
+        data = {
+            category: { fieldName: 'category', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.categorylist(a);
+            $("#kategori").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
+
+            self.category(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.category : null);
+            $("#kategori").multiselect("refresh");
+
+
+        }, null, null)
+    },
+    getsubcategory: function () {
+        var self = this;
+        data = {
+            category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
+            subcategory: { fieldName: 'subcategory', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.subcategorylist(a);
+            $("#urun").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
+            self.subcategory(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.subcategory : null);
+            $("#urun").multiselect("refresh");
+        }, null, null)
+    },
+    getcamapign: function () {
+        var self = this;
+        data = {
+            category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
+            subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
+            campaign: { fieldName: 'name', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.campaignlist(a);
+            $("#kampanya").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
+            self.campaignid(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.id : null);
+            $("#kampanya").multiselect("refresh");
+        }, null, null)
+    },
+    getproduct: function () {
+        var self = this;      
+        data = {
+            category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
+            subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
+            campaign: { fieldName: 'id', op: 2, value: self.campaignid() },
+            products: { fieldName: 'productname', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.productlist(a[0].products);
+            if(a[1])
+            self.sesList(a[1].products);
+            $("#product").multiselect("setOptions", self.productlist()).multiselect("rebuild");
+            $("#product").multiselect("refresh");
+            $("#ses").multiselect("setOptions", self.sesList()).multiselect("rebuild");
+            $("#ses").multiselect("refresh");
+        }, null, null)
+    },
+
     //getMahalle: function (ilceKimlikNo) {
     //    var self = this;
     //    var data = {
@@ -158,8 +232,12 @@ var dataModel = {
     //},
     insertAdslSalesTask: function () {
         var self = this;
+        if (self.selectedNet()) self.pids().push(self.selectedNet());
+        if (self.selectedSes()) self.pids().push(self.selectedSes());
+       
         if (self.yalin()) self.taskid(32);
         else if (self.churn()) self.taskid(33);
+       
         var data = {
             tc: self.tckimlikno(),
             customername: self.customername(),
@@ -175,11 +253,16 @@ var dataModel = {
             description:self.fulladdress(),
             taskdescription: self.taskdescription(),
             taskid: self.taskid(),
-            salespersonel:self.salespersonel(),
+            salespersonel: self.salespersonel(),
+            productids: self.pids(),
+            campaignid:self.campaignid(),
         };
         if (data.tc != null && data.gsm != null && (self.yalin() || self.churn()))
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
-        else alert("Eksik Bilgi Girdiniz.!");
+        else {
+            self.pids(null);
+            alert("Eksik Bilgi Girdiniz.!");
+        }
     },
     renderBindings: function () {
         var self = this;
@@ -204,8 +287,45 @@ var dataModel = {
             validate: true,
             customMaxAttribute: "11"
         });
+        $("#kategori").multiselect({
+            includeSelectAllOption: true,
+            selectAllValue: 'select-all-value',
+            maxHeight: 250,
+            buttonWidth: '100%',
+            nonSelectedText: ' Seçiniz',
+            nSelectedText: ' Seçildi!',
+            numberDisplayed: 2,
+            selectAllText: 'Tümünü Seç!',
+            enableFiltering: true,
+            filterPlaceholder: 'Ara'
+        });
+        $("#urun").multiselect({
+            includeSelectAllOption: true,
+            selectAllValue: 'select-all-value',
+            maxHeight: 250,
+            buttonWidth: '100%',
+            nonSelectedText: ' Seçiniz',
+            nSelectedText: ' Seçildi!',
+            numberDisplayed: 2,
+            selectAllText: 'Tümünü Seç!',
+            enableFiltering: true,
+            filterPlaceholder: 'Ara'
+        });
+        $("#kampanya,#product,#ses").multiselect({
+            includeSelectAllOption: true,
+            selectAllValue: 'select-all-value',
+            maxHeight: 250,
+            buttonWidth: '100%',
+            nonSelectedText: ' Seçiniz',
+            nSelectedText: ' Seçildi!',
+            numberDisplayed: 2,
+            selectAllText: 'Tümünü Seç!',
+            enableFiltering: true,
+            filterPlaceholder: 'Ara'
+        });
         self.getIl();
         ko.applyBindings(dataModel, $("#bindingmodal")[0]);
+        self.getcategory();
 
     }
 }
@@ -260,4 +380,19 @@ dataModel.selectedBucak.subscribe(function (v) {
     if (v != null)
         dataModel.getMahalle(v);
     return true;
+});
+
+dataModel.category.subscribe(function (v) {
+    dataModel.getsubcategory();
+});
+dataModel.subcategory.subscribe(function (v) {
+    dataModel.productlist([]);
+    if (v)
+        dataModel.getcamapign();
+});
+dataModel.campaignid.subscribe(function (v) {
+    dataModel.productlist([]);
+    dataModel.sesList([]);
+    if (v)
+        dataModel.getproduct();
 });

@@ -1,4 +1,4 @@
-﻿<div id="bindingmodal" class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
+﻿<div id="bindingmodal" class="modal-dialog modal-md" role="document" style="margin-top: 50px;">
     <div class="modal-content">
         <div class="modal-header btn-danger">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -95,6 +95,42 @@
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                     <input data-bind="value:fulladdress" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
                 </div>
+                <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Kategori</p>
+                </div>
+                <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Kategori Seçiniz...'"></select>
+                </div>
+                <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Altkategori</p>
+                </div>
+                <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="urun" data-bind="options:subcategorylist,optionsText:'subcategory',optionsValue:'subcategory',value:subcategory,optionsCaption: 'Alt Kategori Seçiniz...'"></select>
+                </div>
+                <div data-bind="visible:subcategory" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Kampanya</p>
+                </div>
+                <div data-bind="visible:subcategory" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="kampanya" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
+                </div>
+                <div data-bind="visible:campaignid" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Net</p>
+                </div>
+                <div data-bind="visible:campaignid" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="product" data-bind="options:productlist,optionsValue:'productid',optionsText:'productname',value:selectedNet,optionsCaption:'Net Seçiniz..'"></select>
+                </div>
+                <div data-bind="visible: sesList &&sesList().length>0" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Ses</p>
+                </div>
+                <div data-bind="visible:sesList && sesList().length>0" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="ses" data-bind="options:sesList,optionsValue:'productid',optionsText:'productname',value:selectedSes,optionsCaption:'Ses Seçiniz..'"></select>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Task Açıklama</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:taskdescription" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
+                </div>
                 <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
                 <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
             </div>
@@ -104,7 +140,7 @@
             <span data-bind="visible:errorControl()">Tekrar Deneyiniz</span>
             <div data-bind="visible: !errorControl()">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                <button data-bind="click:insertAdslSalesTask, visible:(tckimlikno && gsm &&customername && salespersonel && fulladdress)" type="button" class="btn btn-success">Kaydet</button>
+                <button data-bind="click:insertAdslSalesTask, enable:(tckimlikno && gsm &&customername && salespersonel && fulladdress && selectedNet)" type="button" class="btn btn-success">Kaydet</button>
             </div>
         </div>
     </div>

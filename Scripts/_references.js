@@ -42,6 +42,7 @@
 /// <reference path="../Templates/New/FiberSales.js" />
 /// <reference path="../Templates/New/NewAdslSales.js" />
 /// <reference path="../Templates/New/RetentionSatis.js" />
+/// <reference path="../Templates/New/Task.js" />
 /// <reference path="../Templates/New/YanindaEkUrun.js" />
 /// <reference path="../Templates/New/YonetimOdasi.js" />
 /// <reference path="../Templates/Sites.js" />

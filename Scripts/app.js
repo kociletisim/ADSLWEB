@@ -28,6 +28,9 @@ $(window).bind("hashchange", function () {
     $("#newccsales").click(function () {
         $("#ModalContainer").loadTemplate("Templates/New/CCSales.html");
     });
+    $("#newtask").click(function () {
+        $("#ModalContainer").loadTemplate("Templates/New/Task.html");
+    });
     $("#worklist").click(function () {
         $("#templateContainer").loadTemplate("Templates/Worklist.html");
     });
