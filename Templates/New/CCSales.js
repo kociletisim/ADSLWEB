@@ -44,7 +44,8 @@ var dataModel = {
     pids: ko.observableArray([]),
     sesList:ko.observableArray([]),
     selectedNet:ko.observable(),
-    selectedSes:ko.observable(),
+    selectedSes: ko.observable(),
+    fault:ko.observable(),
     errorControl: ko.pureComputed(function () {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
@@ -252,6 +253,7 @@ var dataModel = {
             daire: 61,
             description:self.fulladdress(),
             taskdescription: self.taskdescription(),
+            fault:self.fault(),
             taskid: self.taskid(),
             salespersonel: self.salespersonel(),
             productids: self.pids(),
@@ -274,6 +276,18 @@ var dataModel = {
             buttonWidth: '100%',
             nonSelectedText: 'İlçe Seçiniz',
             nSelectedText: 'İlçe Seçildi!',
+            numberDisplayed: 2,
+            selectAllText: 'Tümünü Seç!',
+            enableFiltering: true,
+            filterPlaceholder: 'Ara'
+        });
+        $("#kaynak").multiselect({
+            includeSelectAllOption: false,
+            selectAllValue: 'select-all-value',
+            maxHeight: 250,
+            buttonWidth: '100%',
+            nonSelectedText: 'Kaynak Seçiniz',
+            nSelectedText: 'Kaynak Seçildi!',
             numberDisplayed: 2,
             selectAllText: 'Tümünü Seç!',
             enableFiltering: true,

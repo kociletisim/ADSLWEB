@@ -21,6 +21,7 @@ var dataModel = {
     tsmList: ko.observableArray([]),
     savemessage: ko.observable(),
     savemessagecode: ko.observable(),
+    taskstatecontrol: ko.observable(true),
     autoTaskIds: ko.observableArray([]),
     opTaskIds: ko.observableArray([]),
     stockIds: ko.observableArray([]),
@@ -54,6 +55,8 @@ var dataModel = {
             taskstatematches: { fieldName: "id", op: 2, value: id },
         };
         crmAPI.getTaskStateMatches(data, function (a, b, c) {
+            if (a.data.rows[0].taskstatepool.taskstateid==9116)
+            self.taskstatecontrol(false);
             self.selectedTSM(a.data.rows[0]);
             $("#edittask,#editstatus").multiselect({
                 includeSelectAllOption: true,
@@ -184,8 +187,8 @@ var dataModel = {
         var self = this;
        
         var data = {
-            task: { taskid: $("#newtaskcombo").val().toString(), },
-            taskstatepool: { taskstateid: $("#newstatus").val().toString(), },
+            task: { taskid: $("#newtaskcombo").val()? $("#newtaskcombo").val().toString():null, },
+            taskstatepool: { taskstateid: $("#newstatus").val()? $("#newstatus").val().toString():null, },
             automandatorytasks: $("#newmandatorytask").val()?$("#newmandatorytask").val().toString():null,
             autooptionaltasks:$("#newoptask").val()? $("#newoptask").val().toString():null,
             stockcards:$("#newstock").val()? $("#newstock").val().toString():null,
@@ -247,7 +250,6 @@ var dataModel = {
       
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     }
-
 }
 dataModel.selectedTSM.subscribe(function (v) {
     if (v.automandatorytasks != null)

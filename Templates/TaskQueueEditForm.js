@@ -28,11 +28,12 @@ var dataModel = {
     customergsm: ko.observable(),
     customerstatus: ko.observable(),
     description: ko.observable(),
+    dateoption: ko.observable(),
     taskstatuslist: ko.observableArray([]),
     personellist:ko.observableArray([]),
     ctstatuslist: ko.observableArray([]),
     message: ko.observable(),
-    flag: ko.observable(false),
+    flag: ko.observable(true),
     customerdocument:ko.observableArray([]),
     ilList: ko.observableArray([]),
     ilceList: ko.observableArray([]),
@@ -345,7 +346,14 @@ var dataModel = {
     },
     saveTaskQueues: function () {
         var self = this;
-        if (!dataModel.modelIsValid()) return alert("Eksik veriler var. Lütfen gerekli tüm alanları doldurunuz.");
+        self.flag(false);
+        if (!dataModel.modelIsValid()) crmAPI.saveTaskQueues(data, function (a, b, c) {
+            self.message(a);
+            window.setTimeout(function () {
+                $("#id_alert").alert('close');
+                self.redirect();
+            }, 1250);
+        }, null, null); //return alert("Eksik veriler var. Lütfen gerekli tüm alanları doldurunuz."); 
         data = {
             taskorderno: self.taskorderno(),
             task:{taskid:self.taskid()},
@@ -498,7 +506,7 @@ var dataModel = {
     //    }, null, null);
     //},
     renderBindings: function () {
-        var self = this;
+        var self = this; var i = 0;
         var hashSearches = document.location.hash.split("?");
         if(hashSearches.length > 1) { 
             $("#kategori").multiselect({
@@ -538,7 +546,8 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#fileUpload").fileinput({
-                uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Adsl/TaskQueues/upload", // server upload action
+                uploadUrl: "http://localhost:50752/api/Adsl/TaskQueues/upload", // server upload action
+               // uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Adsl/TaskQueues/upload", // server upload action
                 uploadAsync: false,
                 minFileCount: 1,
                 maxFileCount: 10,
@@ -583,7 +592,8 @@ var dataModel = {
                 var files = fi.filestack;
                 var filenames = fi.filenames;
                 fi.kocData = fi.kocData || {};
-                fi.kocData["_" + fu.documentid] = files[0];
+                fi.kocData["_" + fu.documentid] = files[i];
+                i++;
                 $.each(self.customerdocument(), function (index, doc) {
                     if (doc.documentid === fu.documentid) doc.documenturl(file.name);
                 });
@@ -594,16 +604,23 @@ var dataModel = {
             });
             $('#fileUpload').on('filebatchuploadsuccess', function (event, data, previewId, index) {
                 dataModel.message("ok");
-                window.setTimeout(function () {
-                    $("#id_alert").alert('close');
-                    self.redirect();
-                }, 1250);
+                //window.setTimeout(function () {
+                //    $("#id_alert").alert('close');
+                //    self.redirect();
+                //}, 1250);
             });
             var data = { taskOrderNo: hashSearches[1] };
             crmAPI.getTaskQueues(data, function (a, b, c) {
                 self.taskorderno(a.data.rows[0].taskorderno);               
                 self.taskname(a.data.rows[0].task.taskname);
                 self.taskid(a.data.rows[0].task.taskid);
+                if (self.taskid() == 30 || self.taskid() == 31 || self.taskid() == 32 || self.taskid() == 33) {
+                    self.dateoption("Satış Tarihi");
+                }
+                else if (self.taskid() == 34) {
+                    self.dateoption("Onay Tarihi");
+                }
+                else self.dateoption("Randevu Tarihi");
                 self.taskstatetype(a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.statetype || null)
                 var status = a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.taskstateid || null;
                 self.gettaskstatus(status);

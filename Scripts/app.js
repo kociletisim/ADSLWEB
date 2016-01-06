@@ -57,6 +57,7 @@ $(window).bind("hashchange", function () {
 
     $("#exit").click(function () {
         document.cookie = "token=;";
+        crmAPI.setCookie("tqlFilter", "");
         window.location.href = "Login.html";
 
     });

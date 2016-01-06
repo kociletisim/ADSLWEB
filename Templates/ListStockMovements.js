@@ -27,6 +27,7 @@ var dataModel = {
     objectsList: ko.observableArray([]),
     stockCardList: ko.observableArray([]),
     personelStockList: ko.observableArray([]),
+    stockOnPersonel:ko.observable(),
     serialList: ko.observableArray([]),
     stockSerialControl: ko.observable(),
     amount: ko.observable(),
@@ -130,6 +131,7 @@ var dataModel = {
         };
         crmAPI.getPersonelStock(data, function (a, b, c) {
             self.personelStockList(a);
+            self.stockOnPersonel(a),
             $("#newproduct,#newobject,#newserial").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
@@ -252,6 +254,7 @@ var dataModel = {
         crmAPI.userInfo(function (a, b, c) {
             self.user(a);
             self.fromobject(a.userId);
+            self.getPersonelStock();
         }, null, null);
     },
     addSerialList: function (d,e) {

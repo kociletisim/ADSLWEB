@@ -12,21 +12,19 @@
     
 </head>
 <body>
-
-    <script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
-    <!-- This is a very simple parallax effect achieved by simple CSS 3 multiple backgrounds, made by http://twitter.com/msurguy -->
+  
    <style>
  body{
     background: url(http://mymaplist.com/img/parallax/back.png);
     background-color: #444;
     background: url(http://mymaplist.com/img/parallax/pinlayer2.png),url(http://mymaplist.com/img/parallax/pinlayer1.png),url(http://mymaplist.com/img/parallax/back.png);
+    text-align: left;
     }
 
     .vertical-offset-100{
     padding-top:100px;
     }
    </style>
-    
     <div class="container">
         <div class="row vertical-offset-100">
             <div class="col-md-4 col-md-offset-4">
@@ -34,11 +32,12 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Lütfen Giriş Yapın</h3>
                     </div>
-                    <div class="panel-body">
+                    <div  class="panel-body ">
                         <form accept-charset="UTF-8" role="form">
                             <fieldset>
                                 <label id="welcome">Hoşgeldiniz</label>
-                                <div class="form-group">
+                                <label id="welcome">Hayallerinize Işık Hızında Ulaşacağınız Mutlu Bir Yıl Dileriz</label>
+                                 <div class="form-group">
                                     <input id="email" class="form-control" placeholder="E-mail" name="email" type="text">
                                 </div>
                                 <div class="form-group">
@@ -50,12 +49,17 @@
                                     </label>
                                 </div>
                                 <input id="login"  class="btn btn-lg btn-success btn-block"  value="Giriş">
+                               
+
                             </fieldset>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="navbar-fixed-bottom">
+        <img class="pull-right" id="lodinggif" src="img/spinner.gif" hidden="hidden" />
     </div>
 
 
@@ -98,6 +102,7 @@
                 password: $("#password").val(),
                 userType: "ADSL"
             };
+            $("#lodinggif").removeAttr("hidden");
             crmAPI.login(data, function (a, b, c) {
                 window.location.href = "app.html";
             }, null, null);
