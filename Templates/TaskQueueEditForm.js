@@ -28,6 +28,7 @@ var dataModel = {
     customergsm: ko.observable(),
     customerstatus: ko.observable(),
     description: ko.observable(),
+    descriptionControl:ko.observable(),
     dateoption: ko.observable(),
     taskstatuslist: ko.observableArray([]),
     personellist:ko.observableArray([]),
@@ -414,6 +415,29 @@ var dataModel = {
             }, null, null);
 
     },
+    saveTaskQueueDescription: function () {
+        data = {
+            taskorderno: self.taskorderno(),
+            task: { taskid: null },
+            taskstatepool:
+                {
+                    taskstateid: 0,
+                    taskstate: "AÇIK"
+                },
+            description: self.description() ? self.description() == "" ? null : (self.description() + " " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")") : null,
+            customerdocument: self.customerdocument(),
+            stockmovement: self.stockmovement(),
+            customerproduct: self.selectedProducts(),
+            asistanPersonel: { personelid: self.assistantpersonel() > 0 ? self.assistantpersonel() : null },
+        };
+         crmAPI.saveTaskQueues(data, function (a, b, c) {
+                self.message(a);
+                window.setTimeout(function () {
+                    $("#id_alert").alert('close');
+                    self.redirect();
+                }, 1250);
+            }, null, null);
+    },
     //closeTaskQueues: function () {
     //    var self = this;
     //    var data = {
@@ -643,6 +667,7 @@ var dataModel = {
                 self.customergsm(a.data.rows[0].attachedcustomer && a.data.rows[0].attachedcustomer.gsm || '');
                 $("#abonedurumu").multiselect("refresh");
                 self.description(a.data.rows[0].description);
+                self.descriptionControl(false);
                 self.customerProductList(a.data.rows[0].customerproduct);
                 $.each(a.data.rows[0].customerdocument, function (index, doc) {
                     doc.documenturl = ko.observable(doc.documenturl);
@@ -802,4 +827,9 @@ dataModel.taskstatus.subscribe(function () {
 dataModel.uploadControl.subscribe(function (v) {
     if(v==true)
         $('.fileinput-upload-button').click()
+});
+dataModel.description.subscribe(function () {
+    dataModel.descriptionControl() == false ? dataModel.descriptionControl(true) : dataModel.descriptionControl(false);
+
+    
 });
