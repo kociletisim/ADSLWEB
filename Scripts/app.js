@@ -34,6 +34,9 @@ $(window).bind("hashchange", function () {
     $("#worklist").click(function () {
         $("#templateContainer").loadTemplate("Templates/Worklist.html");
     });
+    $("#newcorporatesales").click(function () {
+        $("#templateContainer").loadTemplate("Templates/New/NewCorporateSales.html");
+    });
     
 
     //$("#fibersatis").click(function () {
