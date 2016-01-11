@@ -298,7 +298,7 @@
         <span data-bind="visible:!cdIsValid()" class="label label-danger">Döküman Yüklemeniz Gerekiyor</span>
         <span data-bind="visible:!smIsValid()" class="label label-danger">Donanım Girmeniz Gerekiyor</span>
         <span data-bind="visible:errormessage(), text:errormessage" class="label label-danger"></span>
-        <button data-bind="click:function() {saveTaskQueues() }" type="button" class="btn btn-success cls-right cls-button-control" >Kaydet ve Anasayfaya Dön</button>
+        <button data-bind="click:function() {saveTaskQueues() },enable:modelIsValid" type="button" class="btn btn-success cls-right cls-button-control" >Kaydet ve Anasayfaya Dön</button>
    </div>
     <!-- müşteri bilgilerini düzenleme For Modal Start -->
     <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
