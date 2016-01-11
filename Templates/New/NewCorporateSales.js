@@ -203,8 +203,6 @@ var dataModel = {
         if (self.selectedNet()) self.pids().push(self.selectedNet());
         if (self.selectedSes()) self.pids().push(self.selectedSes());
 
-        if (self.yalin()) self.taskid(30);
-        else if (self.churn()) self.taskid(31);
         var data = {
             tc: self.tckimlikno(),
             customername: self.customername(),
@@ -224,7 +222,7 @@ var dataModel = {
             productids: self.pids(),
             campaignid: self.campaignid(),
         };
-        if (data.tc != null && data.gsm != null && (self.yalin() || self.churn()))
+        if (data.tc != null && data.gsm != null )
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
         else alert("Eksik Bilgi Girdiniz.!");
     },
@@ -280,12 +278,12 @@ var dataModel = {
             filterPlaceholder: 'Ara'
         });
         $('#tc').maxlength({
-            threshold: 10,
+            threshold: 9,
             warningClass: "label label-danger",
             limitReachedClass: "label label-success",
             separator: ' / ',
             validate: true,
-            customMaxAttribute: "11"
+            customMaxAttribute: "10"
         });
         self.getIl();
         self.getcategory();
