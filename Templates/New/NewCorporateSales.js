@@ -353,7 +353,7 @@ dataModel.subcategory.subscribe(function (v) {
     dataModel.productlist([]);
     if (v)
         dataModel.getcamapign();
-});
+}); 
 dataModel.campaignid.subscribe(function (v) {
     dataModel.productlist([]);
     dataModel.sesList([]);
