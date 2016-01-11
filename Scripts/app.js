@@ -35,7 +35,7 @@ $(window).bind("hashchange", function () {
         $("#templateContainer").loadTemplate("Templates/Worklist.html");
     });
     $("#newcorporatesales").click(function () {
-        $("#templateContainer").loadTemplate("Templates/New/NewCorporateSales.html");
+        $("#ModalContainer").loadTemplate("Templates/New/NewCorporateSales.html");
     });
     
 
