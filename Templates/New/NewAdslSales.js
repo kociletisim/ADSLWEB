@@ -54,6 +54,7 @@ var dataModel = {
     sesList: ko.observableArray([]),
     selectedNet: ko.observable(),
     selectedSes: ko.observable(),
+    fault: ko.observable(),
     errorControl:ko.pureComputed(function(){
         return  (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
@@ -300,6 +301,7 @@ var dataModel = {
             salespersonel: self.salespersonel(),
             productids: self.pids(),
             campaignid: self.campaignid(),
+            fault: self.fault(),
         };
         if (data.tc != null && data.gsm != null &&(self.yalin()||self.churn()))
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
@@ -363,6 +365,18 @@ var dataModel = {
             separator: ' / ',
             validate: true,
             customMaxAttribute: "11"
+        });
+        $("#kaynak").multiselect({
+            includeSelectAllOption: false,
+            selectAllValue: 'select-all-value',
+            maxHeight: 250,
+            buttonWidth: '100%',
+            nonSelectedText: 'Kaynak Seçiniz',
+            nSelectedText: 'Kaynak Seçildi!',
+            numberDisplayed: 2,
+            selectAllText: 'Tümünü Seç!',
+            enableFiltering: true,
+            filterPlaceholder: 'Ara'
         });
         self.getIl();
         self.getcategory();

@@ -38,6 +38,20 @@
                 <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <select id="salesPersonel" data-bind="options:personellist,optionsText:'personelname',optionsValue:'personelid', value:salespersonel" type="text" class="form-control" value=""></select>
                 </div>
+                <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Satış Kaynağı</p>
+                </div>
+                <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <select id="kaynak" data-bind="value:fault">
+                        <option value="CC">CC</option>
+                        <option value="Ürünler Arası Geçiş">Ürünler Arası Geçiş</option>
+                        <option value="Gatio">Gatio</option>
+                        <option value="Giza">Giza</option>
+                        <option value="Samline">Samline</option>
+                        <option value="Jade">Jade</option>
+                        <option value="Diğer">Diğer</option>
+                    </select>
+                </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Tc Kimlik No</p>
                 </div>

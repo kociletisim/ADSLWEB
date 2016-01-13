@@ -102,7 +102,9 @@ var dataModel = {
     },
     getTasks: function () {
         var self = this;
-        self.selectedTasks().push(51)
+        self.selectedTasks().push(51);
+        self.selectedTasks().push(53);
+        self.selectedTasks().push(54);
         var data = {
             task: { fieldName: "taskid", op: 7, value: self.selectedTasks() },
         };
