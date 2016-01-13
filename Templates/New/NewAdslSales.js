@@ -21,10 +21,19 @@ var dataModel = {
     selectedCadde:ko.observable(),
     selectedBina:ko.observable(),
     selectedDaire: ko.observable(),
-    yalin: ko.observable(),
+    kampanyaTuruList:ko.observableArray(["YALIN","CHURN"]),
+    /////
+    bayi: ko.observable(),
+    cc: ko.observable(),
+
+    adsl: ko.observable(),
+    vdsl: ko.observable(),
+
+    yalin: ko.observable(),    
+    churn: ko.observable(),
+
     yalinadsl: ko.observable(),
     ntyalinadsl: ko.observable(),
-    churn: ko.observable(),
     churnyalin: ko.observable(),
     churnsesli:ko.observable(),
     taskid: ko.observable(),
@@ -49,6 +58,16 @@ var dataModel = {
         return  (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
 
+    isBayi: function () {
+        var self = this;
+        self.bayi(true);
+        self.cc(false);
+    },
+    isCC: function () {
+        var self = this;
+        self.cc(true);
+        self.bayi(false);
+    },
 
     isYalin: function () {
         var self = this;
@@ -226,8 +245,43 @@ var dataModel = {
         if (self.selectedNet()) self.pids().push(self.selectedNet());
         if (self.selectedSes()) self.pids().push(self.selectedSes());
 
-        if (self.yalin()) self.taskid(30);
-        else if (self.churn()) self.taskid(31);
+        if (self.bayi()) {
+            if (self.adsl()) {
+                if (self.yalin()) {
+                    self.taskid(30);
+                }
+                else {
+                    self.taskid(31);
+                }
+            }
+            else {
+                if (self.yalin()) {
+                    self.taskid(58);
+                }
+                else {
+                    self.taskid(58);//satış churn vdsl henüz yok
+                }
+            }
+        }
+        else {
+            if (self.adsl()) {
+                if (self.yalin()) {
+                    self.taskid(32);
+                }
+                else {
+                    self.taskid(33);
+                }
+            }
+            else {
+                if (self.yalin()) {
+                    self.taskid(57);
+                }
+                else {
+                    self.taskid(57);//satış cc churn vdsl henüz yok
+                }
+            }
+        }
+
         var data = {
             tc: self.tckimlikno(),
             customername: self.customername(),
@@ -278,7 +332,7 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#kampanya,#product,#ses").multiselect({
+        $("#kampanya,#product,#ses,#kampanyaturu,#internetturu").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -312,6 +366,11 @@ var dataModel = {
         });
         self.getIl();
         self.getcategory();
+      
+        $('#kampanyaturu').on('change', function () {
+            self.yalin(this.value==1? true : false);
+            self.churn(this.value == 2 ? true : false);
+        });
         ko.applyBindings(dataModel, $("#bindingmodal")[0]);
 
     }
@@ -370,6 +429,16 @@ dataModel.selectedBucak.subscribe(function (v) {
     return true;
 });
 dataModel.category.subscribe(function (v) {
+    $("#kampanyaturu").val('');
+    $("#kampanyaturu").multiselect("refresh");
+    if (v=='ADSL') {
+        dataModel.adsl(true);
+        dataModel.vdsl(false);
+    }
+    else if (v == 'VDSL') {
+        dataModel.adsl(false);
+        dataModel.vdsl(true);
+    }
     dataModel.getsubcategory();
 });
 dataModel.subcategory.subscribe(function (v) {

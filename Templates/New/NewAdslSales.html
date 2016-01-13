@@ -5,13 +5,32 @@
             <h4 class="modal-title" id="myModalLabel">Yeni ADSL Satış</h4>
         </div>
         <div class="modal-body" style="display: inline-block; position: relative; min-height: 50px;">
-            <ul class="nav nav-pills">
-                <li role="presentation"><button class="btn btn-success btn-lg" data-bind="click:isYalin">Yalın ADSL</button></li>
-                <li role="presentation"><button class="btn btn-warning btn-lg" data-bind="click:isChurn">  CHURN</button></li>
-            </ul>
-            <label role="separator" class="divider"></label>
-            <label data-bind="text:yalin()?' Yalın Adsl Girişi Yapıyorsunuz':(churn()?'CHURN Girişi Yapıyorsunuz':'Lütfen Giriş Yapmak İstediğiniz Satışı Seçin')"></label>
-            <label role="separator" class="divider"></label>
+            <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <p></p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <button class="btn btn-success btn-lg " data-bind="click:isBayi">BAYİ</button>
+                <button class="btn btn-warning btn-lg pull-right " data-bind="click:isCC">CC</button>
+                <label role="separator" class="divider"></label>
+                <label data-bind="text:bayi()?' Bayi Satışı Yapıyorsunuz':(cc()?'CC Satışı Yapıyorsunuz':'Lütfen Giriş Yapmak İstediğiniz Satışı Seçin')"></label>
+                <label role="separator" class="divider"></label>
+            </div>      
+            <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <p>İnternet Türü</p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Seçiniz...'"></select>
+            </div>
+            <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <p>Kampanya Türü</p>
+            </div>
+            <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                <select id="kampanyaturu">
+                    <option>Seçiniz</option>
+                   <option value="1">YALIN</option>
+                   <option value="2">CHURN</option>
+                </select>
+            </div>
             <div data-bind="visible:yalin() || churn()">
                 <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Satışı Yapan Kişi</p>
@@ -93,12 +112,6 @@
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                     <input data-bind="value:fulladdress" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                    <p>Kategori</p>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Kategori Seçiniz...'"></select>
-                </div>
                 <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Altkategori</p>
                 </div>
@@ -129,18 +142,18 @@
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                     <input data-bind="value:taskdescription" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
                 </div>
-                <img  data-bind="visible:loadingmessage()==1 "  src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
+                <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
                 <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
             </div>
         </div>
-        <div class="modal-footer">           
-                <span data-bind="visible:errorControl()" style="font-size:x-large" >Hata Oluştu!</span>
-                <span data-bind="visible:errorControl()">Tekrar Deneyiniz</span>
+        <div class="modal-footer">
+            <span data-bind="visible:errorControl()" style="font-size:x-large">Hata Oluştu!</span>
+            <span data-bind="visible:errorControl()">Tekrar Deneyiniz</span>
             <div data-bind="visible: !errorControl()">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
                 <button data-bind="click:insertAdslSalesTask, enable:(tckimlikno && gsm &&customername && salespersonel && fulladdress && selectedNet)" type="button" class="btn btn-success">Kaydet</button>
             </div>
-          </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="Templates/New/NewAdslSales.js"></script>
