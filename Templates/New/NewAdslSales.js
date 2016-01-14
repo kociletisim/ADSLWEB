@@ -21,7 +21,8 @@ var dataModel = {
     selectedCadde:ko.observable(),
     selectedBina:ko.observable(),
     selectedDaire: ko.observable(),
-    kampanyaTuruList:ko.observableArray(["YALIN","CHURN"]),
+    kampanyaTuruList: ko.observableArray(["YALIN", "CHURN"]),
+    fault:ko.observable(),
     /////
     bayi: ko.observable(),
     cc: ko.observable(),
@@ -300,6 +301,7 @@ var dataModel = {
             salespersonel: self.salespersonel(),
             productids: self.pids(),
             campaignid: self.campaignid(),
+            fault:self.fault(),
         };
         if (data.tc != null && data.gsm != null &&(self.yalin()||self.churn()))
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
@@ -320,7 +322,7 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#urun").multiselect({
+        $("#urun,#kaynak").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
