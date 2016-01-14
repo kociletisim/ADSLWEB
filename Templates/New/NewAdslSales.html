@@ -1,6 +1,6 @@
 ﻿<div id="bindingmodal" class="modal-dialog modal-md" role="document" style="margin-top: 50px;">
     <div class="modal-content">
-        <div class="modal-header btn-success">
+        <div class="modal-header btn-primary">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">Yeni ADSL Satış</h4>
         </div>
@@ -12,7 +12,9 @@
                 <button class="btn btn-success btn-lg " data-bind="click:isBayi">BAYİ</button>
                 <button class="btn btn-warning btn-lg pull-right " data-bind="click:isCC">CC</button>
                 <label role="separator" class="divider"></label>
-                <label data-bind="text:bayi()?' Bayi Satışı Yapıyorsunuz':(cc()?'CC Satışı Yapıyorsunuz':'Lütfen Giriş Yapmak İstediğiniz Satışı Seçin')"></label>
+                <span class="label label-danger" data-bind="text:bayi()==null && cc()==null?'Lütfen Giriş Yapmak İstediğiniz Satışı Seçin':''"></span>
+                <span class="label label-success" data-bind="text:bayi()?' Bayi Satışı Yapıyorsunuz':null"></span>
+                <span class="label label-warning pull-right" data-bind="text:cc()?'CC Satışı Yapıyorsunuz':null"></span>
                 <label role="separator" class="divider"></label>
             </div>      
             <div data-bind="visible:bayi() || cc()" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
@@ -43,6 +45,7 @@
                 </div>
                 <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <select id="kaynak" data-bind="value:fault">
+                        <option >Seçiniz</option>
                         <option value="CC">CC</option>
                         <option value="Ürünler Arası Geçiş">Ürünler Arası Geçiş</option>
                         <option value="Gatio">Gatio</option>
