@@ -260,7 +260,7 @@ var dataModel = {
                     self.taskid(58);
                 }
                 else {
-                    self.taskid(58);//satış churn vdsl henüz yok
+                    self.taskid(63);
                 }
             }
         }
@@ -278,7 +278,7 @@ var dataModel = {
                     self.taskid(57);
                 }
                 else {
-                    self.taskid(57);//satış cc churn vdsl henüz yok
+                    self.taskid(64);
                 }
             }
         }
