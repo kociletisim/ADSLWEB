@@ -20,141 +20,150 @@
             <div class="panel" style="border: 1px solid #fff !important;">
                 <div class="panel-heading  panel-danger task-gradient filter-gradient">Task Bilgileri</div>
                 <div class="panel-body">
-                    <div class="col-md-12" style="padding: 1px 0 1px 0 !important; margin: 0 !important;">
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Task No<span style="float:right;">:</span></div>
-                            <div data-bind="text:taskorderno" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
-                        </div>
-                        <div class="col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Oluşturulma Tarihi<span style="float:right;">:</span></div>
-                            <div class='col-sm-6'>
-                                <div class="form-group">
-                                    <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker3" class="form-control" data-bind="enable: false, value: creationdate ? creationdate :null">
-                                    </div>
-                                </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4">Task No</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">:</div>
+                        <div data-bind="text:taskorderno" class="col-xs-6 col-sm-6 col-md-6"></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4">Oluşturulma Tarihi</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">:</div>
+                        <div class='col-xs-6 col-sm-6 col-md-6'>
+                            <div>
+                                <input type="text" id="daterangepicker3" class="form-control a" data-bind="value: creationdate ? creationdate :null">
                             </div>
-                        </div>
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Personel<span style="float:right;">:</span></div>
-                            <div data-bind="text: personelname" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
-                        </div>
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Abone Ad-Soyad<span style="float:right;">:</span></div>
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">
-                                <a href="#customerinfo" data-bind="text:customername,click:getCustomerCard" role="button" data-toggle="modal"></a>
-                            &nbsp;&nbsp;</div>
                         </div>
                     </div>
-                    <div class="col-md-12" style="padding: 1px 0 1px 0 !important; margin: 0 !important;">
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Task<span style="float:right;">:</span></div>
-                            <div data-bind="text: taskname" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">Personel</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div data-bind="text: personelname" class="col-xs-6 col-sm-6 col-md-6"></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">Abone Ad-Soyad</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <a href="#customerinfo" data-bind="text:customername,click:getCustomerCard" role="button" data-toggle="modal"></a>
                         </div>
-                        <div class="col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Atanma Tarihi<span style="float:right;">:</span></div>
-                            <div class='col-sm-6'>
-                                <div class="form-group">
-                                    <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker1" class="form-control" data-bind="enable: false, value: attachmentdate ? attachmentdate :null">
-                                    </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">Task</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div data-bind="text: taskname" class="col-xs-6 col-sm-6 col-md-6 "></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4">Atanma Tarihi</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class='col-xs-6 col-sm-6 col-md-6'>
+                            <div class="form-group">
+                                <div class="col-md-12 a">
+                                    <input type="text" id="daterangepicker1" class="form-control" data-bind="enable: false, value: attachmentdate ? attachmentdate :null">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Yardımcı Personel<span style="float:right;">:</span></div>
-                            <div class="col-md-6">
-                                <select id="assistantPersonel" data-bind="options: personellist, optionsText: 'personelname', optionsValue: 'personelid', value: assistantpersonel," multiple="multiple"></select>
-                            </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4" style="padding:0;">Yardımcı Personel</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <select id="assistantPersonel" data-bind="options: personellist, optionsText: 'personelname', optionsValue: 'personelid', value: assistantpersonel," multiple="multiple"></select>
                         </div>
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Location ID<span style="float:right;">:</span></div>
-                      
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">Location ID</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 ">
                             <a href="#customerinfo" data-bind="text:locationid,click:getCustomerCard" role="button" data-toggle="modal"></a>
                         </div>
                     </div>
-                    <div class="col-md-12" style="padding: 1px 0 1px 0 !important; margin: 0 !important;">
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Önceki Task<span style="float:right;">:</span></div>
-                            <div data-bind="text: previoustask" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
-                        </div>
-                        <div class="col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;"><span data-bind="text:dateoption"></span><span style="float:right;">:</span></div>
-                            <div class='col-sm-6'>
-                                <div class="form-group">
-                                    <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker2" class="form-control" data-bind="enable: editable, value:appointmentdate ? appointmentdate :null">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">İl<span style="float:right;">:</span></div>
-                            <div data-bind="text:il" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-6 col-sm-6 col-md-6 " data-bind="visible:previoustask">
+                            <a href="#TaskQueueEditForm" data-bind="attr: {href:'#TaskQueueEditForm?'+ previoustask()}">
+                                <button id="duzenle" type="button" class="btn btn-primary btn-small ">
+                                    Önceki Task
+                                </button>
+                            </a>
                         </div>
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Gsm<span style="float:right;">:</span></div>
-                            <div data-bind="text: customergsm" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6" data-bind="visible:relatedtask">
+                            <a href="#TaskQueueEditForm" data-bind="attr: {href:'#TaskQueueEditForm?'+ relatedtask()}">
+                                <button id="duzenle" type="button" class="btn btn-success btn-small ">
+                                    İlişkili Task
+                                </button>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-md-12" style="padding: 1px 0 1px 0 !important; margin: 0 !important;">
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">İlişkili Task<span style="float:right;">:</span></div>
-                            <div data-bind="text: relatedtask" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
-                        </div>
-                        <div class="col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Kapanma Tarihi<span style="float:right;">:</span></div>
-                            <div class='col-sm-6'>
-                                <div class="form-group">
-                                    <div class="col-md-12 a">
-                                        <input type="text" id="daterangepicker4" class="form-control" data-bind="enable: false, value: consummationdate ? consummationdate :null">
-                                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4 " data-bind="text:dateoption"></div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class='col-xs-6 col-sm-6 col-md-6'>
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-12 col-md-12  a">
+                                    <input type="text" id="daterangepicker2" class="form-control " data-bind="enable: editable, value:appointmentdate ? appointmentdate :null">
                                 </div>
                             </div>
                         </div>
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">İlçe<span style="float:right;">:</span></div>
-                            <div data-bind="text:ilce" class="col-md-6" style="padding: 10px 0 0 0;">&nbsp;&nbsp;</div>
-                        </div>
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Müşteri Statü<span style="float:right;">:</span></div>
-                            <div class="col-md-6">
-                                <select id="abonedurumu" data-bind="options: ctstatuslist, optionsText: 'Text', optionsValue: 'Text', value: customerstatus" multiple="multiple"></select>
-                            </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="form-group height-30">
+                            <div class="col-xs-4 col-sm-4 col-md-4 ">İl</div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                            <div data-bind="text: il" class="col-xs-6 col-sm-6 col-md-6"></div>
                         </div>
                     </div>
-                    <div class="col-md-12" style="padding: 1px 0 1px 0 !important; margin: 0 !important;">
-                        <div class=" col-md-3 height-40">
-                            <div class="col-md-6" style="padding: 10px 0 0 0;">Task Durumu<span style="float:right;">:</span></div>
-                            <div class="col-md-6">
-                                <select id="taskdurumu" data-bind="enable: editable, options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstateid',value:taskstatus"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-9 height-40">
-                            <div class="col-md-1" style="padding: 10px 0 0 0;">Açıklama<span style="float:right;">:</span></div>
-                            <div class="col-md-6" style="padding: 5px 0 0 0;">
-                                <textarea data-bind="value:description" class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4">Gsm</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div data-bind="text: customergsm" class="col-xs-6 col-sm-6 col-md-6 "></div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-3">
                        
-                        <!--<div class="col-md-3 height-30">
-                            <button type="button" class="btn btn-primary" data-bind="click: saveTaskQueues">Kaydet</button>
-                        </div>-->
-
                     </div>
-                    <div class="col-md-12" style="padding: 1px 0 1px 0 !important; margin: 0 !important;">
-                        <div class="col-md-9 height-40">
-                            <div class="col-md-1" style="padding: 10px 0 0 0;"><span style="float:right;"></span></div>
-                            <div class="col-md-6" style="padding: 5px 0 0 0;"> 
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4">Kapanma Tarihi</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-12 a">
+                                    <input type="text" id="daterangepicker4" class="form-control" data-bind="enable: false, value: consummationdate ? consummationdate :null">
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-6 col-sm-2 col-md-2 ">İlçe</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div data-bind="text:ilce" class="col-xs-6 col-sm-6 col-md-6 "></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">Müşteri Statü</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <select id="abonedurumu" data-bind="options: ctstatuslist, optionsText: 'Text', optionsValue: 'Text', value: customerstatus" multiple="multiple"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 height-40">
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">Task Durumu</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 ">
+                            <select id="taskdurumu" data-bind="options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstateid',value:taskstatus"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        <div class="col-xs-4 col-sm-4 col-md-4">Açıklama</div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <textarea data-bind="value:description" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <div  class="col-md-6 col-md-offset-3" data-bind="visible : message" style="position: absolute; top: 150px;" onclick="setTimeout(function () { $('#id_alert').css({ display: 'none' }); }, 1000)">
+    <div class="col-md-6 col-md-offset-3" data-bind="visible : message" style="position: absolute; top: 150px;" onclick="setTimeout(function () { $('#id_alert').css({ display: 'none' }); }, 1000)">
         <div class="alert alert-success alert-dismissible cls_alert" id="id_alert" role="alert" style="height: 100px;">
             <button type="button" data-bind="click :refresh" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <strong>İşlem Başarılı</strong>
@@ -292,14 +301,14 @@
         </div>
     </div>
 
-    <div  class="col-md-3 height-30 navbar-form pull-right">
+    <div class="col-md-3 height-30 navbar-form pull-right">
         <span data-bind="visible:taskstatus()==0" class="label label-danger">Taskın Durumu Henüz Girilmemiş</span>
         <span data-bind="visible:!campaignIsValid()" class="label label-danger">Kampanya Bilgileri Girilmemiş</span>
         <span data-bind="visible:!cdIsValid()" class="label label-danger">Döküman Yüklemeniz Gerekiyor</span>
         <span data-bind="visible:!smIsValid()" class="label label-danger">Donanım Girmeniz Gerekiyor</span>
         <span data-bind="visible:errormessage(), text:errormessage" class="label label-danger"></span>
-        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:modelIsValid() ||descriptionControl() " type="button" class="btn btn-success cls-right cls-button-control" >Kaydet ve Anasayfaya Dön</button>
-   </div>
+        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:modelIsValid() ||descriptionControl() " type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
+    </div>
     <!-- müşteri bilgilerini düzenleme For Modal Start -->
     <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
@@ -309,12 +318,12 @@
                     <h4 class="modal-title" id="myModalLabel">Müşteri Kimlik Kartı</h4>
                 </div>
                 <div class="modal-body" data-bind="with: selectedCustomer" style="display: inline-block; position: relative; min-height: 50px;">
-                   
+
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Müşteri No:</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p><label data-bind="text:customerid"></label></p> 
+                        <p><label data-bind="text:customerid"></label></p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Adı Soyadı</p>
@@ -322,17 +331,17 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <p><input class="form-control" data-bind="value:customername"></p>
                     </div>
-                    <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Tc Kimlik No</p>
                     </div>
-                    <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <p><input class="form-control" data-bind="value:tc"></p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>GSM</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <p><input class="form-control" data-bind="value:gsm" ></p>
+                        <p><input class="form-control" data-bind="value:gsm"></p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Sabit Tel</p>
@@ -346,16 +355,16 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <p> <input data-bind="value:birthdate" class="form-control"></p>
                     </div>
-                    <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>İl</p>
                     </div>
-                    <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="ilcombo" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'" ></select>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="ilcombo" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
                     </div>
-                    <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>İlçe</p>
                     </div>
-                    <div  class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <select id="ilcecombo" data-bind="options: $root.ilceList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilceKimlikNo,optionsCaption:'Seçiniz'" class="form-control"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
@@ -367,15 +376,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                    <button type="button" data-bind="click:saveCustomer"  class="btn btn-primary">Kaydet</button>
+                    <button type="button" data-bind="click:saveCustomer" class="btn btn-primary">Kaydet</button>
                 </div>
             </div>
 
         </div>
-    <!-- müşteri bilgilerini düzenleme For Modal Finish-->
-</div>
+        <!-- müşteri bilgilerini düzenleme For Modal Finish-->
+    </div>
 
-  </div>
+</div>
 <script type="text/javascript" src="Templates/TaskQueueEditForm.js"></script>
 <script>
     $(document).ready(function () {
