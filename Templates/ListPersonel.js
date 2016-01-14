@@ -26,6 +26,27 @@ var dataModel = {
     newmobile: ko.observable(),
     newemail: ko.observable(),
     newnotes: ko.observable(),
+    yoneticiList: ko.observableArray([]),
+    yoneticiId: ko.observable(),
+
+    getyonetici: function () {
+        var self = this;
+        crmAPI.getPersonel(function (a, b, c) {
+            self.yoneticiList(a);
+            $("#yonetici").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: 'Personel Seçiniz',
+                nSelectedText: 'Personel Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+        }, null, null)
+    },
     getPersonels: function (pageno, rowsperpage) {
         var self = this;
         self.pageNo(pageno);
@@ -58,6 +79,18 @@ var dataModel = {
             self.selectedPersonel(a.data.rows[0]);
             self.getIl();
             self.getIlce(a.data.rows[0].ilKimlikNo);
+            $("#yonetici2").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: 'Personel Seçiniz',
+                nSelectedText: 'Personel Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
         }, null, null);
     },
     getObjects: function () {
@@ -98,7 +131,6 @@ var dataModel = {
             rol |= $("#object").val()[i];
         }
         }
-       
             self.selectedPersonel().category = rol;
             self.selectedPersonel().roles = rol;
                 
@@ -122,6 +154,7 @@ var dataModel = {
         var data = {
             personelname: self.newpersonelname(),
             category: self.newcategory(),
+            relatedpersonelid: self.yoneticiId(),
             password: self.newpassword(),
             mobile: self.newmobile(),
             email: self.newemail(),
@@ -231,6 +264,7 @@ var dataModel = {
         });
         self.getIl();
         self.getIlce();
-       
+     
+        self.getyonetici();
     }
 }
