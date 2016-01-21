@@ -231,6 +231,13 @@ var dataModel = {
         self.selectilce(null);
         self.getPersonels(dataModel.pageNo(), dataModel.rowsPerPage());
     },
+    enterfilter: function (d, e) {
+        var self = this;
+        if (e && (e.which == 1 || e.which == 13)) {
+            self.getPersonels(1, dataModel.rowsPerPage());
+        }
+        return true;
+    },
     navigate: {
         gotoPage: function (pageNo) {
             if (pageNo == dataModel.pageNo() || pageNo <= 0 || pageNo > dataModel.pageCount()) return;

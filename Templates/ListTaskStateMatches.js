@@ -35,7 +35,7 @@ var dataModel = {
             pageNo: pageno,
             rowsPerPage: rowsperpage,
             taskstate: self.selectedState() ? { fieldName: "taskstateid", op: 2, value: self.selectedState() } : { fieldName: "taskstate", op: 6, value: '' },
-            task: self.selectedTask() ? { fieldName: "taskname", op: 6, value: self.selectedTask() } : { fieldName: "taskname", op: 6, value: '' }
+            task: self.selectedTask() ? { fieldName: "taskid", op: 2, value: self.selectedTask() } : { fieldName: "taskname", op: 6, value: '' }
         };
         crmAPI.getTaskStateMatches(data, function (a, b, c) {
             self.tsmList(a.data.rows);

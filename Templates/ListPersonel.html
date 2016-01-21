@@ -16,7 +16,7 @@
 								<div class="col-xs-12 col-sm-4 col-md-3">
 									<div class="form-group-sm has-info cls-margin-bottom">
 										<label class="control-label" for="u-1">Personel Adı</label>
-                                        <input data-bind="value:personelname" type="text" class="form-control" id="exampleInputName2" />
+                                        <input data-bind="value:personelname , valueUpdate: 'keydown', event: { keypress: enterfilter }" type="text" class="form-control" id="exampleInputName2" />
 									</div>
 								</div>
                                 <div class="col-xs-12 col-sm-4 col-md-3">

@@ -4,10 +4,10 @@
             color: #000;
         }
             #taskquetable tr:hover {
-                background: rgba(125, 179, 228, 0.37);
+                background:rgba(128, 199, 136, 0.50);
             }
         .selected {
-            background: #6fc679;
+            background: rgba(111, 198, 121, 0.69);
         }
 
         .a { position: relative; padding:0 }
@@ -15,7 +15,7 @@
         position: absolute; bottom: 10px; right: 24px; top: auto; cursor: pointer;
       }
     </style>	
-    <div id="bindingContainer" class="container-fluid" style="background-color: lightcyan">
+    <div id="bindingContainer" class="container-fluid" style="background-color: rgb(238, 236, 236)">
 			<div class="col-md-12 container" style="padding: 0 !important; margin: 20px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
 				<div class="panel-group" id="accordion">
 					<div class="panel" id="panel2" style="border: 1px solid #fff !important;">
@@ -163,7 +163,7 @@
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage();}">&lt;</a></li>
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
 											<li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
-                                            <li><button data-bind="click: clean" type="button" class="btn btn-info">Temizle</button></li>
+                                            <li><button data-bind="click: clean" type="button" class="btn btn-warning">Temizle</button></li>
 										</ul>
 									</nav>
 									<!--pagination finish-->
@@ -180,7 +180,7 @@
 													<tr>
 														<th class="col-md-1" style="border-right: 1px solid #ddd;">
 															<div class="dropdown">
-																<a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" style="padding: 2px 15px;">
+																<a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-success" style="padding: 2px 15px;">
 																	İşlemler <span class="caret"></span>
 																</a>
 																<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
@@ -233,7 +233,7 @@
 													<tr data-bind="attr:{class :attachedpersonel==null? '' : (taskstatepool==null ?'' :'' )}" style="line-height: 50px;" >
 													
 														<td><a href="#TaskQueueEditForm" data-bind="attr: {href:'#TaskQueueEditForm?'+taskorderno}">
-																<button data-bind="visible:attachedpersonel && attachedpersonel.personelname, text: editable?'Düzenle': 'Gör'" id="duzenle" type="button" class="btn btn-primary btn-lg" style="padding: 3px; border-radius: 5px; font-size:14px;">
+																<button data-bind="visible:attachedpersonel && attachedpersonel.personelname, text: editable?'Düzenle': 'Gör'" id="duzenle" type="button" class="btn btn-success btn-small" style="padding: 3px; border-radius: 5px; font-size:14px;">
 																	Düzenle
 																</button>
 														    </a>

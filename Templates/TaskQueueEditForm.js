@@ -416,6 +416,7 @@ var dataModel = {
 
     },
     saveTaskQueueDescription: function () {
+        var self = this;
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: null },
@@ -570,8 +571,8 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#fileUpload").fileinput({
-                uploadUrl: "http://localhost:50752/api/Adsl/TaskQueues/upload", // server upload action
-               // uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Adsl/TaskQueues/upload", // server upload action
+               // uploadUrl: "http://localhost:50752/api/Adsl/TaskQueues/upload", // server upload action
+                uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Adsl/TaskQueues/upload", // server upload action
                 uploadAsync: false,
                 minFileCount: 1,
                 maxFileCount: 10,
