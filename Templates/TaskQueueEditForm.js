@@ -38,9 +38,12 @@ var dataModel = {
     customerdocument:ko.observableArray([]),
     ilList: ko.observableArray([]),
     ilceList: ko.observableArray([]),
+    bucakList: ko.observableArray([]),
+    mahalleList: ko.observableArray([]),
     editable: ko.observable(),
     tasktype: ko.observable(),
     errormessage: ko.observable(),
+    dosya:ko.observable(),
     campaignEditable: ko.pureComputed(function () {
         var b = true;
         $.each(dataModel.productlist(), function (index, cp) {
@@ -129,6 +132,50 @@ var dataModel = {
             $("#ilcecombo").multiselect("setOptions", self.ilceList()).multiselect("rebuild");
         }, null, null)
     },
+    getBucak: function (ilce) {
+        self = this;
+        var data = {
+            adres: { fieldName: "ilceKimlikNo", op: 2, value: ilce },
+        };
+        crmAPI.getAdress(data, function (a, b, c) {
+            self.bucakList(a);
+            $("#bucakcombo").multiselect({
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#bucakcombo").multiselect("setOptions", self.bucakList()).multiselect("rebuild");
+            $("#bucakcombo").multiselect('select', dataModel.selectedCustomer().bucakKimlikNo);
+        }, null, null)
+    },
+    getMahalle: function (x) {
+        self = this;
+        var data = {
+            adres: { fieldName: "bucakKimlikNo", op: 2, value: x },
+        };
+        crmAPI.getAdress(data, function (a, b, c) {
+            self.mahalleList(a);
+            $("#mahallecombo").multiselect({
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#mahallecombo").multiselect("setOptions", self.mahalleList()).multiselect("rebuild");
+            $("#mahallecombo").multiselect('select', dataModel.selectedCustomer().mahalleKimlikNo);
+        }, null, null)
+    },
     getCustomerCard : function () {
        var self = this;
        var data = {
@@ -136,6 +183,8 @@ var dataModel = {
        };
        crmAPI.getCustomer(data, function (a, b, c) {
            self.selectedCustomer(a.data.rows[0]);
+           self.getMahalle(a.data.rows[0].bucakKimlikNo);
+           self.getBucak(a.data.rows[0].ilceKimlikNo);
            $("#ilcombo,#ilcecombo").multiselect({
                selectAllValue: 'select-all-value',
                maxHeight: 250,
@@ -150,7 +199,9 @@ var dataModel = {
        },null,null);
    },
     saveCustomer: function () {
-       var self = this;
+        var self = this;
+        self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
+        self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
        var data = self.selectedCustomer();
        crmAPI.saveCustomerCard(data, function (a, b, c) {
            if (a == "ok")
@@ -439,6 +490,12 @@ var dataModel = {
                 }, 1250);
             }, null, null);
     },
+    //download: function () {
+    //    var self = this;
+    //    crmAPI.download(function (a, b, c) {
+    //        self.dosya(a.);
+    //    }, null, null);
+    //},
     //closeTaskQueues: function () {
     //    var self = this;
     //    var data = {
