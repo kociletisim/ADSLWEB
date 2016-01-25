@@ -629,7 +629,7 @@ var dataModel = {
             });
             $("#fileUpload").fileinput({
               // uploadUrl: "http://localhost:50752/api/Adsl/TaskQueues/upload", // server upload action
-               uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Adsl/TaskQueues/upload", // server upload action
+               uploadUrl: "http://crmapitest.kociletisim.com.tr/api/Adsl/TaskQueues/upload", // server upload action
                 uploadAsync: false,
                 minFileCount: 1,
                 maxFileCount: 10,
