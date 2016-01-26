@@ -220,6 +220,7 @@ var dataModel = {
     user:ko.observable(),
     docIds: ko.observableArray(),
     uploadControl:ko.observable(),
+    xx:ko.observable(),
 
     getcategory: function () {
         var self = this;
@@ -530,7 +531,12 @@ var dataModel = {
     //    }, null, null);
     //    console.log(postdata);
     //},
-
+    download: function () {
+        var self = this;
+        crmAPI.download(function (a, b, c) {
+        }, null, null);
+        
+    },
     selectFile: function(documentid){
         var fu = $("#fileUpload")[0];
         fu.documentid = documentid;
@@ -891,3 +897,6 @@ dataModel.description.subscribe(function () {
 
     
 });
+
+						
+
