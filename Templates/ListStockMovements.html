@@ -275,7 +275,7 @@
                         <p>Onay Durumu</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <input type="checkbox" class="btn btn-success form-control" data-bind="checked:confirmationdate, enable:$root.user().userId==toobject && confirmationdate==null " />
+                        <input type="checkbox" class="btn btn-success form-control" data-bind="checked:confirmationdate, enable:$root.confirmable " />
                     </div>
 
                     <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: $root.savemessagecode()">

@@ -41,6 +41,9 @@ var dataModel = {
     amountcontrol: ko.pureComputed(function () {
         return dataModel.newamount() > dataModel.amount() ? true : false;
     }),
+    confirmable: ko.pureComputed(function () {
+        return dataModel.user().userId == dataModel.selectedMovementCard().toobject && dataModel.selectedMovementCard().confirmationdate == null ? true : false;
+    }),
     getStockMovements: function (pageno, rowsperpage) {
         var self = this;
         self.savemessage(null);
@@ -62,10 +65,9 @@ var dataModel = {
             self.pageCount(a.data.pagingInfo.pageCount);
             self.totalRowCount(a.data.pagingInfo.totalRowCount);
             $(".edit").click(function () {
-                self.getStockMovementCard($(this).val());
                 self.getStockCards();
                 self.getpersonel();
-                console.log($(this).val());
+                self.getStockMovementCard($(this).val());
             });
             $('.sel').change(function () {
                 var ids = [];
@@ -101,19 +103,7 @@ var dataModel = {
         };
         crmAPI.getStockCards(data, function (a, b, c) {
             self.stockCardList(a.data.rows);
-            $("#newproduct,#newobject").multiselect({
-                includeSelectAllOption: true,
-                selectAllValue: 'select-all-value',
-                maxHeight: 250,
-                buttonWidth: '100%',
-                nonSelectedText: ' Seçiniz',
-                nSelectedText: ' Seçildi!',
-                numberDisplayed: 3,
-                selectAllText: 'Tümünü Seç!',
-                enableFiltering: true,
-                filterPlaceholder: 'Ara'
-            });
-            $("#newproduct").multiselect({
+            $("#newproduct,#newobject,#editobject,#editproduct").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -126,6 +116,7 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#newproduct").multiselect("setOptions", dataModel.stockCardList()).multiselect("rebuild");
+            $("#editproduct,#editobject").multiselect("setOptions", dataModel.stockCardList()).multiselect("rebuild");
         }, null, null);
     },
     getPersonelStock: function () {
@@ -136,7 +127,7 @@ var dataModel = {
         crmAPI.getPersonelStock(data, function (a, b, c) {
             self.personelStockList(a);
             self.stockOnPersonel(a),
-            $("#newproduct,#newobject,#newserial").multiselect({
+            $("#newobject,#newserial").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -148,7 +139,7 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
-            $("#newproduct").multiselect("setOptions", dataModel.personelStockList()).multiselect("rebuild");
+           // $("#newproduct").multiselect("setOptions", dataModel.personelStockList()).multiselect("rebuild");
         }, null, null);
     },
     getSerialsOnPersonel: function () {
@@ -179,7 +170,7 @@ var dataModel = {
         var data = { personel: self.newtoobjecttype() ? { fieldName: "roles", op: 10, value: self.newtoobjecttype(), } : { fieldName: "personelname", op: 6, value: '', } };
         crmAPI.getPersonels(data, function (a, b, c) {
             self.personellist(a.data.rows);
-            $("#newpersonel").multiselect({
+            $("#newpersonel,#editpersonel").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -199,18 +190,7 @@ var dataModel = {
         var data = { movement: { value: movementid } };
         crmAPI.getStockMovements(data, function (a, b, c) {
             self.selectedMovementCard(a.data.rows[0]);
-            $("#editproduct,#editobject,#editpersonel").multiselect({
-                includeSelectAllOption: true,
-                selectAllValue: 'select-all-value',
-                maxHeight: 250,
-                buttonWidth: '100%',
-                nonSelectedText: ' Seçiniz',
-                nSelectedText: ' Seçildi!',
-                numberDisplayed: 3,
-                selectAllText: 'Tümünü Seç!',
-                enableFiltering: true,
-                filterPlaceholder: 'Ara'
-            });
+            
         }, null, null);
 
     },
@@ -357,8 +337,7 @@ var dataModel = {
             self.getPersonelStock();
             self.getpersonel();
            
-        });
-        
+        });        
         self.getUser();
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     }
