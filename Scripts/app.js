@@ -38,25 +38,10 @@ $(window).bind("hashchange", function () {
         $("#ModalContainer").loadTemplate("Templates/New/NewCorporateSales.html");
     });
     
+    $("#username,#notice").click(function () {
+        $("#ModalContainer").loadTemplate("Templates/New/Profil.html");
+    });
 
-    //$("#fibersatis").click(function () {
-    //    $("#ModalContainer").loadTemplate("Templates/New/FiberSales.html");
-    //});
-    //$("#yanindaekurun").click(function () {
-    //    $("#ModalContainer").loadTemplate("Templates/New/YanindaEkUrun.html");
-    //});
-    //$("#retentionsatis").click(function () {
-    //    $("#ModalContainer").loadTemplate("Templates/New/RetentionSatis.html");
-    //});
-    //$("#caymabedeli").click(function () {
-    //    $("#ModalContainer").loadTemplate("Templates/New/Cayma.html");
-    //});
-    //$("#yonetimodasi").click(function () {
-    //    $("#ModalContainer").loadTemplate("Templates/New/YonetimOdasi.html");
-    //});
-    //$("#arizataski").click(function () {
-    //    $("#ModalContainer").loadTemplate("Templates/New/ArizaTaski.html");
-    //});
 
     $("#exit").click(function () {
         document.cookie = "token=;";
@@ -67,11 +52,21 @@ $(window).bind("hashchange", function () {
 
     $(document).ready(function () {
         crmAPI.userInfo(function (a, b, c) {
+            var pid = 0;
             $("#username").text(a.userFullName);
             if (a.userRole != 2147483647) {
                 $("#tanimlamalar").hide(true);
                 $("#musteriler").hide(true);
-            }     
+            }
+            var data = {
+                personel: { fieldName: 'personelid', op: 2, value: pid },
+            };
+            crmAPI.getPersonels(data, function (a, b, c) {
+                var pass = a.data.rows[0].password;
+                if (pass == "123456") {
+                    $("#notice").text("Güvenliğiniz için Şifrenizi değiştiriniz!");
+                }
+            }, null, null);
         }, null, null);
        
     });
