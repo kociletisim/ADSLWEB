@@ -52,7 +52,7 @@ $(window).bind("hashchange", function () {
 
     $(document).ready(function () {
         crmAPI.userInfo(function (a, b, c) {
-            var pid = 0;
+             var pid = a.userId;
             $("#username").text(a.userFullName);
             if (a.userRole != 2147483647) {
                 $("#tanimlamalar").hide(true);
