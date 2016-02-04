@@ -399,6 +399,7 @@ var dataModel = {
     },
     saveTaskQueues: function () {
         var self = this;
+        $('.btn').prop('disabled', true);
         self.flag(false);
         if (!dataModel.modelIsValid()) crmAPI.saveTaskQueues(data, function (a, b, c) {
             self.message(a);
