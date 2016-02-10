@@ -286,6 +286,13 @@ var dataModel = {
             }, 1000);
         });
     },
+    enterfilter: function (d, e) {
+        var self = this;
+        if (e && (e.which == 1 || e.which == 13)) {
+            self.getStockMovements(1, dataModel.rowsPerPage());
+        }
+        return true;
+    },
     clean: function () {
         var self = this;
         self.fromObjectName(null);
