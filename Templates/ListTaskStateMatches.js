@@ -45,7 +45,7 @@ var dataModel = {
             self.savemessagecode(null);
             $(".edit").click(function () {
                 self.getTSMCard($(this).val());
-                console.log($(this).val());
+                //console.log($(this).val());
             });
         }, null, null);
     },
@@ -274,3 +274,6 @@ dataModel.selectedTSM.subscribe(function (v) {
         dataModel.docIds(null);
     dataModel.getDocs();
 });
+$('#myModal').on('hide.bs.modal', function (e) {
+    dataModel.taskstatecontrol(true);
+})
