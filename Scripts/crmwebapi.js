@@ -91,7 +91,6 @@
      return {
          getCookie: function (key) { return getCookie(key); },
          setCookie: function (key, keyvalue, value) { setCookie(key, keyvalue, value); },
-
          login: function (data, onsuccess, onerror, before) {
              getData("POST", "Authorize/getToken", data, onsuccess, onerror, before);
          },
@@ -232,6 +231,9 @@
          },
          getObjectType: function (onsuccess, onerror, before) {
              getData("POST", "Filter/getObjectType", {}, onsuccess, onerror, before)
+         },
+         getTaskType: function (onsuccess, onerror, before) {
+             getData("POST", "Filter/getTaskType", {}, onsuccess, onerror, before)
          },
          getObject: function (data, onsuccess, onerror, before) {
              getData("POST", "Filter/getObject", data, onsuccess, onerror, before)
