@@ -293,9 +293,17 @@
          saveCustomerCard: function (data, onsuccess, onerror, before) {
              getData("POST", "Customer/saveCustomerCard", data, onsuccess, onerror, before)
          },
-
          getPersonelWorkList: function (data, onsuccess, onerror, before) {
              getData("POST", "Reports/getPersonelWorks", data, onsuccess, onerror, before)
+         },
+         insertPersonelAtama: function (data, onsuccess, onerror, before) {
+             getData("POST", "Atama/insertPersonelAtama", data, onsuccess, onerror, before)
+         },
+         updatePersonelAtama: function (data, onsuccess, onerror, before) {
+             getData("POST", "Atama/updatePersonelAtama", data, onsuccess, onerror, before)
+         },
+         deletePersonelAtama: function (data, onsuccess, onerror, before) {
+             getData("POST", "Atama/deletePersonelAtama", data, onsuccess, onerror, before)
          },
      }
  })();

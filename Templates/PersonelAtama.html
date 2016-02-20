@@ -1,0 +1,255 @@
+﻿<!--<style>
+    #taskquetable {
+        cursor: pointer;
+        color: #000;
+    }
+
+        #taskquetable tr:hover {
+            background: rgba(128, 199, 136, 0.50);
+        }
+
+    .selected {
+        background: rgba(111, 198, 121, 0.69);
+    }
+
+    .a {
+        position: relative;
+        padding: 0;
+    }
+
+        .a i {
+            position: absolute;
+            bottom: 10px;
+            right: 24px;
+            top: auto;
+            cursor: pointer;
+        }
+</style>-->
+<div id="bindingContainer" class="container-fluid" style="background-color: rgb(238, 236, 236)">
+    <div class="col-md-12 container" style="padding: 0 !important; margin: 20px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
+        <div class="panel-group" id="accordion">
+            <div class="panel" id="panel2" style="border: 1px solid #fff !important;">
+                <div class="panel-heading filter-gradient">
+                    <a data-toggle="collapse" data-target="#collapse1"
+                       href="javascript:void(0)" class="collapsed filtertitle">
+                        <h4 class="panel-title">
+                            Filtreleme
+                            <span class="glyphicon glyphicon glyphicon-filter" aria-hidden="true"></span>
+                        </h4>
+
+                    </a>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group-sm has-info cls-margin-bottom">
+                                <div class="col-lg-4 col-md-12 col-xs-12 col-sm-12">
+                                    <label class="control-label" for="taskNameFilter">Task Adı</label>
+                                </div>
+                                <div class="col-lg-8 col-md-12 col-xs-12 col-sm-12">
+                                    <select id="taskNameFilter" data-bind="options: tasks, optionsText: 'taskname', optionsValue: 'taskid',  valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group-sm has-info cls-margin-bottom">
+                                <div class="col-lg-4 col-md-12 col-xs-12 col-sm-12">
+                                    <label class="control-label" for="personel">Personel</label>
+                                </div>
+                                <div class="col-lg-8 col-md-12 col-xs-12 col-sm-12">
+                                    <select data-size="10" id="personel" data-bind="options: personellist,
+                                                                                        optionsText:function(item) {
+                                                                                           return item.personelname +(item.il!=null? ' ['+item.il.ad+']':'') +(item.ilce!=null?' ['+item.ilce.ad+']':'')
+                                                                                       },
+                                                                                        optionsValue: 'personelid',
+                                                                                        valueUpdate: 'keydown',
+                                                                                        event: { keypress: enterfilter }" multiple="multiple"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 pull-right">
+                            <div class="btn-group pull-right" role="group">
+                                <button data-bind="click: queryButtonClick" type="button" class="btn btn-success">Sorgula</button>
+                                <button data-bind="click: clean" type="button" class="btn btn-warning">Temizle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-md-offset-3" data-bind="visible: isLoading() == false && taskqueuelist().length==0" style="position: absolute; top: 150px;" id="id_alert" onclick="setTimeout(function () { $('#id_alert').css({ display: 'none' }); }, 1000)">
+        <div class="alert alert-danger alert-dismissible cls_alert" role="alert" style="height: 100px;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-search"> <strong>Bence Yanlış Filtreleme Yaptın.</strong> </span>
+            <br /><strong>Ya da böyle bir kayıt yok</strong>
+
+        </div>
+    </div>
+
+    <div class="col-md-12 container" style="padding: 0 !important; margin: 20px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
+        <div class="panel-group">
+            <div class="panel" style="border: 1px solid #fff !important;">
+                <div class="panel-heading task-gradient">
+                    <div class="row cls-padding-0px">
+                        <div class="col-xs-12 col-sm-6 col-md-6 left">
+                            Task - Personel Atamaları
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 right">
+                            <!--pagination Starts-->
+                            <nav class="text-center" style="margin: 0px !important;padding: 0px !important;">
+                                <ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
+                                    <li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); } ,enable:pageNo>1">&lt;&lt;</a></li>
+                                    <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage();}">&lt;</a></li>
+                                    <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
+                                    <li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+                                    <li><button data-bind="click: clean" type="button" class="btn btn-warning">Temizle</button></li>
+                                </ul>
+                            </nav>
+                            <!--pagination finish-->
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" style="margin: 0 15px 0 15px !important; padding: 0px !important;">
+                    <div class="container-fluid cls-padding-0px cls-deneme-height ">
+                        <div class="row cls-margin-task">
+                            <div class="col-lg-12 cls-padding-0px">
+                                <div class="col-lg-12 cls-task cls-padding-0px table-responsive">
+                                    <table class="table table-bordered table-hover" id="taskquetable" data-pagination="true" data-search="true">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-1" style="border-right: 1px solid #ddd;">
+                                                    <div class="dropdown">
+                                                        <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-success" style="padding: 2px 15px;">
+                                                            İşlemler <span class="caret"></span>
+                                                        </a>
+                                                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                                                            <li>
+                                                                <a id="new" href="#newap" role="button" class="btn" data-toggle="modal" style="padding-right: 110px; float: left;">Yeni</a>
+                                                            </li>
+                                                            <li class="divider"></li>
+                                                            <li class="dropdown-submenu">
+                                                                <a tabindex="-1" href="#">Seçim</a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a tabindex="-1" href="#">Tümünü Seç</a></li>
+                                                                    <li><a href="#">Seçimi Çevir</a></li>
+                                                                    <li><a href="#">Seçimi Temizle</a></li>
+                                                                </ul>
+                                                        </ul>
+                                                    </div>
+                                                </th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Kapatılan Task</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Kapatan Personel</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Oluşan Task</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Atanan Personel</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-bind="attr:{class :attachedpersonel==null? '' : (taskstatepool==null ?'' :'' )}" style="line-height: 50px;">
+
+                                                <td>
+                                                    <!-- Button trigger modal -->
+                                                    <button data-bind="value:id" type="button" class="btn btn-success btn-lg edit" data-toggle="modal" data-target="#myModal" style="padding: 3px; border-radius: 4px; font-size:14px;">
+                                                        Düzenle
+                                                    </button>
+                                                    <input type="checkbox" />
+                                                </td>
+                                                <td data-bind="text:task.taskname"></td>
+                                                <td data-bind="text: attachedcustomer && (attachedcustomer.il && attachedcustomer.il.ad || '&lt;boş&gt;') "></td>
+                                                <td data-bind="text: attachedcustomer && (attachedcustomer.ilce && attachedcustomer.ilce.ad || '&lt;boş&gt;') "></td>
+                                                <td><a href="#customerinfo" class="customer" role="button" data-toggle="modal" data-bind="value:attachedcustomer.customerid">
+                                                        <span data-bind="text:attachedcustomer && (attachedcustomer.customername && (attachedcustomer.customername) || '&lt;boş&gt;')"></span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--pagination Starts-->
+                    <nav class="text-center" style="margin: 0px !important;padding: 0px !important;">
+                        <ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
+                            <li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); }, enable: pageNo > 1">&lt;&lt;</a></li>
+                            <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage(); }">&lt;</a></li>
+                            <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
+                            <li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+                            <li><button data-bind="click: clean" type="button" class="btn btn-warning">Temizle</button></li>
+                        </ul>
+                    </nav>
+                    <!--pagination finish-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="newap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document" style="margin-top: 50px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Müşteri Kimlik Kartı</h4>
+                </div>
+                <div class="modal-body" data-bind="with: selectedAtama" style="display: inline-block; position: relative; min-height: 50px;">
+
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>ID :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px text-center" style="margin-top: 3px;">
+                        <p><label data-bind="text:id"></label></p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Kapatan Personel :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="offpersonel" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Kapatılan Task Türü :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="closedtasktype" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Kapatılan Task :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="closedtask" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Atanan Personel :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="appointedpersonel" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Oluşan Task Türü :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="formedtasktype" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Oluşan Task :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="formedtask" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                    <button type="button" data-bind="click:save" class="btn btn-primary">Kaydet</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- müşteri bilgilerini düzenleme For Modal Finish-->
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        moment.locale('tr');
+    });
+</script>
+<script type="text/javascript" src="Templates/PersonelAtama.js"></script>

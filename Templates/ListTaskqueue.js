@@ -1,7 +1,6 @@
 ﻿/// <reference path="../Scripts/koc-typehead-v1.0.js" />
 /// <reference path="../Scripts/knockout-3.3.0.js" />
 /// <reference path="../Scripts/crmwebapi.js" />
-///
 
 var tqlFilter = crmAPI.getCookie("tqlFilter");
 
@@ -52,7 +51,6 @@ var dataModel = {
     selectedCustomer:ko.observable(),
     user: ko.observable(),
    
-
     queryButtonClick: function () {
         var self = this;
         self.getFilter(1, dataModel.rowsPerPage());
@@ -422,9 +420,6 @@ var dataModel = {
             dataModel.navigate.gotoPage(pc);
         },
     },
-  
-
-
     renderBindings: function() {
         var self = this;
         self.firstLoad(true);
@@ -489,9 +484,7 @@ var dataModel = {
         self.getIlce();
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     },
-
 }
-
 dataModel.flag.subscribe(function(v) {
     if (v == null)
         return true;

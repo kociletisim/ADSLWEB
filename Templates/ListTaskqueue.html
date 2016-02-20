@@ -198,15 +198,6 @@
 											                        <li><a href="#personelatama" id="atama" data-bind="click:attacheablecontrol" role="button" data-toggle="modal">Personel Ata</a></li>
 											                        <li><a href="#sonlandir" role="button" data-toggle="modal">Taskları Sonlandır</a></li>
                                                                     <li class="divider"></li>
-                                                                      <li class="dropdown-submenu">
-												                            <a tabindex="-1" href="#">Kat Ziyaret İşlemleri</a>
-												                            <ul class="dropdown-menu">
-													                            <li><a href="#katziyareti1" role="button" class="btn" data-toggle="modal" style="float: left;">Kat Ziyaret Sonuçlarını Toplu Gir</a></li>
-													                            <li><a href="#katziyareti2" role="button" class="btn" data-toggle="modal" style="float: left;">Müşteri Statülerini Toplu Değiştir</a></li>
-													                            <li><a href="#katziyareti3" role="button" class="btn" data-toggle="modal" style="float: left;">Müşteri Kat Ziyareti Toplu Task Kapama</a></li>
-												                            </ul>
-                                                                     </li>
-                                                                    	<li class="divider"></li>
 																	<li><a href="#">Excel'e Kaydet</a></li>
 																</ul>
 															</div>
@@ -240,7 +231,7 @@
 														    </a>
 																<input class="sel"  type="checkbox" data-bind="value:taskorderno" />
 														</td>
-														<td  style=" color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" data-bind="text:task.taskname"></td>
+														<td  style=" color:#284af5;font-family:'Franklin Gothic Medium','Arial Narrow', Arial, sans-serif" data-bind="text:task.taskname"></td>
 														<td data-bind="text: attachedcustomer && (attachedcustomer.il && attachedcustomer.il.ad || '&lt;boş&gt;') " ></td>
 														<td data-bind="text: attachedcustomer && (attachedcustomer.ilce && attachedcustomer.ilce.ad || '&lt;boş&gt;') "></td>
                                                         <td style="color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
@@ -312,7 +303,7 @@
         </div>
 	<!-- İşlemler *personel atama* For Modal Finish-->
     <!-- Kat Ziyaret Sonuçlarını Toplu Gir For Modal Start-->
-	<div class="modal fade" id="katziyareti1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<!--<div class="modal fade" id="katziyareti1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -338,10 +329,10 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>-->
 	<!-- Kat Ziyaret Sonuçlarını Toplu Gir For Modal Finish-->
     <!--Müşteri durumlarını Toplu Gir For Modal Start-->
-	<div class="modal fade" id="katziyareti2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<!--<div class="modal fade" id="katziyareti2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -367,10 +358,10 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>-->
 	<!-- Müşteri durumlarını Toplu Gir For Modal Finish-->
     <!-- Müşteri ve Kat Ziyaret Sonuçlarını Toplu Gir For Modal Start-->
-	<div class="modal fade" id="katziyareti3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<!--<div class="modal fade" id="katziyareti3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document" style="margin-top: 50px;">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -407,7 +398,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>-->
 	<!--Müşteri ve Kat Ziyaret Sonuçlarını Toplu Gir For Modal Finish-->
 
         <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
