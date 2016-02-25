@@ -10,7 +10,6 @@ var dataModel = {
     rowsPerPage: ko.observable(tqlFilter.rowsPerPage || 20),
     errormessage: ko.observable(),
     errorcode: ko.observable(),
-    hiddencontrol: ko.observable(true),
     selectedPersonelname: ko.observable(),
     selectedid: ko.observable(),
     selectedTaskname: ko.observable(),
@@ -79,7 +78,6 @@ var dataModel = {
             });
             $('#closedtask,#editclosedtask').multiselect('select', self.tasksforclosedtype()).multiselect('rebuild');
         }, null, null);
-
     },
     getTasksForFormedType: function () {
         var self = this;
@@ -224,11 +222,9 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
-            $('#editformedtask,#editclosedtask').multiselect('rebuild');
-            $('#editformedtask,#editclosedtask').multiselect('rebuild');
-            if (self.hiddencontrol())
-                if (!($('#editformedtask').val()))
-                    self.getEditAtama(id);
+            $('#editclosedtask,#editformedtask').multiselect('rebuild');
+            if (!($('#editformedtask').val()) || (($('#editformedtask').val()) == '')) 
+                self.getEditAtama(id);
         }, null, null);
     },
     //select: function (d, e) {    //seçilen atama idsi alınarak işlem yapılacak
@@ -332,10 +328,6 @@ var dataModel = {
 $('#editap').on('hidden.bs.modal', function () {
     dataModel.selectedclosedtasktype(null);
     dataModel.selectedformedtasktype(null);
-    dataModel.hiddencontrol(false);
-})
-$('#editap').on('shown.bs.modal', function () {
-    dataModel.hiddencontrol(true);
 })
 
 dataModel.selectedclosedtasktype.subscribe(function (v) {
