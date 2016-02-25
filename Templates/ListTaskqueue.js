@@ -176,7 +176,7 @@ var dataModel = {
             self.errorcode(a.errorCode);
             if(a.errorCode!=0)
             window.setTimeout(function () {
-                $('#personelatama').modal('hide');
+                $('#personelata').modal('hide');
                 self.getFilter(1, dataModel.rowsPerPage());
             }, 1000);
             self.getAttachablePersonelList();
@@ -194,7 +194,7 @@ var dataModel = {
             self.errorcode(a.errorCode);
             self.flag(true);
             window.setTimeout(function() {
-                $('#personelatama').modal('hide');
+                $('#personelata').modal('hide');
                 self.getFilter(1, dataModel.rowsPerPage());
             }, 1000);
             self.selectedAttachmentPersonelid(null);
