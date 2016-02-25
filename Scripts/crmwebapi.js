@@ -298,6 +298,9 @@
          getPersonelWorkList: function (data, onsuccess, onerror, before) {
              getData("POST", "Reports/getPersonelWorks", data, onsuccess, onerror, before)
          },
+         getTaskPersonelAtama: function (data, onsuccess, onerror, before) {
+             getData("POST", "Atama/getTaskPersonelAtama", data, onsuccess, onerror, before)
+         },
          insertPersonelAtama: function (data, onsuccess, onerror, before) {
              getData("POST", "Atama/insertPersonelAtama", data, onsuccess, onerror, before)
          },
