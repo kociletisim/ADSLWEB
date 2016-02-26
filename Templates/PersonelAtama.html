@@ -152,12 +152,12 @@
                                                         </ul>
                                                     </div>
                                                 </th>
-                                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Kapatan Personel</th>
                                                 <th class="col-md-2" style="border-right: 1px solid #ddd;">Kapatılan Task Türü</th>
                                                 <th class="col-md-2" style="border-right: 1px solid #ddd;">Kapatılan Task</th>
-                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Atanan Personel</th>
-                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Oluşan Task Türü</th>
-                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Oluşan Task</th>
+                                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Task Kapatan Personel</th>
+                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Oluşacak Task Türü</th>
+                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Oluşacak Task</th>
+                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Oluşacak Task Atanan Personel</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -169,12 +169,13 @@
                                                     </button>
                                                     <input type="checkbox" />
                                                 </td>
-                                                <td data-bind="text: adsl_personeloff.personelname"></td>
+                                                
                                                 <td data-bind="text: adsl_tasktypesclosed.TaskTypeName"></td>
                                                 <td data-bind="text: adsl_taskclosed.taskname"></td>
-                                                <td data-bind="text: adsl_personelappoint.personelname"></td>
-                                                 <td data-bind="text: adsl_tasktypesformed.TaskTypeName"></td>
+                                                <td data-bind="text: adsl_personeloff.personelname"></td>
+                                                <td data-bind="text: adsl_tasktypesformed.TaskTypeName"></td>
                                                 <td data-bind="text: adsl_taskformed.taskname"></td>
+                                                <td data-bind="text: adsl_personelappoint.personelname"></td>
                                             </tr>
                                             <!--/ko-->
                                         </tbody>
@@ -215,12 +216,6 @@
                         <p><label data-bind="text:id"></label></p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Kapatan Personel :</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="editoffpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value:offpersonel , optionsCaption:'Seçiniz'"></select>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Kapatılan Task Türü :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
@@ -233,22 +228,28 @@
                         <select class="form-control" id="editclosedtask" data-bind="options: $root.tasksforclosedtype, optionsText: 'taskname', optionsValue: 'taskid', value:closedtask,  optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Atanan Personel :</p>
+                        <p>Task Kapatan Personel :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="editappointedpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value:appointedpersonel , optionsCaption:'Seçiniz'"></select>
+                        <select class="form-control" id="editoffpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value:offpersonel , optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Oluşan Task Türü :</p>
+                        <p>Oluşacak Task Türü :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <select class="form-control" id="editformedtasktype" data-bind="options: $root.taskTypeList, optionsText: 'TaskTypeName', optionsValue: 'TaskTypeId', value:formedtasktype, value: $root.selectedformedtasktype, optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Oluşan Task :</p>
+                        <p>Oluşacak Task :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <select class="form-control" id="editformedtask" data-bind="options: $root.tasksforformedtype, optionsText: 'taskname', optionsValue: 'taskid', value:formedtask , optionsCaption:'Seçiniz'"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Oluşacak Task Atanan Personel :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="editappointedpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value:appointedpersonel , optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <label class="col-xs-12 col-sm-12 col-md-12 text-center" id="editinfo" data-bind="visible:$root.errormessage,text:$root.errormessage"></label>
@@ -281,12 +282,6 @@
                         <p><label></label></p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Kapatan Personel :</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="offpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value:selectedoffpersonel , optionsCaption:'Seçiniz'"></select>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Kapatılan Task Türü :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
@@ -299,22 +294,28 @@
                         <select class="form-control" id="closedtask" data-bind="options: $root.tasksforclosedtype, optionsText: 'taskname', optionsValue: 'taskid', value:selectedclosedtask ,optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Atanan Personel :</p>
+                        <p>Task Kapatan Personel :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="appointedpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value: selectedappointedpersonel ,optionsCaption:'Seçiniz'"></select>
+                        <select class="form-control" id="offpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value:selectedoffpersonel , optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Oluşan Task Türü :</p>
+                        <p>Oluşacak Task Türü :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <select class="form-control" id="formedtasktype" data-bind="options: $root.taskTypeList, optionsText: 'TaskTypeName', optionsValue: 'TaskTypeId', value:selectedformedtasktype ,optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Oluşan Task :</p>
+                        <p>Oluşacak Task :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                         <select class="form-control" id="formedtask" data-bind="options: $root.tasksforformedtype, optionsText: 'taskname', optionsValue: 'taskid', value: selectedformedtask ,optionsCaption:'Seçiniz'"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Oluşacak Task Atanan Personel :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="appointedpersonel" data-bind="options: $root.personellist, optionsText: 'personelname', optionsValue: 'personelid', value: selectedappointedpersonel ,optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <label class="col-xs-12 col-sm-12 col-md-12 text-center success" id="info" data-bind="visible:errormessage,text: errormessage"></label>
@@ -325,7 +326,6 @@
                     <button type="button" data-bind="enable:((selectedclosedtask && selectedformedtask) || (selectedoffpersonel && selectedappointedpersonel)),click: insertAtama" class="btn btn-primary">Kaydet</button>
                 </div>
             </div>
-
         </div>
     </div>
     <!-- Atama yeni modal finish -->
