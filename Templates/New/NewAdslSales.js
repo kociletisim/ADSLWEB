@@ -39,6 +39,8 @@ var dataModel = {
     churnsesli:ko.observable(),
     taskid: ko.observable(),
     user: ko.observable(),
+    mail: ko.observable(),
+    isSirketPersonel: ko.observable(),
     taskdescription:ko.observable(),
     personellist: ko.observableArray([]),
     salespersonel: ko.observable(),
@@ -85,6 +87,12 @@ var dataModel = {
         var self = this;
         crmAPI.userInfo(function (a, b, c) {
             self.user(a);
+            var arr = self.user().userName.split('@');
+            if (arr[1] == 'kociletisim.com.tr') {
+                self.isSirketPersonel(true);
+            }
+            else
+                self.isSirketPersonel(false);
             self.isAutorized((a.userRole & 67108896) == 67108896);
         }, null, null)
     },

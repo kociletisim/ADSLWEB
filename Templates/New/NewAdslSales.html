@@ -10,11 +10,11 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                 <button class="btn btn-success btn-lg " data-bind="click:isBayi">BAYİ</button>
-                <button class="btn btn-warning btn-lg pull-right " data-bind="click:isCC">CC</button>
+                <button class="btn btn-warning btn-lg pull-right " data-bind="visible:isSirketPersonel() ,click:isCC">CC</button>
                 <label role="separator" class="divider"></label>
-                <span class="label label-danger" data-bind="text:bayi()==null && cc()==null?'Lütfen Giriş Yapmak İstediğiniz Satışı Seçin':''"></span>
-                <span class="label label-success" data-bind="text:bayi()?' Bayi Satışı Yapıyorsunuz':null"></span>
-                <span class="label label-warning pull-right" data-bind="text:cc()?'CC Satışı Yapıyorsunuz':null"></span>
+                <span class="label label-danger" data-bind="visible:isSirketPersonel() ,text:bayi()==null && cc()==null?'Lütfen Giriş Yapmak İstediğiniz Satışı Seçin':''"></span>
+                <span class="label label-success" data-bind="visible:isSirketPersonel() ,text:bayi()?' Bayi Satışı Yapıyorsunuz':null"></span>
+                <span class="label label-warning pull-right" data-bind="visible:isSirketPersonel() ,text:cc()?'CC Satışı Yapıyorsunuz':null"></span>
                 <label role="separator" class="divider"></label>
             </div>      
             <div data-bind="visible:bayi() || cc()" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
