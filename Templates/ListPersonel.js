@@ -26,6 +26,7 @@ var dataModel = {
     newmobile: ko.observable(),
     newemail: ko.observable(),
     newnotes: ko.observable(),
+    newkurulumbayi: ko.observable(),
     yoneticiList: ko.observableArray([]),
     yoneticiId: ko.observable(),
 
@@ -33,7 +34,7 @@ var dataModel = {
         var self = this;
         crmAPI.getPersonel(function (a, b, c) {
             self.yoneticiList(a);
-            $("#yonetici").multiselect({
+            $("#yonetici,#kurulumbayi").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -78,7 +79,7 @@ var dataModel = {
             self.selectedPersonel(a.data.rows[0]);
             self.getIl();
             self.getIlce(a.data.rows[0].ilKimlikNo);
-            $("#yonetici2").multiselect({
+            $("#yonetici2,#kurulumbayi2").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -154,6 +155,7 @@ var dataModel = {
             personelname: self.newpersonelname(),
             category: self.newcategory(),
             relatedpersonelid: self.yoneticiId(),
+            kurulumpersonelid: self.newkurulumbayi(),
             password: self.newpassword(),
             mobile: self.newmobile(),
             email: self.newemail(),
