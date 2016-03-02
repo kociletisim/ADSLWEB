@@ -106,6 +106,8 @@ var dataModel = {
         self.selectedTasks().push(53)
         self.selectedTasks().push(54)
         self.selectedTasks().push(88)
+        self.selectedTasks().push(93)
+        self.selectedTasks().push(99)
         var data = {
             task: { fieldName: "taskid", op: 7, value: self.selectedTasks() },
         };
