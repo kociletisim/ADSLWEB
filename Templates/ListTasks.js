@@ -23,7 +23,8 @@ var dataModel = {
     newtaskscore: ko.observable(),
     newpersoneltype: ko.observable(),
     newobjecttype: ko.observable(),
-    newtasktype:ko.observable(),
+    newtasktype: ko.observable(),
+    taskTypeList: ko.observableArray([]),
 
     //combo için
     getTaskList: function () {
@@ -112,7 +113,25 @@ var dataModel = {
             });
         }, null, null);
     },
-   
+    getTaskType: function () {
+        var self = this;
+        crmAPI.getTaskType(function (a, b, c) {
+            self.taskTypeList(a);
+            $("#newtaskturu,#edittaskturu,#taskturu").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: 'Task Türünü Seçiniz',
+                nSelectedText: 'Task Adı Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $('#newtaskturu,#edittaskturu,#taskturu').multiselect('select', self.tasksforformedtype()).multiselect('rebuild');
+        }, null, null)
+    },
     //getTaskType: function () {
     //    var self = this;
     //    var data = {
@@ -228,6 +247,11 @@ var dataModel = {
         var self = this;
         self.getTask(dataModel.pageNo(), dataModel.rowsPerPage());
         self.getTaskList();
+        self.getTaskType();
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     },
 }
+
+$('#myModal').on('shown.bs.modal', function () {
+    dataModel.getTaskType();
+})

@@ -376,7 +376,7 @@ var dataModel = {
         });
         self.getIl();
         self.getcategory();
-      
+        self.getpersonel();
         $('#kampanyaturu').on('change', function () {
             self.yalin(this.value==1? true : false);
             self.churn(this.value == 2 ? true : false);
