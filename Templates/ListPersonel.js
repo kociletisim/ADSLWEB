@@ -140,7 +140,7 @@ var dataModel = {
             self.savemessagecode(a.errorCode);
             window.setTimeout(function () {
                 $('#myModal').modal('hide');
-                self.getPersonels(1, dataModel.rowsPerPage());
+                self.getPersonels(dataModel.pageNo(), dataModel.rowsPerPage());
             }, 1000);
         }, null, null);
     },
@@ -168,7 +168,7 @@ var dataModel = {
             self.savemessagecode(a.errorCode);
             window.setTimeout(function () {
                 $('#myModal1').modal('hide');
-                self.getPersonels(1, dataModel.rowsPerPage());
+                self.getPersonels(dataModel.pageNo(), dataModel.rowsPerPage());
             }, 1000);
         }, null, null);
     },
@@ -235,7 +235,7 @@ var dataModel = {
     enterfilter: function (d, e) {
         var self = this;
         if (e && (e.which == 1 || e.which == 13)) {
-            self.getPersonels(1, dataModel.rowsPerPage());
+            self.getPersonels(dataModel.pageNo(), dataModel.rowsPerPage());
         }
         return true;
     },

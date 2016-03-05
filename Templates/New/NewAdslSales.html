@@ -38,13 +38,14 @@
                     <p>Satışı Yapan Kişi</p>
                 </div>
                 <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                    <select id="salesPersonel" data-bind="options:personellist,optionsText:'personelname',optionsValue:'personelid', value:salespersonel" type="text" class="form-control" value=""></select>
+                    <select id="salesPersonel" data-bind="options:personellist,optionsText:'personelname',optionsValue:'personelid', value:salespersonel" class="form-control"></select>
                 </div>
                 <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Satış Kaynağı</p>
                 </div>
                 <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                    <select id="kaynak" data-bind="value:fault,optionsCaption:'Seçiniz'" multiple="true">
+                    <select id="kaynak" data-bind="value:fault">
+                        <option value="">Seçiniz</option>
                         <option value="CC">CC</option>
                         <option value="Ürünler Arası Geçiş">Ürünler Arası Geçiş</option>
                         <option value="Gatio">Gatio</option>
@@ -58,25 +59,25 @@
                     <p>Tc Kimlik No</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                    <input data-bind="value:tckimlikno" type="number" class="form-control" id="tc" value="">
+                    <input data-bind="value:tckimlikno" type="number" class="form-control" id="tc">
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Müşteri Adı Soyadı</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <input data-bind="value:customername" type="text" class="form-control" id="Text3" value="">
+                    <input data-bind="value:customername" type="text" class="form-control" id="csnm">
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Gsm</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <input data-bind="value:gsm" type="text" class="form-control" id="Text3" value="">
+                    <input data-bind="value:gsm" type="text" class="form-control" id="gsmt">
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Ev Telefonu</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <input data-bind="value:phone" type="text" class="form-control" id="Text3" value="">
+                    <input data-bind="value:phone" type="text" class="form-control" id="phone">
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>İl</p>
@@ -102,31 +103,11 @@
                 <div data-bind="visible:selectedBucak" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                     <select id="optionMahalle" data-bind="options:mahalleList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedMahalle,optionsCaption:'Mahalle Seçiniz..'"></select>
                 </div>
-                <div data-bind="visible:false">
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Cadde/SK</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <input data-bind="value:selectedCadde" type="text" class="form-control" id="Text3" value="">
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Bina Kapı No</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <input data-bind="value:selectedBina" type="text" class="form-control" id="Text3" value="">
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                        <p>Daire</p>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <input data-bind="value:selectedDaire" type="text" class="form-control" id="Text3" value="">
-                    </div>
-                </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Açık Adres</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <input data-bind="value:fulladdress" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
+                    <input data-bind="value:fulladdress" placeholder="Adres Detay" type="text" class="form-control" id="fulladres">
                 </div>
                 <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Altkategori</p>
@@ -156,7 +137,7 @@
                     <p>Task Açıklama</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <input data-bind="value:taskdescription" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
+                    <input data-bind="value:taskdescription" placeholder="Adres Detay" type="text" class="form-control" id="Text3">
                 </div>
                 <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
                 <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
@@ -167,7 +148,7 @@
             <span data-bind="visible:errorControl()">Tekrar Deneyiniz</span>
             <div data-bind="visible: !errorControl()">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                <button data-bind="click:insertAdslSalesTask, enable:(tckimlikno() && gsm() && customername() && salespersonel() && fulladdress() && selectedNet() && ((cc() && fault()) || bayi()))" type="button" class="btn btn-success">Kaydet</button>
+                <button data-bind="click:insertAdslSalesTask, enable:isSelectedKaynak" type="button" class="btn btn-success">Kaydet</button>
             </div>
         </div>
     </div>

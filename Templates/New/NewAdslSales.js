@@ -1,12 +1,11 @@
-﻿
-var dataModel = {
+﻿var dataModel = {
 
     returntaskorderno:ko.observable(),
-    tckimlikno: ko.observable(),
-    customername: ko.observable(),
-    gsm: ko.observable(),
+    tckimlikno: ko.observable(""),
+    customername: ko.observable(""),
+    gsm: ko.observable(""),
     phone: ko.observable(),
-    fulladdress: ko.observable(),
+    fulladdress: ko.observable(""),
     ilList: ko.observableArray([]),
     ilceList: ko.observableArray([]),
     bucakList:ko.observableArray([]),
@@ -55,8 +54,11 @@ var dataModel = {
     productlist: ko.observableArray([]),
     pids: ko.observableArray([]),
     sesList: ko.observableArray([]),
-    selectedNet: ko.observable(),
+    selectedNet: ko.observable(""),
     selectedSes: ko.observable(),
+    isSelectedKaynak: ko.pureComputed(function () {
+        return ((dataModel.isSirketPersonel() == true && dataModel.salespersonel() > 0 && dataModel.fault() != '' || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0);
+    }),
     errorControl:ko.pureComputed(function(){
         return  (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
@@ -112,6 +114,7 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
+            $('#salesPersonel').multiselect('select', self.personellist()).multiselect('rebuild');
         }, null, null)
     },
     getIl: function () {
@@ -220,35 +223,6 @@ var dataModel = {
             $("#ses").multiselect("refresh");
         }, null, null)
     },
-    //getCadde: function (mahalleKoyBaglisiKimlikNo) {
-    //    var self = this;
-    //    var data = {
-    //        adres: { fieldName: "mahalleKoyBaglisiKimlikNo", op: 2, value: mahalleKoyBaglisiKimlikNo },
-    //    };
-    //    crmAPI.getAdress(data, function (a, b, c) {
-    //        self.caddeList(a);
-    //    }, null, null);
-    //},
-    //getBina: function (mahalleKoyBaglisiKimlikNo,yolKimlikNo) {
-    //    var self = this;
-    //    var data = {
-    //        adres: { fieldName: "mahalleKoyBaglisiKimlikNo", op: 2, value: mahalleKoyBaglisiKimlikNo },
-    //        subAdres: { fieldName: "yolKimlikNo", op: 2, value: yolKimlikNo },
-    //    };
-    //    crmAPI.getAdress(data, function (a, b, c) {
-    //        self.binaList(a);
-    //    }, null, null);
-    //},
-    //getDaire: function (mahalleKoyBaglisiKimlikNo, binaKimlikNo) {
-    //    var self = this;
-    //    var data = {
-    //        adres: { fieldName: "mahalleKoyBaglisiKimlikNo", op: 2, value: mahalleKoyBaglisiKimlikNo },
-    //        subAdres: { fieldName: "yolKimlikNo", op: 2, value: binaKimlikNo },
-    //    };
-    //    crmAPI.getAdress(data, function (a, b, c) {
-    //        self.daireList(a);
-    //    }, null, null);
-    //},
     insertAdslSalesTask: function () {
         var self = this;
         if (self.selectedNet()) self.pids().push(self.selectedNet());
@@ -376,7 +350,6 @@ var dataModel = {
         });
         self.getIl();
         self.getcategory();
-        self.getpersonel();
         $('#kampanyaturu').on('change', function () {
             self.yalin(this.value==1? true : false);
             self.churn(this.value == 2 ? true : false);
@@ -385,21 +358,6 @@ var dataModel = {
 
     }
 }
-//dataModel.selectedIl.subscribe(function (v) {
-//    dataModel.getIlce(v);
-//});
-//dataModel.selectedIlce.subscribe(function (v) {
-//    dataModel.getMahalle(v);
-//});
-//dataModel.selectedMahalle.subscribe(function (v) {
-//    dataModel.getCadde(v);
-//});
-//dataModel.selectedCadde.subscribe(function (v) {
-//    dataModel.getBina(selectedMahalle,v);
-//});
-//dataModel.selectedBina.subscribe(function (v) {
-//    dataModel.getBina(selectedMahalle, v);
-//});
 dataModel.returntaskorderno.subscribe(function (v) {
     if (v == "Girilen TC Numarası Başkasına Aittir") {
         alert(v);
