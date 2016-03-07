@@ -1,31 +1,4 @@
-﻿<!--<style>
-    #taskquetable {
-        cursor: pointer;
-        color: #000;
-    }
-
-        #taskquetable tr:hover {
-            background: rgba(128, 199, 136, 0.50);
-        }
-
-    .selected {
-        background: rgba(111, 198, 121, 0.69);
-    }
-
-    .a {
-        position: relative;
-        padding: 0;
-    }
-
-        .a i {
-            position: absolute;
-            bottom: 10px;
-            right: 24px;
-            top: auto;
-            cursor: pointer;
-        }
-</style>-->
-<div id="bindingContainer" class="container-fluid" style="background-color: rgb(238, 236, 236)">
+﻿<div id="bindingContainer" class="container-fluid" style="background-color: rgb(238, 236, 236)">
     <div class="col-md-12 container" style="padding: 0 !important; margin: 20px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
         <div class="panel-group" id="accordion">
             <div class="panel" id="panel2" style="border: 1px solid #fff !important;">
@@ -170,12 +143,12 @@
                                                     <input type="checkbox" />
                                                 </td>
                                                 
-                                                <td data-bind="text: adsl_tasktypesclosed.TaskTypeName"></td>
-                                                <td data-bind="text: adsl_taskclosed.taskname"></td>
-                                                <td data-bind="text: adsl_personeloff.personelname"></td>
-                                                <td data-bind="text: adsl_tasktypesformed.TaskTypeName"></td>
-                                                <td data-bind="text: adsl_taskformed.taskname"></td>
-                                                <td data-bind="text: adsl_personelappoint.personelname"></td>
+                                                <td data-bind="text: adsl_tasktypesclosed ? adsl_tasktypesclosed.TaskTypeName: null"></td>
+                                                <td data-bind="text: adsl_taskclosed ? adsl_taskclosed.taskname: null"></td>
+                                                <td data-bind="text: adsl_personeloff ? adsl_personeloff.personelname: null"></td>
+                                                <td data-bind="text: adsl_tasktypesformed ? adsl_tasktypesformed.TaskTypeName: null"></td>
+                                                <td data-bind="text: adsl_taskformed ? adsl_taskformed.taskname: null"></td>
+                                                <td data-bind="text: adsl_personelappoint ? adsl_personelappoint.personelname: null"></td>
                                             </tr>
                                             <!--/ko-->
                                         </tbody>
