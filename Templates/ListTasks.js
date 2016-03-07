@@ -11,7 +11,9 @@ var dataModel = {
     pageCount: ko.observable(),
     pageNo: ko.observable(1),
     rowsPerPage: ko.observable(20),
-    selectedTaskid: ko.observable(),
+    selectedTaskid: ko.observableArray([]),
+    selectedTypeId: ko.observable(),
+    typeControl: ko.observable(),
     objectTypeList: ko.observableArray([]),
     selectedObjectType: ko.observable(),
     personelTypeList:ko.observableArray([]),
@@ -45,8 +47,8 @@ var dataModel = {
                 selectAllText: 'Tümünü Seç!',
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
-                
             });
+            $('#taskadi').multiselect('select', self.taskCombo()).multiselect('rebuild');
         }, null, null);
 
     },
@@ -55,10 +57,14 @@ var dataModel = {
         var self = this;
         self.pageNo(pageno);
         self.rowsPerPage(rowsperpage);
+        self.typeControl(null)
+        if (self.selectedTypeId() == 0) self.typeControl(99);
+        self.selectedTaskid($("#taskadi").val() ? $("#taskadi").val() : '');
         var data = {
             pageNo:pageno,
             rowsPerPage:rowsperpage,
-            task: self.selectedTaskid() ? { fieldName: 'taskid', op: 2, value: self.selectedTaskid() } : { fieldName: 'taskname', op: 6, value: '' },
+            task: self.selectedTaskid().length>0 ? { fieldName: 'taskid', op: 7, value: self.selectedTaskid() } : { fieldName: 'taskname', op: 6, value: '' },
+            taskType: self.selectedTypeId() ? { fieldName: 'TaskTypeId', op: 2, value: self.selectedTypeId() } : (self.typeControl() == 99 ? { fieldName: 'TaskTypeId', op: 2, value: 0 } : null),
         };
         crmAPI.getTaskDefination(data, function (a, b, c) {
             self.tasklist(a);
@@ -71,7 +77,7 @@ var dataModel = {
                 self.getObjectType();
                 self.getPersonelType();
             });
-
+            $('#taskturu').multiselect('rebuild');
         }, null, null);
     },
     getObjectType: function () {
@@ -129,7 +135,7 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
-            $('#newtaskturu,#edittaskturu,#taskturu').multiselect('select', self.tasksforformedtype()).multiselect('rebuild');
+            $('#newtaskturu,#edittaskturu,#taskturu').multiselect('select', self.taskTypeList()).multiselect('rebuild');
         }, null, null)
     },
     //getTaskType: function () {
@@ -241,6 +247,9 @@ var dataModel = {
         var self = this;
         self.selectedTaskid(null);
         self.taskCombo(null);
+        self.selectedTypeId(null);
+        self.getTaskList();
+        self.getTaskType();
         self.getTask(self.pageNo(), self.rowsPerPage());
     },
     renderBindings: function () {
