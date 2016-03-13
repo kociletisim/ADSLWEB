@@ -16,7 +16,7 @@ var dataModel = {
     selectedTaskTypename: ko.observable(),
     selectedPersonelname: ko.observable(),
     selectedclosedtask: ko.observable(),
-    selectedformedtask: ko.observable(),
+    selectedformedtask: ko.observableArray([]),
     selectedoffpersonel: ko.observable(),
     selectedappointedpersonel: ko.observable(),
     selectedclosedtasktype: ko.observable(),
@@ -31,6 +31,9 @@ var dataModel = {
     totalRowCount: ko.observable(),
     selectedAtama: ko.observable(),
     user: ko.observable(),
+    kaydetButonEnabla: ko.pureComputed(function () {
+        return (dataModel.selectedformedtasktype() != null) && (dataModel.selectedappointedpersonel() != null)
+    }),
 
     queryButtonClick: function () {
         var self = this;
@@ -48,8 +51,8 @@ var dataModel = {
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
-                nonSelectedText: 'Task Adını Seçiniz',
-                nSelectedText: 'Task Adı Seçildi!',
+                nonSelectedText: 'Seçiniz',
+                nSelectedText: 'Task Seçildi!',
                 numberDisplayed: 2,
                 selectAllText: 'Tümünü Seç!',
                 enableFiltering: true,
@@ -69,8 +72,8 @@ var dataModel = {
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
-                nonSelectedText: 'Task Adını Seçiniz',
-                nSelectedText: 'Task Adı Seçildi!',
+                nonSelectedText: 'Seçiniz',
+                nSelectedText: 'Task Seçildi!',
                 numberDisplayed: 2,
                 selectAllText: 'Tümünü Seç!',
                 enableFiltering: true,
@@ -91,8 +94,8 @@ var dataModel = {
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
-                nonSelectedText: 'Task Adını Seçiniz',
-                nSelectedText: 'Task Adı Seçildi!',
+                nonSelectedText: 'Seçiniz',
+                nSelectedText: 'Task Seçildi!',
                 numberDisplayed: 2,
                 selectAllText: 'Tümünü Seç!',
                 enableFiltering: true,
@@ -110,8 +113,8 @@ var dataModel = {
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
-                nonSelectedText: 'Task Türünü Seçiniz',
-                nSelectedText: 'Task Adı Seçildi!',
+                nonSelectedText: 'Seçiniz',
+                nSelectedText: 'Task Türü Seçildi!',
                 numberDisplayed: 2,
                 selectAllText: 'Tümünü Seç!',
                 enableFiltering: true,
@@ -129,7 +132,7 @@ var dataModel = {
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
-                nonSelectedText: 'Personel Seçiniz',
+                nonSelectedText: 'Seçiniz',
                 nSelectedText: 'Personel Seçildi!',
                 numberDisplayed: 2,
                 selectAllText: 'Tümünü Seç!',
@@ -149,17 +152,13 @@ var dataModel = {
     },
     cleannewatama: function () {
         var self = this;
-        $("#offpersonel option[value='']").attr('selected', true)
-        $("#closedtasktype option[value='']").attr('selected', true)
-        $("#appointedpersonel option[value='']").attr('selected', true)
-        $("#formedtasktype option[value='']").attr('selected', true)
-        $('#offpersonel,#closedtasktype,#appointedpersonel,#formedtasktype').multiselect('rebuild');
         self.selectedappointedpersonel(null),
         self.selectedoffpersonel(null),
         self.selectedclosedtasktype(null),
         self.selectedformedtasktype(null),
         self.selectedclosedtask(null),
         self.selectedformedtask(null)
+        $('#offpersonel,#closedtasktype,#closedtask,#appointedpersonel,#formedtask,#formedtasktype').multiselect('rebuild');
         window.setTimeout(function () {
             $('#newap').modal('hide');
         }, 2000);
@@ -183,10 +182,9 @@ var dataModel = {
         var data = {
             pageNo: pageno,
             rowsPerPage: rowsperpage,
-            task: self.selectedTaskname() ? { fieldName: "closedtask", op: 2, value: self.selectedTaskname() } : null,
-            tasktype: self.selectedTaskTypename() ? { fieldName: "closedtasktype", op: 2, value: self.selectedTaskTypename() } : null,
-            personel: self.selectedPersonelname() ? (self.selectedPersonelname() == "0" ? { fieldName: "offpersonel", op: 8, value: null } : { fieldName: "offpersonel", op: 2, value: self.selectedPersonelname() }) : null,
-            //personel2: self.selectedPersonelname() ? (self.selectedPersonelname() == "0" ? { fieldName: "appointedpersonel", op: 8, value: null } : { fieldName: "appointedpersonel", op: 2, value: self.selectedPersonelname() }) : null,
+            task: self.selectedTaskname() ? { fieldName: "formedtask", op: 2, value: self.selectedTaskname() } : null,
+            tasktype: self.selectedTaskTypename() ? { fieldName: "formedtasktype", op: 2, value: self.selectedTaskTypename() } : null,
+            personel: self.selectedPersonelname() ? (self.selectedPersonelname() == "0" ? { fieldName: "appointedpersonel", op: 8, value: null } : { fieldName: "appointedpersonel", op: 2, value: self.selectedPersonelname() }) : null,
         };
         crmAPI.setCookie("tqlFilter", data);
         crmAPI.getTaskPersonelAtama(data, function (a, b, c) {
@@ -206,34 +204,28 @@ var dataModel = {
             id: { fieldName: 'id', op: 2, value: id },
         };
         crmAPI.getTaskPersonelAtama(data, function (a, b, c) {
-            //console.log(a);
             self.selectedclosedtasktype(a.data.rows[0].closedtasktype);
             self.selectedformedtasktype(a.data.rows[0].formedtasktype);
             self.selectedAtama(a.data.rows[0]);
-            $("#editappointedpersonel,#editoffpersonel,#editformedtask,#editclosedtask,#editclosedtasktype,#editformedtasktype").multiselect({
+            $("#editclosedtask,#editformedtask,#editappointedpersonel,#editoffpersonel,#editclosedtasktype,#editformedtasktype").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
-                nonSelectedText: 'Personel Seçiniz',
-                nSelectedText: 'Personel Seçildi!',
+                nonSelectedText: 'Seçiniz',
+                nSelectedText: 'Seçildi!',
                 numberDisplayed: 2,
                 selectAllText: 'Tümünü Seç!',
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
-            $('#editclosedtask,#editformedtask').multiselect('rebuild');
-            if (!($('#editformedtask').val()) || (($('#editformedtask').val()) == '')) 
-                self.getEditAtama(id);
+            $('#editclosedtask,#editformedtask,#editappointedpersonel,#editoffpersonel,#editclosedtasktype,#editformedtasktype').multiselect('rebuild');
+            if (a.data.rows[0].adsl_taskformed != null && $('#editformedtask').val() == "")
+                dataModel.getEditAtama(id);
+            if (a.data.rows[0].adsl_taskclosed != null && $('#editclosedtask').val() == "")
+                dataModel.getEditAtama(id);
         }, null, null);
     },
-    //select: function (d, e) {    //seçilen atama idsi alınarak işlem yapılacak
-    //    var self = this;
-    //    $("#aptable tr").removeClass("selected");
-    //    $(e.currentTarget).addClass("selected");
-    //    console.log("seçilen " + d.id);
-    //    self.selectedid(d.id);
-    //},
     redirect: function () {
         window.location.href = "app.html";
     },
@@ -267,12 +259,13 @@ var dataModel = {
     },
     insertAtama: function() {
         var self = this;
+        self.selectedformedtask($("#formedtask").val() ? $("#formedtask").val() : '');
         var data = {
             closedtasktype: self.selectedclosedtasktype(),
             closedtask: self.selectedclosedtask(),
             offpersonel: self.selectedoffpersonel(),
             formedtasktype: self.selectedformedtasktype(),
-            formedtask: self.selectedformedtask(),
+            formedtaskarray: self.selectedformedtask(),
             appointedpersonel: self.selectedappointedpersonel(),
         };
         crmAPI.insertPersonelAtama(data, function (a, b, c) {
@@ -348,3 +341,5 @@ dataModel.selectedformedtasktype.subscribe(function (v) {
         dataModel.getTasksForFormedType();
     }
 });
+
+console.log("hjjj");

@@ -282,7 +282,7 @@
                         <p>Oluşacak Task :</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="formedtask" data-bind="options: $root.tasksforformedtype, optionsText: 'taskname', optionsValue: 'taskid', value: selectedformedtask ,optionsCaption:'Seçiniz'"></select>
+                        <select class="form-control" id="formedtask" data-bind="options: $root.tasksforformedtype, optionsText: 'taskname', optionsValue: 'taskid'" multiple="multiple"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Oluşacak Task Atanan Personel :</p>
@@ -296,7 +296,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                    <button type="button" data-bind="enable:((selectedclosedtask && selectedformedtask) || (selectedoffpersonel && selectedappointedpersonel)),click: insertAtama" class="btn btn-primary">Kaydet</button>
+                    <button type="button" data-bind="enable:kaydetButonEnabla(), click:insertAtama" class="btn btn-primary">Kaydet</button>
                 </div>
             </div>
         </div>

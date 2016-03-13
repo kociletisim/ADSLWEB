@@ -138,26 +138,6 @@ var dataModel = {
             $('#newtaskturu,#edittaskturu,#taskturu').multiselect('select', self.taskTypeList()).multiselect('rebuild');
         }, null, null)
     },
-    //getTaskType: function () {
-    //    var self = this;
-    //    var data = {
-    //        taskType: {fieldName:'TaskTypeName',op:6,value:''},
-    //    }; 
-    //    crmAPI.getTaskFilter(data, function (a, b, c) {
-    //        self.taskTypeList(a);
-    //        $("#tasktype").multiselect({
-    //            includeSelectAllOption: true,
-    //            selectAllValue: 'select-all-value',
-    //            maxHeight: 250,
-    //            buttonWidth: '100%',
-    //            nonSelectedText: 'Seçiniz',
-    //            numberDisplayed: 2,
-    //            selectAllText: 'Tümünü Seç!',
-    //            enableFiltering: true,
-    //            filterPlaceholder: 'Ara'
-    //        });
-    //    }, null, null);
-    //},
     getTaskCard: function (taskid) {
         var self = this;
         var data = {
@@ -220,7 +200,6 @@ var dataModel = {
             }, 1000);
         }, null, null);
     },
-
     navigate: {
         gotoPage: function (pageNo) {
             if (pageNo == dataModel.pageNo() || pageNo <= 0 || pageNo > dataModel.pageCount()) return;
