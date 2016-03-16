@@ -230,8 +230,12 @@ var dataModel = {
         self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
         var data = self.selectedCustomer();
         crmAPI.saveCustomerCard(data, function (a, b, c) {
-            if (a == "ok")
-                self.refresh();
+            if (a == "ok") {
+                window.setTimeout(function () {
+                    $('#customerinfo').modal('hide');
+                    self.getFilter(1, dataModel.rowsPerPage());
+                }, 2000);
+            }
         }, null, null);
     },
     getIl: function () {
