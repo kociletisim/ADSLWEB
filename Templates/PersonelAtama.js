@@ -341,5 +341,3 @@ dataModel.selectedformedtasktype.subscribe(function (v) {
         dataModel.getTasksForFormedType();
     }
 });
-
-console.log("hjjj");

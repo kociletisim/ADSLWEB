@@ -1,7 +1,49 @@
 ﻿/// <reference path="../Scripts/_references.js" />
 
 var dataModel = {
-
+    perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
+    BayiOrKoc: function () {
+        var self = this;
+        var arr = self.user().userName.split('@');
+        if (arr[1] == 'kociletisim.com.tr') {
+            self.perOfBayiOrKoc(true);
+        }
+        else
+            self.perOfBayiOrKoc(false);
+    },
+    isNetflowDate: ko.observable(false), // Task NetFlowdan CRM'e giriş gerektiriyorsa Randevu Tarih Alanı Netflow tarihi olarak sadece bizim personele gösterilecek (dateoption -> duruma göre değişecek)  false : Randevu Tarihi -- true : NetFlow Tarihi
+    NetFlowOrRand: function() {
+        var self = this;
+        self.isNetflowDate(false);
+        if (self.taskid() == 32 || self.taskid() == 57 || self.taskid() == 34 || self.taskid() == 33 || self.taskid() == 36 || self.taskid() == 64 || self.taskid() == 97 || self.taskid() == 88 || self.taskid() == 56 || self.taskid() == 54 || self.taskid() == 53 || self.taskid() == 93 || self.taskid() == 51 || self.taskid() == 48) {
+            self.isNetflowDate(true);
+            self.dateoption("Netflow Tarihi");
+        }
+        else if (self.tasktype() == 1)
+            self.dateoption("Satış Tarihi");   
+        else if (self.tasktype() == 3)
+            self.dateoption("Kurulum Tarihi");
+        else if (self.tasktype() == 5)
+            self.dateoption("Kapatma Tarihi");
+        else self.dateoption("Randevu Tarihi");
+    },
+    isEnableDateOption: ko.pureComputed(function () {
+        if (dataModel.perOfBayiOrKoc() == true || (dataModel.perOfBayiOrKoc() == false && dataModel.isNetflowDate() == false))
+            return true;
+        else
+            return false;
+    }),
+    isEnterDateOption: ko.pureComputed(function () {
+        if (dataModel.perOfBayiOrKoc() == true && dataModel.isNetflowDate() == true && (dataModel.appointmentdate() == "" || dataModel.appointmentdate() == null))
+            return false;
+        else
+            return true;
+    }),
+    ff: function () { // netflow tarih seçilip silindiğinde tarih nesnesini temizle
+        window.setTimeout(function () {
+            dataModel.appointmentdate($('#daterangepicker2').val());
+        }, 50);
+    },
     taskorderno: ko.observable(),
     taskname: ko.observable(),
     taskid: ko.observable(),
@@ -306,8 +348,6 @@ var dataModel = {
     },
     stockcardlist: ko.observableArray([]),
     stockmovement:ko.observableArray([]),
-    
-
 
     gettaskstatus: function (statusVal) {
         var self = this;
@@ -360,6 +400,7 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
+            $('#assistantPersonel').multiselect('select', self.personellist()).multiselect('rebuild');
         }, null, null)
     },
     getCustomerStatus: function () {
@@ -492,112 +533,21 @@ var dataModel = {
                 }, 1250);
             }, null, null);
     },
-    //download: function () {
-    //    var self = this;
-    //    crmAPI.download(function (a, b, c) {
-    //        self.dosya(a.);
-    //    }, null, null);
-    //},
-    //closeTaskQueues: function () {
-    //    var self = this;
-    //    var data = {
-    //        campaignid: self.campaignid(),
-    //        selectedProductsIds: self.selectedProductIds(),
-    //        taskorderno: self.taskorderno(),
-    //    };
-    //    crmAPI.closeTaskQueues(data, function (a,b,c) {
-    //        self.closedTaskqueueResponseMessage(a);
-    //        self.getDocs();
-    //    }, null, null);
-    //},
-    //saveStockMovements: function () {
-    //    var self = this;
-    //    var postdata = [];
-    //    for (var i = 0; i < dataModel.stockcardlist().length; i++) {
-    //        var pd =  {
-    //            movementid: self.stockcardlist()[i].movementid,
-    //            relatedtaskqueue:self.taskorderno(),// self.stockcardlist()[i].relatedtaskqueue,
-    //            amount: self.stockcardlist()[i].serial()?1: self.stockcardlist()[i].used(),
-    //            serialno:self.stockcardlist()[i].serial(),
-    //            fromobjecttype:self.user().userRole, //self.stockcardlist()[i].fromobjecttype,
-    //            fromobject: self.user().userId,//self.stockcardlist()[i].fromobject,
-    //            toobjecttype: 16777217,
-    //            toobject: self.customerid(), //self.stockcardlist()[i].toobject,
-    //            stockcardid:self.stockcardlist()[i].stockid,               
-    //        };
-    //        postdata.push(pd);
-    //    }
-    //    crmAPI.SaveStockMovementMultiple(postdata, function (a, b, c) {
-    //        self.message(a);
-    //    }, null, null);
-    //    console.log(postdata);
-    //},
     download: function () {
         var self = this;
         crmAPI.download(function (a, b, c) {
         }, null, null);
-        
     },
     selectFile: function(documentid){
         var fu = $("#fileUpload")[0];
         fu.documentid = documentid;
         $(fu).trigger('click');
     },
-
-    //fileUpload: function () {
-    //    var self = this;
-    //    var count = 0;
-    //    for (var i = 0; i < self.docIds().length; i++) {
-    //        if ($("#" + self.docIds()[i].documentid + "").val() != '') {
-    //            console.log(self.docIds()[i].documentid + ' inci dosya yüklenebilir');
-    //            count++;
-    //        }
-    //        else {
-    //            alert('Tüm Dosyaları Yüklemeden İşleme Devam Edemezsiniz');
-    //            console.log('Tüm Dosyaları Yüklemeden İşleme Devam Edemezsiniz');
-    //        }
-    //        if(count==self.docIds().length)
-    //        self.uploadControl(true);
-    //        else self.uploadControl(false);
-    //    }
-    //},
-    //getDocs: function () {
-    //    var self = this;
-    //    var data = {
-    //        taskid: self.taskid(),
-    //        taskstate: self.taskstatus(),
-    //        campaignid: self.campaignid(),
-    //        productIds: self.selectedProductIds(),
-    //    };
-    //    crmAPI.getDocumentIds(data, function (a, b, c) {
-    //        self.docIds(a);
-    //        for (var i = 0; i < self.docIds().length; i++) {
-    //            $('#' + self.docIds()[i].documentid+ '').fileinput({
-    //                uploadUrl: "http://crmapitest.kociletisim.com.tr:8083/api/Fiber/Upload/upload", // server upload action
-    //                uploadAsync: true,
-    //                minFileCount: 1,
-    //                maxFileCount: 10,
-    //                showUpload:true,
-    //                overwriteInitial: false,
-    //                uploadExtraData: function () {
-    //                    return {
-    //                        img_key: self.customerid() + "-" + self.customername(),
-    //                        il: self.il(),
-    //                        ilce:self.ilce(),
-    //                        tqid: self.taskorderno(),
-    //                        docid: this.id,
-    //                        updatedby:self.user().userId
-    //                    };
-    //                }
-    //            });
-    //        }
-    //       // $(".fileinput-upload-button").attr("style", "visibility: hidden")
-    //    }, null, null);
-    //},
     renderBindings: function () {
         var self = this; var i = 0;
         var hashSearches = document.location.hash.split("?");
-        if(hashSearches.length > 1) { 
+        if (hashSearches.length > 1) {
+            self.getUserInfo();
             $("#kategori").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
@@ -703,13 +653,9 @@ var dataModel = {
                 self.taskorderno(a.data.rows[0].taskorderno);               
                 self.taskname(a.data.rows[0].task.taskname);
                 self.taskid(a.data.rows[0].task.taskid);
-                if (self.taskid() == 30 || self.taskid() == 31 || self.taskid() == 32 || self.taskid() == 33) {
-                    self.dateoption("Satış Tarihi");
-                }
-                else if (self.taskid() == 34) {
-                    self.dateoption("Onay Tarihi");
-                }
-                else self.dateoption("Randevu Tarihi");
+                self.tasktype(a.data.rows[0].task.tasktypes.TaskTypeId);
+                self.BayiOrKoc();
+                self.NetFlowOrRand();
                 self.taskstatetype(a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.statetype || null)
                 var status = a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.taskstateid || null;
                 self.gettaskstatus(status);
@@ -722,7 +668,6 @@ var dataModel = {
                 self.personelname(a.data.rows[0].attachedpersonel && a.data.rows[0].attachedpersonel.personelname || 'atanmamış');
                 self.personelid(a.data.rows[0].attachedpersonel && a.data.rows[0].attachedpersonel.personelid || 0);
                 self.assistantpersonel(a.data.rows[0].asistanPersonel ? a.data.rows[0].asistanPersonel.personelid : 'atanmamış');
-                $("#assistantPersonel").multiselect("refresh");
                 self.il(a.data.rows[0].attachedcustomer.il && a.data.rows[0].attachedcustomer.il.ad || '');
                 self.ilce(a.data.rows[0].attachedcustomer.ilce && a.data.rows[0].attachedcustomer.ilce.ad || '');
                 self.customername(a.data.rows[0].attachedcustomer.customername && (a.data.rows[0].attachedcustomer.customername) || '');
@@ -765,47 +710,8 @@ var dataModel = {
                     });
                 });
                 self.editable(a.data.rows[0].editable);
-                self.tasktype(a.data.rows[0].task.tasktypes.TaskTypeId);
                 self.stockmovement(a.data.rows[0].stockmovement);
-                //$.each(a.data.rows[0].stockcardlist, function (index, stockcard) {
-                //    stockcard.movementid = 0;
-                //    stockcard.fromobject = 0;
-                //    stockcard.toobject = 0;
-                //    stockcard.relatedtaskqueue = 0;
-                //    stockcard.fromobjecttype = 0;
-                //    stockcard.toobjecttype = 0;
-                //    stockcard.used.subscribe(function (v) {
-                //        if (v > stockcard.max())
-                //           stockcard.used(stockcard.max());
-                //        else if (v < 0)
-                //            stockcard.used(0);
-                //        stockcard.available(stockcard.max() - stockcard.used());
-                //        return v;
-                //    });
-                //    $.each(a.data.rows[0].attachedpersonel.stockstatus, function (sindex, status) {
-                //        if (stockcard.stockid == status.stockcardid) {
-                //            stockcard.available(status.amount);
-                //            stockcard.serials(status.serials);
-                //        }
-                //    });
-                //    $.each(a.data.rows[0].stockmovement, function (mindex, movement) {
-                //        if (stockcard.stockid == movement.stockcardid) {
-                //            stockcard.movementid = movement.movementid;
-                //            stockcard.fromobject = movement.fromobject;
-                //            stockcard.toobject = movement.toobject;
-                //            stockcard.relatedtaskqueue = movement.relatedtaskqueue;
-                //            stockcard.fromobjecttype = movement.fromobjecttype;
-                //            stockcard.toobjecttype = movement.toobjecttype;
-                //            stockcard.max(stockcard.available() + movement.amount);
-                //            if (stockcard.hasserial == true) stockcard.max(1);
-                //            stockcard.used(movement.amount);
-                //            if (movement.serialno) stockcard.serials.unshift(movement.serialno);
-                //            stockcard.serial(movement.serialno);
-                //        }
-                //    });
-                //});
                 self.stockcardlist(a.data.rows[0].stockcardlist);
-                
             }, null, null);          
             self.getpersonel();
             self.getCustomerStatus();
@@ -820,7 +726,6 @@ var dataModel = {
                     "format": 'MM/DD/YYYY h:mm A',
                 },
             });
-            self.getUserInfo();
            
             ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         }
@@ -828,7 +733,6 @@ var dataModel = {
         self.getIlce();
     }
 }
-
 
 dataModel.category.subscribe(function (v) {
     dataModel.getsubcategory();
@@ -843,12 +747,6 @@ dataModel.campaignid.subscribe(function (v) {
     if(v)
     dataModel.getproduct();
 });
-//dataModel.campaignInfoIsVisible = ko.computed(function () {
-//    if (dataModel.taskstatus() != null && dataModel.taskstatus() != 0 && dataModel.taskstatetype() != 2 && dataModel.consummationdate() !=null) {
-//        return true;
-//    }
-//    return false;
-//});
 dataModel.taskstatus.subscribe(function () {
     dataModel.errormessage(null);
     var data = {
@@ -898,6 +796,3 @@ dataModel.description.subscribe(function () {
 
     
 });
-
-						
-

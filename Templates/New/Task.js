@@ -6,6 +6,7 @@ var dataModel = {
     customername: ko.observable(),
     gsm: ko.observable(),
     phone: ko.observable(),
+    email:ko.observable(),
     fulladdress: ko.observable(),
     user:ko.observable(),
     ilList: ko.observableArray([]),
@@ -140,9 +141,8 @@ var dataModel = {
                 bucakKimlikNo: self.selectedBucak(),
                 mahalleKimlikNo: self.selectedMahalle(),
                 description: self.fulladdress(),
-                //taskdescription: self.taskdescription(),
                 taskid: self.taskid(),
-                //salespersonel: self.salespersonel(),
+                email: self.email(),
             };
             if ((data.tc != null && data.gsm != null) || self.confirmMessage() != "-1")
                 crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);

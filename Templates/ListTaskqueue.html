@@ -124,7 +124,7 @@
 <!--								 <input  type="checkbox" data-bind="checked:atanmamistasklar" />Atanmamış Tasklar </input>-->
                                 <div class="btn-group pull-right" role="group">
 									<button data-bind="click: queryButtonClick"  type="button" class="btn btn-success">Sorgula</button>
-									<button  data-bind="click: clean" type="button" class="btn btn-primary">Temizle</button>
+									<button  data-bind="click: clean" type="button" class="btn btn-warning">Temizle</button>
 								</div>
 							</div>
 						</div>
@@ -262,7 +262,7 @@
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage(); }">&lt;</a></li>
 											<li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
 											<li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
-                                            <li><button data-bind="click: clean" type="button" class="btn btn-primary">Temizle</button></li>
+                                            <li><button data-bind="click: clean" type="button" class="btn btn-warning">Temizle</button></li>
 										</ul>
 									</nav>
 							<!--pagination finish-->
@@ -296,110 +296,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bind="click:queryButtonClick" data-dismiss="modal">Kapat</button>
-                        <button type="button" data-bind="click: attachmentpersonel" class="btn btn-primary">Kaydet</button>
+                        <button type="button" data-bind="click: attachmentpersonel" class="btn btn-success">Kaydet</button>
                     </div>
                 </div>
             </div>
         </div>
-	<!-- İşlemler *personel atama* For Modal Finish-->
-    <!-- Kat Ziyaret Sonuçlarını Toplu Gir For Modal Start-->
-	<!--<div class="modal fade" id="katziyareti1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="H1">Kat Ziyaret Sonuçlarını Toplu Gir</h4>
-				</div>
-				<div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-						<p>Kat Ziyaret Sonucu</p>
-					</div>
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-						<select class="form-control">
-							<option></option>
-							<option>KZS1</option>
-							<option>KZS2</option>
-							<option>KZS3</option>
-						</select>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-					<button type="button" class="btn btn-primary">Kaydet</button>
-				</div>
-			</div>
-		</div>
-	</div>-->
-	<!-- Kat Ziyaret Sonuçlarını Toplu Gir For Modal Finish-->
-    <!--Müşteri durumlarını Toplu Gir For Modal Start-->
-	<!--<div class="modal fade" id="katziyareti2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="H2">Müşteri Durumlarını Toplu Gir</h4>
-				</div>
-				<div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-						<p>Müşteri Statüsünü Seçiniz</p>
-					</div>
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-						<select class="form-control">
-							<option></option>
-							<option>MSS1</option>
-							<option>MSS2</option>
-							<option>MSS3</option>
-						</select>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-					<button type="button" class="btn btn-primary">Kaydet</button>
-				</div>
-			</div>
-		</div>
-	</div>-->
-	<!-- Müşteri durumlarını Toplu Gir For Modal Finish-->
-    <!-- Müşteri ve Kat Ziyaret Sonuçlarını Toplu Gir For Modal Start-->
-	<!--<div class="modal fade" id="katziyareti3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document" style="margin-top: 50px;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="H3">Müşteri Ve Kat Ziyareti Sonuçlarını Toplu Gir</h4>
-				</div>
-				<div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-						<p>Müşteri Statüsünü Seçiniz</p>
-					</div>
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-						<select class="form-control">
-							<option></option>
-							<option>MSS1</option>
-							<option>MSS2</option>
-							<option>MSS3</option>
-						</select>
-					</div>
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-						<p>Kat Ziyaret Sonucu</p>
-					</div>
-					<div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-						<select class="form-control">
-							<option></option>
-							<option>KZS1</option>
-							<option>KZS2</option>
-							<option>KZS3</option>
-						</select>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-					<button type="button" class="btn btn-primary">Kaydet</button>
-				</div>
-			</div>
-		</div>
-	</div>-->
-	<!--Müşteri ve Kat Ziyaret Sonuçlarını Toplu Gir For Modal Finish-->
 
         <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-sm" role="document" style="margin-top: 50px;">
@@ -485,7 +386,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                        <button type="button" data-bind="click:saveCustomer" class="btn btn-primary">Kaydet</button>
+                        <button type="button" data-bind="click:saveCustomer" class="btn btn-success">Kaydet</button>
                     </div>
                 </div>
 
