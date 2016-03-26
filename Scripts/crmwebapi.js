@@ -301,6 +301,9 @@
          SKR: function (data, onsuccess, onerror, before) {
              getData("POST", "Reports/SKR", data, onsuccess, onerror, before)
          },
+         Taskqueues: function (data, onsuccess, onerror, before) {
+             getData("POST", "Reports/Taskqueues", data, onsuccess, onerror, before)
+         },
          getTaskPersonelAtama: function (data, onsuccess, onerror, before) {
              getData("POST", "Atama/getTaskPersonelAtama", data, onsuccess, onerror, before)
          },

@@ -1,7 +1,5 @@
 ﻿/// <reference path="crmwebapi.js" />
 
-
-
 jQuery.fn.extend({
     loadTemplate: function (url, onload) {
         return this.load(url, function () {
@@ -13,8 +11,6 @@ jQuery.fn.extend({
         });
     }
 });
-
-
 
 $(window).bind("hashchange", function () {
     document.location.reload();
@@ -58,6 +54,12 @@ $(window).bind("hashchange", function () {
                 $("#tanimlamalar").hide(true);
                 $("#musteriler").hide(true);
             }
+            var arr = a.userName.split('@');
+            if (arr[1] == 'kociletisim.com.tr') {
+                $("#newtask").show();
+            }
+            else
+                $("#newtask").hide();
             var data = {
                 personel: { fieldName: 'personelid', op: 2, value: pid },
             };
@@ -68,7 +70,5 @@ $(window).bind("hashchange", function () {
                 }
             }, null, null);
         }, null, null);
-       
     });
 });
-

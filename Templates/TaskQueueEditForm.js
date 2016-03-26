@@ -4,12 +4,14 @@ var dataModel = {
     perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
     BayiOrKoc: function () {
         var self = this;
-        var arr = self.user().userName.split('@');
-        if (arr[1] == 'kociletisim.com.tr') {
-            self.perOfBayiOrKoc(true);
+        if (self.user() != null || self.user() != "") {
+            var arr = self.user().userName.split('@');
+            if (arr[1] == 'kociletisim.com.tr') {
+                self.perOfBayiOrKoc(true);
+            }
+            else
+                self.perOfBayiOrKoc(false);
         }
-        else
-            self.perOfBayiOrKoc(false);
     },
     isNetflowDate: ko.observable(false), // Task NetFlowdan CRM'e giriş gerektiriyorsa Randevu Tarih Alanı Netflow tarihi olarak sadece bizim personele gösterilecek (dateoption -> duruma göre değişecek)  false : Randevu Tarihi -- true : NetFlow Tarihi
     NetFlowOrRand: function() {

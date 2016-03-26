@@ -14,6 +14,30 @@
                 </div>
                 <div id="collapse1" class="panel-collapse collapse">
                     <div class="panel-body">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group-sm has-info cls-margin-bottom">
+                                <label class="control-label" for="durumtanimi">İlk Tarih</label>
+                                <div class="col-md-12 a">
+                                    <input type="text" id="daterangepicker1" class="form-control" data-bind="value: startDate, valueUpdate: 'keydown'">
+                                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group-sm has-info cls-margin-bottom">
+                                <label class="control-label" for="durumtanimi">Son Tarih</label>
+                                <div class="col-md-12 a">
+                                    <input type="text" id="daterangepicker2" class="form-control" data-bind="value: endDate, valueUpdate: 'keydown'">
+                                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 pull-right" style="margin-top: 21px;">
+                            <div class="btn-group pull-right" role="group">
+                                <button data-bind="click: getReport" type="button" class="btn btn-success">Sorgula</button>
+                                <button data-bind="click: clean" type="button" class="btn btn-warning">Temizle</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -28,16 +52,157 @@
                             Satış Kurulum Raporu
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
-                            <!--pagination Starts-->
-                            <!--pagination finish-->
+                            
                         </div>
                     </div>
                 </div>
+
                 <div class="panel-body" style="margin: 0 15px 0 15px !important; padding: 0px !important;">
                     <div class="container-fluid cls-padding-0px cls-deneme-height ">
                         <div class="row cls-margin-task">
                             <div class="col-lg-12 cls-padding-0px">
                                 <div class="col-lg-12 cls-task cls-padding-0px table-responsive">
+                                    <table class="table table-bordered table-hover" id="aptable" data-pagination="true" data-search="true">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Müşteri ID</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Müşteri Ad</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Müşteri GSM</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Müşteri Telefon</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">İi</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">İlçe</th>
+
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış TON</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Task Ad</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Durum</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">S. Durum Tip</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Kampanya</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">S. Personeli ID</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">S. Personeli</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">S. Personel K.Y</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Kaynağı</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Açıklama</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Yıl</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Ay</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Gün</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Kapama Tarihi</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Kapama Yıl</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Kapama Ay</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Satış Kapama Gün</th>
+
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR TON</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Task Ad</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Durum</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Durum Tip</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Personeli ID</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Personeli</th>
+                                                <!--<th class="col-md-3" style="border-right: 1px solid #ddd;">S. Personel K.Y</th>-->
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Açıklama</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Kapama Tarihi</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Kapama Yıl</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Kapama Ay</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KR Kapama Gün</th>
+
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K TON</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Task Ad</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Durum</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Durum Tip</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Personeli ID</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Personeli</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Açıklama</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Kapama Tarihi</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Kapama Yıl</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Kapama Ay</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">K Kapama Gün</th>
+
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK TON</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Task Ad</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Durum</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Durum Tip</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Personeli ID</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Personeli</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Açıklama</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Kapama Tarihi</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Kapama Yıl</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Kapama Ay</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">KTK Kapama Gün</th>
+
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Last Task Ad</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Last Task Durum</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Last Task Durum Tip</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- ko foreach: report -->
+                                            <tr>
+                                                <td data-bind="text: custid"></td>
+                                                <td data-bind="text: custname"></td>
+                                                <td data-bind="text: gsm"></td>
+                                                <td data-bind="text: custphone"></td>
+                                                <td data-bind="text: il"></td>
+                                                <td data-bind="text: ilce"></td>
+
+                                                <td data-bind="text: s_ton"></td>
+                                                <td data-bind="text: s_tqname"></td>
+                                                <td data-bind="text: s_tqstate"></td>
+                                                <td data-bind="text: s_tqstatetype"></td>
+                                                <td data-bind="text: campaign"></td>
+                                                <td data-bind="text: s_perid"></td>
+                                                <td data-bind="text: s_pername"></td>
+                                                <td data-bind="text: s_perky"></td>
+                                                <td data-bind="text: kaynak"></td>
+                                                <td data-bind="text: s_desc"></td>
+                                                <td data-bind="text: s_year"></td>
+                                                <td data-bind="text: s_month"></td>
+                                                <td data-bind="text: s_day"></td>
+                                                <td data-bind="text: s_consummationdate"></td>
+                                                <td data-bind="text: s_consummationdateyear"></td>
+                                                <td data-bind="text: s_consummationdatemonth"></td>
+                                                <td data-bind="text: s_consummationdateday"></td>
+
+                                                <td data-bind="text: kr_ton"></td>
+                                                <td data-bind="text: kr_tqname"></td>
+                                                <td data-bind="text: kr_tqstate"></td>
+                                                <td data-bind="text: kr_tqstatetype"></td>
+                                                <td data-bind="text: kr_perid"></td>
+                                                <td data-bind="text: kr_pername"></td>
+                                                <td data-bind="text: kr_desc"></td>
+                                                <td data-bind="text: kr_consummationdate"></td>
+                                                <td data-bind="text: kr_consummationdateyear"></td>
+                                                <td data-bind="text: kr_consummationdatemonth"></td>
+                                                <td data-bind="text: kr_consummationdateday"></td>
+
+                                                <td data-bind="text: k_ton"></td>
+                                                <td data-bind="text: k_tqname"></td>
+                                                <td data-bind="text: k_tqstate"></td>
+                                                <td data-bind="text: k_tqstatetype"></td>
+                                                <td data-bind="text: k_perid"></td>
+                                                <td data-bind="text: k_pername"></td>
+                                                <td data-bind="text: k_desc"></td>
+                                                <td data-bind="text: k_consummationdate"></td>
+                                                <td data-bind="text: k_consummationdateyear"></td>
+                                                <td data-bind="text: k_consummationdatemonth"></td>
+                                                <td data-bind="text: k_consummationdateday"></td>
+
+                                                <td data-bind="text: ktk_ton"></td>
+                                                <td data-bind="text: ktk_tqname"></td>
+                                                <td data-bind="text: ktk_tqstate"></td>
+                                                <td data-bind="text: ktk_tqstatetype"></td>
+                                                <td data-bind="text: ktk_perid"></td>
+                                                <td data-bind="text: ktk_pername"></td>
+                                                <td data-bind="text: ktk_desc"></td>
+                                                <td data-bind="text: ktk_consummationdate"></td>
+                                                <td data-bind="text: ktk_consummationdateyear"></td>
+                                                <td data-bind="text: ktk_consummationdatemonth"></td>
+                                                <td data-bind="text: ktk_consummationdateday"></td>
+
+                                                <td data-bind="text: lastTaskName"></td>
+                                                <td data-bind="text: lastTaskTypeName"></td>
+                                                <td data-bind="text: lastTaskStatus"></td>
+                                            </tr>
+                                            <!--/ko-->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
