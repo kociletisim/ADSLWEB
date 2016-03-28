@@ -2,6 +2,7 @@
 
     returntaskorderno:ko.observable(),
     tckimlikno: ko.observable(""),
+    superonlineCustNo: ko.observable(),
     customername: ko.observable(""),
     gsm: ko.observable(""),
     phone: ko.observable(),
@@ -174,7 +175,7 @@
             $("#kategori").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
 
             self.category(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.category : null);
-            $("#kategori").multiselect("refresh");
+            $("#kategori").multiselect("rebuild");
 
 
         }, null, null)
@@ -285,7 +286,8 @@
             salespersonel: self.salespersonel(),
             productids: self.pids(),
             campaignid: self.campaignid(),
-            fault:self.fault(),
+            fault: self.fault(),
+            superonlineCustNo: self.superonlineCustNo(),
         };
         if (data.tc != null && data.gsm != null &&(self.yalin()||self.churn()))
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);

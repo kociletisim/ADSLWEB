@@ -26,6 +26,7 @@ var dataModel = {
     newpersoneltype: ko.observable(),
     newobjecttype: ko.observable(),
     newtasktype: ko.observable(),
+    newtaskdesc: ko.observable(),
     taskTypeList: ko.observableArray([]),
 
     //combo için
@@ -144,9 +145,9 @@ var dataModel = {
             task: {fieldname:'taskid',op:2,value:taskid}
         };
         crmAPI.getTaskDefination(data, function (a, b, c) {
-            self.selectedTask(a[0]);
             self.getObjectType();
             self.getPersonelType();
+            self.selectedTask(a[0]);
         }, null, null);
     },
     saveTask: function () {
@@ -186,6 +187,7 @@ var dataModel = {
             self.newobjecttype(parseInt($("#newilgi").val()[0]));
         var data = {
             taskname: self.newtaskname(),
+            description: self.newtaskdesc(),
             tasktypes: { TaskTypeId: $("#newtaskturu").val() },
             objecttypes: { typeid: self.newobjecttype() },
             personeltypes: { typeid: self.newpersoneltype() },
@@ -236,6 +238,8 @@ var dataModel = {
         self.getTask(dataModel.pageNo(), dataModel.rowsPerPage());
         self.getTaskList();
         self.getTaskType();
+        self.getObjectType();
+        self.getPersonelType();
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     },
 }

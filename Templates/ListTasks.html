@@ -73,7 +73,7 @@
 													<tr>
 														<th class="col-md-1" style="border-right: 1px solid #ddd;">
 															<div class="dropdown">
-																<a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" style="padding: 2px 15px;">
+																<a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-success" style="padding: 2px 15px;">
 																	İşlemler <span class="caret"></span>
 																</a>
 																<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
@@ -107,7 +107,7 @@
 													<!-- ko foreach: tasklist -->
 													<tr>
 														<td>
-															<button data-bind="value:taskid" type="button" class="btn btn-primary btn-lg edit" data-toggle="modal" data-target="#myModal" style="padding: 3px; border-radius: 0px; font-size:14px;">
+															<button data-bind="value:taskid" type="button" class="btn btn-success btn-lg edit" data-toggle="modal" data-target="#myModal" style="padding: 3px; border-radius: 0px; font-size:14px;">
 																Düzenle
 															</button>
 															<input type="checkbox" />															
@@ -161,7 +161,7 @@
                             <p>Task Adı</p>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                            <input data-bind="value:newtaskname" type="text" class="form-control" id="exampleInputName2" value="">
+                            <input data-bind="value:newtaskname" type="text" class="form-control" id="exampleInputName2">
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                             <p>Görevli</p>
@@ -189,7 +189,13 @@
                             <p>Puan</p>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                            <input data-bind="value:newtaskscore" type="text" class="form-control" id="Text1" value="">
+                            <input data-bind="value:newtaskscore" type="text" class="form-control" id="score">
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Açıklama</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <textarea data-bind="value:newtaskdesc" class="form-control" rows="3"></textarea>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: $root.saveerrorcode()">
                             <span class="label label-success" data-bind="text: $root.savemessage , visible:$root.saveerrorcode()==1"></span>
@@ -198,7 +204,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                        <button data-bind="click:insertTask" type="button" class="btn btn-primary">Kaydet</button>
+                        <button data-bind="click:insertTask" type="button" class="btn btn-success">Kaydet</button>
                     </div>
                 </div>
             </div>
@@ -253,6 +259,12 @@
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                             <input data-bind="value:performancescore" type="text" class="form-control" id="Text3" >
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Açıklama</p>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <textarea data-bind="value:description" class="form-control" rows="2"></textarea>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: $root.saveerrorcode()">
                             <span class="label label-success" data-bind="text: $root.savemessage , visible:$root.saveerrorcode()==1"></span>

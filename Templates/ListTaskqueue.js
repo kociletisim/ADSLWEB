@@ -50,6 +50,17 @@ var dataModel = {
     mahalleList: ko.observableArray([]),
     selectedCustomer:ko.observable(),
     user: ko.observable(),
+    perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
+    BayiOrKoc: function () {
+        var self = this;
+        if (self.user() != null || self.user() != "") {
+            var arr = self.user().userName.split('@');
+            if (arr[1] == 'kociletisim.com.tr')
+                self.perOfBayiOrKoc(true);
+            else
+                self.perOfBayiOrKoc(false);
+        }
+    },
    
     queryButtonClick: function () {
         var self = this;
@@ -211,7 +222,7 @@ var dataModel = {
             self.selectedCustomer(a.data.rows[0]);
             self.getMahalle(a.data.rows[0].bucakKimlikNo);
             self.getBucak(a.data.rows[0].ilceKimlikNo);
-            $("#ilcombo,#ilcecombo").multiselect({
+            $("#ilcombo,#ilcecombo,#mahallecombo").multiselect({
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
@@ -379,7 +390,6 @@ var dataModel = {
             });
             $(".customer").click(function () {
                 self.getCustomerCard($(this).val());
-                console.log($(this).val());
             });
         }, null, null);
 
@@ -399,6 +409,7 @@ var dataModel = {
         var self = this;
         crmAPI.userInfo(function(a, b, c) {
             self.user(a);
+            self.BayiOrKoc();
         }, null, null)
     },
     navigate: {

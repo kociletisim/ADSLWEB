@@ -6,9 +6,8 @@ var dataModel = {
         var self = this;
         if (self.user() != null || self.user() != "") {
             var arr = self.user().userName.split('@');
-            if (arr[1] == 'kociletisim.com.tr') {
+            if (arr[1] == 'kociletisim.com.tr') 
                 self.perOfBayiOrKoc(true);
-            }
             else
                 self.perOfBayiOrKoc(false);
         }
@@ -380,6 +379,7 @@ var dataModel = {
         var self = this;
         crmAPI.userInfo(function (a, b, c) {
             self.user(a);
+            self.BayiOrKoc();
         }, null, null)
     },
     refresh: function () {
@@ -656,7 +656,6 @@ var dataModel = {
                 self.taskname(a.data.rows[0].task.taskname);
                 self.taskid(a.data.rows[0].task.taskid);
                 self.tasktype(a.data.rows[0].task.tasktypes.TaskTypeId);
-                self.BayiOrKoc();
                 self.NetFlowOrRand();
                 self.taskstatetype(a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.statetype || null)
                 var status = a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.taskstateid || null;
