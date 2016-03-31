@@ -1,15 +1,16 @@
 ﻿/// <reference path="../Scripts/_references.js" />
 
 var dataModel = {
-    perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
+    perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli admin : 2147483647
+    admin: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli admin : 2147483647
     BayiOrKoc: function () {
         var self = this;
         if (self.user() != null || self.user() != "") {
             var arr = self.user().userName.split('@');
             if (arr[1] == 'kociletisim.com.tr') 
                 self.perOfBayiOrKoc(true);
-            else
-                self.perOfBayiOrKoc(false);
+            if (self.user().category == 2147483647)
+                self.admin(true);
         }
     },
     isNetflowDate: ko.observable(false), // Task NetFlowdan CRM'e giriş gerektiriyorsa Randevu Tarih Alanı Netflow tarihi olarak sadece bizim personele gösterilecek (dateoption -> duruma göre değişecek)  false : Randevu Tarihi -- true : NetFlow Tarihi

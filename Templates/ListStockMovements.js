@@ -187,10 +187,24 @@ var dataModel = {
     },
     getStockMovementCard: function (movementid) {
         var self = this;
+        self.getpersonel();
         var data = { movement: { value: movementid } };
         crmAPI.getStockMovements(data, function (a, b, c) {
             self.selectedMovementCard(a.data.rows[0]);
-            
+            if (($('#editpersonel').val() == "") || ($('#editpersonel').val() == null))
+                self.getStockMovementCard(movementid);
+            $("#editpersonel,#editobject,#editproduct").multiselect({
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#editpersonel,#editobject,#editproduct").multiselect("rebuild");
         }, null, null);
 
     },
@@ -326,7 +340,6 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
-
         $('#movementdate').daterangepicker({
             "timePicker": true,
             ranges: {
@@ -341,9 +354,8 @@ var dataModel = {
         self.getStockMovements(dataModel.pageNo(), dataModel.rowsPerPage());
         self.getObjectTypes();
         $('#new').click(function () {
-            self.getPersonelStock();
             self.getpersonel();
-           
+            self.getPersonelStock();
         });        
         self.getUser();
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);

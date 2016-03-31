@@ -316,5 +316,14 @@
          deletePersonelAtama: function (data, onsuccess, onerror, before) {
              getData("POST", "Atama/deletePersonelAtama", data, onsuccess, onerror, before)
          },
+         getSL: function (data, onsuccess, onerror, before) {
+             getData("POST", "SL/getSL", data, onsuccess, onerror, before)
+         },
+         insertSL: function (data, onsuccess, onerror, before) {
+             getData("POST", "SL/insertSL", data, onsuccess, onerror, before)
+         },
+         updateSL: function (data, onsuccess, onerror, before) {
+             getData("POST", "SL/updateSL", data, onsuccess, onerror, before)
+         },
      }
  })();

@@ -1,0 +1,223 @@
+﻿<div id="bindingContainer" class="container-fluid" style="background-color: rgb(238, 236, 236)">
+    <div class="col-md-12 container" style="padding: 0 !important; margin: 30px 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
+        <div class="panel-group">
+            <div class="panel" style="border: 1px solid #fff !important;">
+                <div class="panel-heading task-gradient">
+                    <div class="row cls-padding-0px">
+                        <div class="col-xs-12 col-sm-6 col-md-6 left">
+                            SL Tanımlamaları
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 right">
+                            <!--pagination Starts-->
+                            <nav class="text-center" style="margin: 0px !important;padding: 0px !important;">
+                                <ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
+                                    <li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); } ,enable:pageNo>1">&lt;&lt;</a></li>
+                                    <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage();}">&lt;</a></li>
+                                    <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
+                                    <li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+                                </ul>
+                            </nav>
+                            <!--pagination finish-->
+                        </div>
+                    </div>
+                </div>  <!-- page count, next or prev page -->
+                <div class="panel-body" style="margin: 0 15px 0 15px !important; padding: 0px !important;">
+                    <div class="container-fluid cls-padding-0px cls-deneme-height ">
+                        <div class="row cls-margin-task">
+                            <div class="col-lg-12 cls-padding-0px">
+                                <div class="col-lg-12 cls-task cls-padding-0px table-responsive" style="min-height:150px;">
+                                    <table class="table table-bordered table-hover" id="aptable" data-pagination="true" data-search="true">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-1" style="border-right: 1px solid #ddd;">
+                                                    <div class="dropdown">
+                                                        <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-success" style="padding: 2px 15px;">
+                                                            İşlemler <span class="caret"></span>
+                                                        </a>
+                                                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                                                            <li>
+                                                                <a id="new" href="#newap" role="button" class="btn" data-toggle="modal" style="padding-right: 110px; float: left;">Yeni</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </th>
+                                                <th class="col-md-4" style="border-right: 1px solid #ddd;">SL Adı</th>
+                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Koç Max SL Süre</th>
+                                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Bayi Max SL Süre</th>
+                                                <th class="col-md-3" style="border-right: 1px solid #ddd;">Güncellenme Tarihi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- ko foreach: sllist -->
+                                            <tr>
+                                                <td>
+                                                    <button data-bind="value:SLID" type="button" class="btn btn-success btn-lg edit" data-toggle="modal" data-target="#editap" style="padding: 3px; border-radius: 4px; font-size:14px;">
+                                                        Düzenle
+                                                    </button>
+                                                </td>
+
+                                                <td data-bind="text: SLName"></td>
+                                                <td data-bind="text: KocMaxTime ? KocMaxTime: null"></td>
+                                                <td data-bind="text: BayiMaxTime ? BayiMaxTime: null"></td>
+                                                <td data-bind="text: moment(lastupdated).format('LLL')"></td>
+                                            </tr>
+                                            <!--/ko-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--pagination Starts-->
+                    <nav class="text-center" style="margin: 0px !important;padding: 0px !important;">
+                        <ul class="pagination" style="margin: 0 !important;padding: 0px !important; float:right;">
+                            <li class="previous"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoFirstPage(); }, enable: pageNo > 1">&lt;&lt;</a></li>
+                            <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoBackPage(); }">&lt;</a></li>
+                            <li><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoNextPage(); }">&gt;</a></li>
+                            <li class="next"><a href="javascript:void(0)" data-bind="click: function (e) { navigate.gotoLastPage(); }">&gt;&gt;</a></li>
+                        </ul>
+                    </nav>
+                    <!--pagination finish-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SL düzenle modal start -->
+    <div class="modal fade" id="editap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document" style="margin-top: 50px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">SL Düzenle</h4>
+                </div>
+                <div class="modal-body" data-bind="with:selectedSL" style="display: inline-block; position: relative; min-height: 50px;">
+
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>SLID :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px text-center" style="margin-top: 3px; background-color:gray;">
+                        <p><label data-bind="text:SLID"></label></p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>SL Adı :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <input data-bind="value:SLName" type="text" class="form-control"/>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Koç SL Başlangıç Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="editKocSTask" data-bind="options: $root.tasks, optionsText: 'taskname', value: KocSTask, optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Koç SL Bitiş Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="editKocETask" data-bind="options: $root.tasks, optionsText: 'taskname', value: KocETask, optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Koç Max SL Süresi :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <input data-bind="value:KocMaxTime" type="number" class="form-control" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Bayi SL Başlangıç Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="editBayiSTask" data-bind="options: $root.tasks, optionsText: 'taskname', value: BayiSTask, optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Bayi SL Bitiş Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="editBayiETask" data-bind="options: $root.tasks, optionsText: 'taskname', value: BayiETask, optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Bayi Max SL Süresi :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <input data-bind="value:BayiMaxTime" type="number" class="form-control" />
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <label class="col-xs-12 col-sm-12 col-md-12 text-center" id="editinfo" data-bind="visible:$root.errormessage,text:$root.errormessage"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                    <button type="button" data-bind="click:saveSL" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- SL düzenle modal finish -->
+    <!-- SL yeni modal start -->
+    <div class="modal fade" id="newap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document" style="margin-top: 50px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Yeni SL</h4>
+                </div>
+                <div class="modal-body" style="display: inline-block; position: relative; min-height: 50px;">
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>SL Adı :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <input data-bind="value:newSLName" type="text" class="form-control" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Koç SL Başlangıç Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="newKocSTask" data-bind="options: $root.tasks, optionsText: 'taskname', optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Koç SL Bitiş Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="newKocETask" data-bind="options: $root.tasks, optionsText: 'taskname', optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Koç Max SL Süresi :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <input data-bind="value:newKocMaxTime" type="number" class="form-control" />
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Bayi SL Başlangıç Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="newBayiSTask" data-bind="options: $root.tasks, optionsText: 'taskname', optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Bayi SL Bitiş Taskları :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select class="form-control" id="newBayiETask" data-bind="options: $root.tasks, optionsText: 'taskname', optionsValue: 'taskid'" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Bayi Max SL Süresi :</p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <input data-bind="value:newBayiMaxTime" type="number" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                    <button type="button" data-bind="enable:kaydetButonEnable(), click:insertSL" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SL yeni modal finish -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        moment.locale('tr');
+    });
+</script>
+<script type="text/javascript" src="Templates/ListSL.js"></script>

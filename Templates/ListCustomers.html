@@ -26,71 +26,37 @@
 				</div>
 				<div id="collapse1" class="panel-collapse collapse">
 					<div class="panel-body">
-						<div class="col-xs-12 col-sm-4 col-md-4">
+						<div class="col-xs-12 col-sm-6 col-md-4">
 							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Site</label>
-								<input type="text" class="form-control" id="Text1" data-bind="value: sitename" />
+								<label class="control-label" for="durumtanimi">Müşteri No</label>
+								<input type="text" class="form-control" id="Text1" data-bind="value: custid" />
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
+						<div class="col-xs-12 col-sm-6 col-md-4">
 							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Blok</label>
-								<input type="text" class="form-control" id="Text1" data-bind="value: sitename" />
+								<label class="control-label" for="durumtanimi">Müşteri Ad-Soyad</label>
+								<input type="text" class="form-control" id="Text1" data-bind="value: custname" />
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
+						<div class="col-xs-12 col-sm-6 col-md-4">
 							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Daire</label>
-								<input type="text" class="form-control" id="Text1" data-bind="value: sitename" />
+								<label class="control-label" for="durumtanimi">TC</label>
+								<input type="text" class="form-control" id="Text1" data-bind="value: tc" />
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
-							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Müşteri Ad Soyad</label>
-								<input type="text" class="form-control" id="Text1" data-bind="value: sitename" />
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
+						<div class="col-xs-12 col-sm-6 col-md-4">
 							<div class="form-group-sm has-info cls-margin-bottom">
 								<label class="control-label" for="durumtanimi">GSM</label>
-								<input type="text" class="form-control" id="Text1" data-bind="value: sitename" />
+								<input type="text" class="form-control" id="Text1" data-bind="value: gsm" />
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
+						<div class="col-xs-12 col-sm-6 col-md-4">
 							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Telefon</label>
-								<input type="text" class="form-control" id="Text1" data-bind="value: sitename" />
+								<label class="control-label" for="durumtanimi">Süperonline Müşteri No</label>
+								<input type="text" class="form-control" id="Text1" data-bind="value: smno" />
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
-							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Fiber Başlangıç</label>
-								<div class='input-group date' id='datetimepicker2'>
-									<input type='text' class="form-control" />
-									<span class="input-group-addon">
-										<span class="glyphicon glyphicon-calendar"></span>
-									</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
-							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Kontrat Bitiş</label>
-								<div class='input-group date' id='datetimepicker3'>
-									<input type='text' class="form-control" />
-									<span class="input-group-addon">
-										<span class="glyphicon glyphicon-calendar"></span>
-									</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4">
-							<div class="form-group-sm has-info cls-margin-bottom">
-								<label class="control-label" for="durumtanimi">Emptor Müşteri Numarası</label>
-								<input type="text" class="form-control" id="Text1" data-bind="value: sitename" />
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-12 col-md-12" style="margin-top: 21px;">
+						<div class="col-xs-12 col-sm-6 col-md-4" style="margin-top: 21px;">
 							<div class="btn-group pull-right" role="group">
 								<button data-bind="click: getFilter(1,dataModel.rowsPerPage())" type="button" class="btn btn-success">Sorgula</button>
 								<button type="button" class="btn btn-info">Temizle</button>
@@ -199,7 +165,7 @@
 </div>
 
 
-<script type="text/javascript" src="Templates/ListTaskqueue.js"></script>
+<script type="text/javascript" src="Templates/ListCustomers.js"></script>
 
 
 <script>

@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 height-30">
-                            
+
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group-sm has-info cls-margin-bottom">
@@ -135,14 +135,14 @@
                                         </thead>
                                         <tbody>
                                             <!-- ko foreach: appointlist -->
-                                             <tr>
+                                            <tr>
                                                 <td>
                                                     <button data-bind="value:id" type="button" class="btn btn-success btn-lg edit" data-toggle="modal" data-target="#editap" style="padding: 3px; border-radius: 4px; font-size:14px;">
                                                         Düzenle
                                                     </button>
                                                     <input type="checkbox" />
                                                 </td>
-                                                
+
                                                 <td data-bind="text: adsl_tasktypesclosed ? adsl_tasktypesclosed.TaskTypeName: null"></td>
                                                 <td data-bind="text: adsl_taskclosed ? adsl_taskclosed.taskname: null"></td>
                                                 <td data-bind="text: adsl_personeloff ? adsl_personeloff.personelname: null"></td>
@@ -230,14 +230,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                    <button type="button" data-bind="click:saveAtama" class="btn btn-success">Kaydet</button> 
+                    <button type="button" data-bind="click:saveAtama" class="btn btn-success">Kaydet</button>
                 </div>
             </div>
 
         </div>
     </div>
     <!-- Atama düzenle modal finish -->
-
     <!-- Atama yeni modal start -->
     <div class="modal fade" id="newap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-md" role="document" style="margin-top: 50px;">

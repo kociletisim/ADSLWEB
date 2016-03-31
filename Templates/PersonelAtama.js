@@ -10,7 +10,6 @@ var dataModel = {
     rowsPerPage: ko.observable(tqlFilter.rowsPerPage || 20),
     errormessage: ko.observable(),
     errorcode: ko.observable(),
-    selectedPersonelname: ko.observable(),
     selectedid: ko.observable(),
     selectedTaskname: ko.observable(),
     selectedTaskTypename: ko.observable(),
