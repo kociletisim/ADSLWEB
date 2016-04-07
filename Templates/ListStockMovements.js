@@ -287,7 +287,6 @@ var dataModel = {
                 self.savemessagecode(null);
             }, 1000);
         }, null, null);
-        console.log(postdata);
     },
     confirmAll: function () {
         var self = this;

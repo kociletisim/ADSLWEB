@@ -1,16 +1,13 @@
 ﻿/// <reference path="../Scripts/_references.js" />
 
 var dataModel = {
-    perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli admin : 2147483647
-    admin: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli admin : 2147483647
+    perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
     BayiOrKoc: function () {
         var self = this;
         if (self.user() != null || self.user() != "") {
             var arr = self.user().userName.split('@');
             if (arr[1] == 'kociletisim.com.tr') 
                 self.perOfBayiOrKoc(true);
-            if (self.user().category == 2147483647)
-                self.admin(true);
         }
     },
     isNetflowDate: ko.observable(false), // Task NetFlowdan CRM'e giriş gerektiriyorsa Randevu Tarih Alanı Netflow tarihi olarak sadece bizim personele gösterilecek (dateoption -> duruma göre değişecek)  false : Randevu Tarihi -- true : NetFlow Tarihi
@@ -21,7 +18,7 @@ var dataModel = {
             self.isNetflowDate(true);
             self.dateoption("Netflow Tarihi");
         }
-        else if (self.tasktype() == 1)
+        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9)
             self.dateoption("Satış Tarihi");   
         else if (self.tasktype() == 3)
             self.dateoption("Kurulum Tarihi");
@@ -93,7 +90,7 @@ var dataModel = {
         $.each(dataModel.productlist(), function (index, cp) {
             b &= cp.selectedProduct() == 0;
         });
-        return (dataModel.editable() || b) && (dataModel.tasktype() === 1);
+        return (dataModel.editable() || b) && ((dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9));
     }),
     campaignIsValid: ko.pureComputed(function () {
         var b = true;
@@ -338,7 +335,7 @@ var dataModel = {
                 stateid: dataModel.taskstatus(),
                 campaignid: dataModel.campaignid(),
                 customerproducts: dataModel.selectedProductIds(),
-                isSalesTask: dataModel.tasktype() == 1
+                isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9)
             };
             crmAPI.getTQDocuments(data, function (a, b, c) {
                 $.each(a, function (index, doc) {
@@ -432,7 +429,7 @@ var dataModel = {
             stateid: dataModel.taskstatus(),
             campaignid: dataModel.campaignid(),
             customerproducts: dataModel.selectedProductIds(),
-            isSalesTask: dataModel.tasktype() == 1
+            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9)
         };
         crmAPI.getTQDocuments(data, function (a, b, c) {
             $.each(a, function (index, doc) {
@@ -757,7 +754,7 @@ dataModel.taskstatus.subscribe(function () {
         stateid: dataModel.taskstatus(),
         campaignid: dataModel.campaignid(),
         customerproducts: dataModel.selectedProductIds(),
-        isSalesTask: dataModel.tasktype() == 1
+        isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9)
     };
     crmAPI.getTQStockMovements(data, function (a, b, c) {
         if (a.errorMessage) dataModel.errormessage(a.errorMessage);

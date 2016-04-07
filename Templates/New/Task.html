@@ -87,13 +87,19 @@
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                     <select id="task" data-bind="options:taskList,optionsText:'taskname',optionsValue:'taskid',value:taskid,optionsCaption: 'Task Seçiniz...'"></select>
                 </div>
+                <div data-bind="visible:baglantitask()" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Müşterideki Cihaz Seri No</p>
+                </div>
+                <div data-bind="visible:baglantitask()" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:serial" placeholder="Serial" type="text" class="form-control" id="Text3" value="">
+                </div>
             </div>
             <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
             <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-            <button type="button" class="btn btn-success"data-bind="click:function(){insertAdslSalesTask()},visible:taskid" >Kaydet</button>
+            <button type="button" class="btn btn-success"data-bind="click:function(){insertAdslSalesTask()},enable:kaydetEnable()" >Kaydet</button>
         </div>
     </div>
 </div>

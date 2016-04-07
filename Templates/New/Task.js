@@ -24,7 +24,22 @@ var dataModel = {
     confirmedCustomer: ko.observable(),
     ccname: ko.observable(),
     cil: ko.observable(),
-    cilce:ko.observable(),
+    cilce: ko.observable(),
+    serial: ko.observable(), // bağlanti problemi taskı seçilirse geri alınacak modem serisi girilmesi gerekmektedir (Hüseyin KOZ)
+    movement: ko.observable(),
+    baglantitask: ko.pureComputed(function () { // modem seri girilicek bölümü göster
+        if (dataModel.taskid() == 51)
+            return true;
+        else {
+            dataModel.serial(null);
+            return false;
+        }
+    }),
+    kaydetEnable: ko.pureComputed(function () { // kaydet butonunu aktif etmek için gerekli şartlar !
+        if (dataModel.taskid() != null && (dataModel.taskid() != 51 || dataModel.serial() != null) && (dataModel.confirmedCustomer() != null || (dataModel.customername() != null && dataModel.gsm() != null && dataModel.selectedMahalle() != null && dataModel.fulladdress() != null)))
+            return true;
+        else return false;
+    }),
 
     loadingmessage: ko.observable(0),
     selectedTasks: ko.observableArray([]),
@@ -118,13 +133,12 @@ var dataModel = {
         }, null, null);
 
     },
-    insertAdslSalesTask: function () {
+    insert: function () {
         var self = this;
-        
-        if (self.confirmMessage()==null) {
-            var data = {            
-                attachedcustomer: { customerid:self.confirmedCustomer().customerid },
-                task: { taskid:self.taskid()},
+        if (self.confirmMessage() == null) {
+            var data = {
+                attachedcustomer: { customerid: self.confirmedCustomer().customerid },
+                task: { taskid: self.taskid() },
             };
             crmAPI.insertTaskqueue(data, function (a, b, c) {
                 self.returntaskorderno(a)
@@ -144,13 +158,46 @@ var dataModel = {
                 taskid: self.taskid(),
                 email: self.email(),
             };
-            if ((data.tc != null && data.gsm != null) || self.confirmMessage() != "-1")
-                crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
-            else {
-                alert("Eksik Bilgi Girdiniz.!");
-            }
-
+            crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
         }
+    },
+    insertAdslSalesTask: function () {
+        var self = this;
+        //self.insert();
+        if (self.serial() != null) {
+            if (self.confirmedCustomer() != null) {
+                var data = {
+                    serialno: { value: self.serial() },
+                    toobject: { value: self.confirmedCustomer().customername },
+                };
+                crmAPI.getStockMovements(data, function (a, b, c) {
+                    self.movement(a.data.rows[0]);
+                    if (self.movement() && self.movement().stockcardid == 1117) {
+                        //self.insert();
+                    }
+                    else { 
+                        alert("Girdiğiniz Bilgiler Eşleştirilemedi ! \r\n TC Kimlik No Veya Seri No Kontrol ediniz !");
+                    }
+                }, null, null);
+            }
+            else {
+                var data = {
+                    serialno: { value: self.serial() },
+                };
+                crmAPI.getStockMovements(data, function (a, b, c) {
+                    self.movement(a.data.rows[0]);
+                    if (self.movement() && self.movement().toobject != null) {
+                        alert("Seri No Kontrol Ediniz !");
+                    }
+                    else {
+
+                        // satın almadan depoya seriyi aldır sonra o seriyi olusan müşteriye at sonra task olustur 
+                    }
+                }, null, null);
+            }
+        }
+        //else
+        //    self.insert();
     },
     enterfilter: function (d, e) {
         var self = this;
@@ -159,8 +206,21 @@ var dataModel = {
         }
         return true;
     },
+    clean: function () { // ana ekrandan yeni task bir kere olusturularak kapanıp tekrar oluşturulmak istenirse önceki bilgiler sıfırlanması gerek (Hüseyin KOZ)
+        var self = this;
+        self.customername(null);
+        self.gsm(null);
+        self.phone(null);
+        self.email(null);
+        self.fulladdress(null);
+        self.taskid(null);
+        self.confirmedCustomer(null);
+        self.serial(null);
+        self.movement(null);
+    },
     renderBindings: function () {
         var self = this;
+        self.clean();
         self.getUserInfo();
         $("#optionIl,#optionIlce,#optionBucak,#optionMahalle").multiselect({
             includeSelectAllOption: false,
