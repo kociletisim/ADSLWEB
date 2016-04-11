@@ -38,7 +38,6 @@ $(window).bind("hashchange", function () {
         $("#ModalContainer").loadTemplate("Templates/New/Profil.html");
     });
 
-
     $("#exit").click(function () {
         document.cookie = "token=;";
         crmAPI.setCookie("tqlFilter", "");
@@ -47,8 +46,9 @@ $(window).bind("hashchange", function () {
     });
 
     $(document).ready(function () {
+        var pid = 0;
         crmAPI.userInfo(function (a, b, c) {
-             var pid = a.userId;
+            pid = a.userId;
             $("#username").text(a.userFullName);
             if (a.userRole != 2147483647) {
                 $("#tanimlamalar").hide(true);
@@ -70,5 +70,12 @@ $(window).bind("hashchange", function () {
                 }
             }, null, null);
         }, null, null);
+        //var data = {
+        //    bid: 1100,
+        //};
+        //crmAPI.BSLOrt(data, function (a, b, c) {
+        //    var ort = a;
+        //    $("#notice").text(ort);
+        //}, null, null);
     });
 });

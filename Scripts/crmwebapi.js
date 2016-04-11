@@ -45,8 +45,8 @@
      };
     
      var getData = function (callType, path, sendData, onsuccess, onerror, before) {
-         var baseURL = "http://crmapitest.kociletisim.com.tr/api/Adsl/";
-         //var baseURL = "http://localhost:50752/api/Adsl/";
+         //var baseURL = "http://crmapitest.kociletisim.com.tr/api/Adsl/";
+         var baseURL = "http://localhost:50752/api/Adsl/";
          $.ajax({
              method: callType,
              url: baseURL + path,
@@ -324,6 +324,9 @@
          },
          updateSL: function (data, onsuccess, onerror, before) {
              getData("POST", "SL/updateSL", data, onsuccess, onerror, before)
+         },
+         BSLOrt: function (data, onsuccess, onerror, before) {
+             getData("POST", "Reports/BSLOrt", data, onsuccess, onerror, before)
          },
      }
  })();
