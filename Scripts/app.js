@@ -69,13 +69,13 @@ $(window).bind("hashchange", function () {
                     $("#notice").text("Güvenliğiniz için Şifrenizi değiştiriniz!");
                 }
             }, null, null);
+            var id = { BayiID: pid };
+            crmAPI.BSLOrt(id, function (a, b, c) {
+                var ort = a;
+                $("#sl").text("SL'iniz = " + ort[0]);
+                $("#gsl").text("Geçen Ay SL'iniz = " + ort[1]);
+            }, null, null);
         }, null, null);
-        //var data = {
-        //    bid: 1100,
-        //};
-        //crmAPI.BSLOrt(data, function (a, b, c) {
-        //    var ort = a;
-        //    $("#notice").text(ort);
-        //}, null, null);
+        
     });
 });

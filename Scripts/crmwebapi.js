@@ -328,5 +328,8 @@
          BSLOrt: function (data, onsuccess, onerror, before) {
              getData("POST", "Reports/BSLOrt", data, onsuccess, onerror, before)
          },
+         InsertStock: function (data, onsucces, onerror, before) {
+             getData("POST", "Stock/InsertStock", data, onsucces, onerror, before)
+         },
      }
  })();
