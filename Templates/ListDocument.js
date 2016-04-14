@@ -30,7 +30,6 @@ var dataModel = {
             self.savemessagecode(null);
             $(".edit").click(function () {
                 self.getDocCard($(this).val());
-                console.log($(this).val());
             });
         }, null, null);
     },

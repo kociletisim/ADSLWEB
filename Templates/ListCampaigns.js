@@ -45,8 +45,6 @@ var dataModel = {
                 self.getCampaignCard($(this).val());
                 $("#category,#editcategory").multiselect("refresh");
                 $("#subcategory,#editsubcategory").multiselect("refresh");
-               
-                console.log($(this).val());
             });
         }, null, null);
     },

@@ -75,7 +75,6 @@ var dataModel = {
                     if ($(this).is(':checked')) {
                         var id = $(this).val();
                         ids.push(id);
-                        console.log("Seçim: " + id + "");
                     }
                 });
                 self.selectedmovementid(ids);

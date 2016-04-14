@@ -43,6 +43,8 @@ var dataModel = {
             dataModel.appointmentdate($('#daterangepicker2').val());
         }, 50);
     },
+    eskiserial: ko.observable(null), // modem değiştirilecek olan tasklarda kullanılacak olan iade modem seri
+    movement: ko.observable(),
     taskorderno: ko.observable(),
     taskname: ko.observable(),
     taskid: ko.observable(),
@@ -438,7 +440,22 @@ var dataModel = {
             self.customerdocument(a);
         });
     },
-    saveTaskQueues: function () {
+    insertStockMovements: function (fromtype,fromobject,tootype,toobject,seri) {
+        // taskda geri modem alınacak tasklar için oluşturuldu
+        var self = this;
+        var data = {
+            amount: 1,
+            serialno: seri,
+            fromobjecttype: fromtype,
+            fromobject: fromobject,
+            toobjecttype: tootype,
+            toobject: toobject,
+            stockcardid: 1117,
+        };
+        crmAPI.InsertStock(data, function (a, b, c) {
+        }, null, null);
+    },
+    save: function () {
         var self = this;
         $('.btn').prop('disabled', true);
         self.flag(false);
@@ -451,17 +468,17 @@ var dataModel = {
         }, null, null); //return alert("Eksik veriler var. Lütfen gerekli tüm alanları doldurunuz."); 
         data = {
             taskorderno: self.taskorderno(),
-            task:{taskid:self.taskid()},
-            taskstatepool: 
+            task: { taskid: self.taskid() },
+            taskstatepool:
                 {
                     taskstateid: self.taskstatus() ? self.taskstatus() : null,
-                taskstate: $("#taskdurumu option:selected").text() ? $("#taskdurumu option:selected").text():null
+                    taskstate: $("#taskdurumu option:selected").text() ? $("#taskdurumu option:selected").text() : null
                 },
             customerdocument: self.customerdocument(),
             stockmovement: self.stockmovement(),
             customerproduct: self.selectedProducts(),
             description: self.description() ? self.description() == "" ? null : (self.description() + " " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")") : null,
-            asistanPersonel: { personelid: self.assistantpersonel()>0? self.assistantpersonel() : null },
+            asistanPersonel: { personelid: self.assistantpersonel() > 0 ? self.assistantpersonel() : null },
             appointmentdate: self.appointmentdate() ? moment(self.appointmentdate()).format() : null,
             consummationdate: self.consummationdate() ? moment(self.consummationdate()).format() : null,
             creationdate: self.creationdate() ? moment(self.creationdate()).format() : null,
@@ -485,10 +502,10 @@ var dataModel = {
                 $.each(dataModel.customerdocument(), function (index, doc) {
                     b |= doc.id = 0;
                 })
-                if(b)
+                if (b)
                     return alert("Tüm Belgeleri Yükleyiniz...");
                 else
-                  return  crmAPI.saveTaskQueues(data, function (a, b, c) {
+                    return crmAPI.saveTaskQueues(data, function (a, b, c) {
                         self.message(a);
                         window.setTimeout(function () {
                             $("#id_alert").alert('close');
@@ -507,7 +524,19 @@ var dataModel = {
                     self.redirect();
                 }, 1250);
             }, null, null);
-
+    },
+    saveTaskQueues: function () {
+        var self = this;
+        if (self.taskid() == 66 && self.stockmovement().length > 0) {
+            if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
+                self.insertStockMovements(16777217, self.customer().customerid, self.user().userRole, self.user().userId, self.eskiserial());
+                self.save();
+            }
+            else
+                alert("Müşterinin Eski Modem Bilgisinde Hata !");
+        }
+        else
+            self.save();
     },
     saveTaskQueueDescription: function () {
         var self = this;
@@ -636,7 +665,6 @@ var dataModel = {
                 $.each(self.customerdocument(), function (index, doc) {
                     if (doc.documentid === fu.documentid) doc.documenturl(file.name);
                 });
-                //console.log(files.length - 1 + "=>" + $('#fileUpload').data().fileinput.filestack[files.length - 1].name);
             })
             $('#fileUpload').on('filebatchpreupload', function (event, data, previewId, index) {
                 data.jqXHR.setRequestHeader("X-KOC-Token", crmAPI.getCookie("token"));
@@ -781,10 +809,29 @@ dataModel.taskstatus.subscribe(function () {
                 return v;
             });
         });
-
         dataModel.stockmovement(a);
     });
     dataModel.getTQDocuments();
+});
+dataModel.stockmovement.subscribe(function (v) {
+    if (dataModel.taskid() == 66 && dataModel.stockmovement().length > 0 && dataModel.stockmovement().serialno != "") { // Bağlantı problemi taskı modem geri almak için
+        dataModel.movement(null);
+        var data = {
+            product: { fieldName: 'stockid', op: 2, value: 1117 },
+            toobjectid: { value: dataModel.customer().customerid },
+        };
+        crmAPI.getSerialOnCustomer(data, function (a, b, c) {
+            dataModel.movement(a);
+            if (dataModel.movement()) {
+                dataModel.eskiserial(dataModel.movement().serialno);
+            }
+            else
+                alert("Müşteride Sisteme Kayıtlı Modem Bulunamadı. Sistem Yöneticinize Başvurunuz !");
+        }, null, null);
+    }
+    else {
+        dataModel.eskiserial(null);
+    }
 });
 dataModel.uploadControl.subscribe(function (v) {
     if(v==true)

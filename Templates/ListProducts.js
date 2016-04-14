@@ -38,7 +38,6 @@ var dataModel = {
             self.savemessagecode(null);
             $(".edit").click(function () {
                 self.getProductCard($(this).val());
-                console.log($(this).val());
             });
         }, null, null);
     },

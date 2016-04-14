@@ -36,7 +36,6 @@ var dataModel = {
             self.savemessagecode(null);
             $(".edit").click(function () {
                 self.getStockCard($(this).val());
-                console.log($(this).val());
             });
         }, null, null);
     },

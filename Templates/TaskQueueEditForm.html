@@ -159,7 +159,14 @@
                             <textarea data-bind="value:description" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
-
+                    <div data-bind="visible:eskiserial()" class="col-xs-12 col-sm-12 col-md-12">
+                        
+                    </div>
+                    <div data-bind="visible:eskiserial()" class="col-xs-12 col-sm-12 col-md-12 label-warning">
+                        <div class="col-xs-6 col-sm-6 col-md-6"><strong>Müşteriden Alınacak Olan Modem Seri</strong></div>
+                        <div class="col-xs-1 col-sm-1 col-md-1"><strong>:</strong></div>
+                        <div class="col-xs-5 col-sm-5 col-md-5" data-bind="text:eskiserial"></div>
+                    </div>
                 </div>
             </div>
         </div>

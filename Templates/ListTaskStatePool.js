@@ -39,7 +39,6 @@ var dataModel = {
             self.savemessagecode(null);
             $(".edit").click(function () {
                 self.getStateCard($(this).val());
-                console.log($(this).val());
             });
         }, null, null);
     },

@@ -50,7 +50,6 @@ var dataModel = {
                 });
                 self.getSite();
                 self.getBlockCard($(this).val());           
-                console.log($(this).val());
             });
 
         },null,null);

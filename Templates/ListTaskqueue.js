@@ -383,7 +383,6 @@ var dataModel = {
                     if ($(this).is(':checked')) {
                         var id = $(this).val();
                         ids.push(id);
-                        console.log("Seçim: " + id + "");
                     }
                 });
                 self.selectedtaskorderno(ids);
@@ -398,7 +397,6 @@ var dataModel = {
         var self = this;
         $("#taskquetable tr").removeClass("selected");
         $(e.currentTarget).addClass("selected");
-        console.log("seçilen " + d.taskorderno);
         self.selectedtaskorderno(d.taskorderno);
 
     },

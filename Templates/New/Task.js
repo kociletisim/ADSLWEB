@@ -1,6 +1,6 @@
 ﻿
 var dataModel = {
-    newCust: ko.observable(false), // Bağlantı problemi seçildiğinde girilen müşteri bizde yoksa kontrolü için oluşturuldu
+    newmovement: ko.observable(false), // Bağlantı problemi seçildiğinde girilen müşteri bizde yoksa kontrolü için oluşturuldu
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(),
     customername: ko.observable(),
@@ -26,7 +26,9 @@ var dataModel = {
     cil: ko.observable(),
     cilce: ko.observable(),
     serial: ko.observable(), // bağlanti problemi taskı seçilirse geri alınacak modem serisi girilmesi gerekmektedir (Hüseyin KOZ)
+    geciciton: ko.observable(), // yeni stock hareketi oluşmadan sayfa yönlendirme yapmasını engellemek için oluşturuldu (Hüseyin KOZ)
     movement: ko.observable(),
+    frommovement: ko.observable(),
     baglantitask: ko.pureComputed(function () { // modem seri girilicek bölümü göster
         if (dataModel.taskid() == 51)
             return true;
@@ -40,7 +42,6 @@ var dataModel = {
             return true;
         else return false;
     }),
-    dene: ko.observable(),
     loadingmessage: ko.observable(0),
     selectedTasks: ko.observableArray([]),
     isTcValid:ko.observable(),
@@ -145,6 +146,8 @@ var dataModel = {
             stockcardid: 1117,
         };
         crmAPI.InsertStock(data, function (a, b, c) {
+            if (a)
+                self.returntaskorderno(self.geciciton())
         }, null, null);
     },
     insert: function () {
@@ -155,7 +158,13 @@ var dataModel = {
                 task: { taskid: self.taskid() },
             };
             crmAPI.insertTaskqueue(data, function (a, b, c) {
-                self.returntaskorderno(a)
+                if (self.newmovement()) {
+                    self.insertStockMovements(33554433, 33554433, 2, 1007);
+                    self.insertStockMovements(2, 1007, 16777217, self.confirmedCustomer().customerid);
+                    self.geciciton(a)
+                }
+                else
+                    self.returntaskorderno(a);
             });
         }
         else {
@@ -173,17 +182,18 @@ var dataModel = {
                 email: self.email(),
             };
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {
-                if (self.newCust()) {
+                if (self.newmovement()) {
                     var data = {
                         tc: { fieldName: 'tc', op: 2, value: self.tckimlikno() },
                     }
                     crmAPI.getCustomer(data, function (a, b, c) {
-                        self.dene(a);
                         self.insertStockMovements(33554433, 33554433, 2, 1007);
                         self.insertStockMovements(2, 1007, 16777217, a.data.rows[0].customerid);
                     }, null, null);
                 }
-                self.returntaskorderno(a)
+                else
+                    self.returntaskorderno(a);
+                self.geciciton(a)
             }, null, null);
         }
     },
@@ -194,16 +204,39 @@ var dataModel = {
             if (self.confirmedCustomer() != null) {
                 var data = {
                     serialno: { value: self.serial() },
-                    toobject: { value: self.confirmedCustomer().customername },
+                    toobjectid: { value: self.confirmedCustomer().customerid },
                 };
-                crmAPI.getStockMovements(data, function (a, b, c) {
+                crmAPI.getStock(data, function (a, b, c) {
                     self.movement(a.data.rows[0]);
                     if (self.movement() && self.movement().stockcardid == 1117) {
-                        self.newCust(false);
-                        self.insert();
+                        var data = {
+                            serialno: { value: self.serial() },
+                            fromobjectid: { value: self.confirmedCustomer().customerid },
+                        };
+                        crmAPI.getStock(data, function (a, b, c) {
+                            self.frommovement(a.data.rows[0]);
+                            if (!self.frommovement()) {
+                                self.newmovement(false);
+                                self.insert();
+                            }
+                            else
+                                alert(self.serial() + " Serili Modem Müşteriden Alınmış !");
+                        }, null, null);
                     }
                     else {
-                        alert("Girdiğiniz Bilgiler Eşleştirilemedi ! \r\n TC Kimlik No Veya Seri No Kontrol ediniz !");
+                        var data = {
+                            product: { fieldName: 'stockid', op: 2, value: 1117 },
+                            toobjectid: { value: self.confirmedCustomer().customerid },
+                        };
+                        crmAPI.getStock(data, function (a, b, c) {
+                            self.frommovement(a.data.rows[0]);
+                            if (!self.frommovement()) {
+                                self.newmovement(true);
+                                self.insert();
+                            }
+                            else
+                                alert("Girdiğiniz Bilgiler Eşleştirilemedi ! \r\n TC Kimlik No Veya Seri No Kontrol ediniz !");
+                        }, null, null);
                     }
                 }, null, null);
             }
@@ -211,13 +244,13 @@ var dataModel = {
                 var data = {
                     serialno: { value: self.serial() },
                 };
-                crmAPI.getStockMovements(data, function (a, b, c) {
+                crmAPI.getStock(data, function (a, b, c) {
                     self.movement(a.data.rows[0]);
                     if (self.movement() && self.movement().toobject != null) {
                         alert("Seri No Kontrol Ediniz !");
                     }
                     else {
-                        self.newCust(true);
+                        self.newmovement(true);
                         self.insert();
                         // satın almadan depoya seriyi aldır sonra o seriyi olusan müşteriye at sonra task olustur 
                     }
@@ -225,7 +258,7 @@ var dataModel = {
             }
         }
         else {
-            self.newCust(false);
+            self.newmovement(false);
             self.insert();
         }
     },
@@ -363,5 +396,3 @@ dataModel.selectedBucak.subscribe(function (v) {
 dataModel.tckimlikno.subscribe(function (v) {
     v.length > 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
 });
-
-console.log("fsd");

@@ -38,7 +38,6 @@ var dataModel = {
                     },
                 });
                 self.getSiteCard($(this).val());
-                console.log($(this).val());
             });
 
         }, null, null);
