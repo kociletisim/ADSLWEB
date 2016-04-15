@@ -529,7 +529,7 @@ var dataModel = {
         var self = this;
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
-                self.insertStockMovements(16777217, self.customer().customerid, self.user().userRole, self.user().userId, self.eskiserial());
+                self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement().frompersonel.roles, self.stockmovement().frompersonel.personelid, self.eskiserial());
                 self.save();
             }
             else
