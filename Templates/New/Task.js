@@ -28,7 +28,6 @@ var dataModel = {
     serial: ko.observable(), // bağlanti problemi taskı seçilirse geri alınacak modem serisi girilmesi gerekmektedir (Hüseyin KOZ)
     geciciton: ko.observable(), // yeni stock hareketi oluşmadan sayfa yönlendirme yapmasını engellemek için oluşturuldu (Hüseyin KOZ)
     movement: ko.observable(),
-    frommovement: ko.observable(),
     baglantitask: ko.pureComputed(function () { // modem seri girilicek bölümü göster
         if (dataModel.taskid() == 51)
             return true;
@@ -203,40 +202,23 @@ var dataModel = {
         if (self.serial() != null) {
             if (self.confirmedCustomer() != null) {
                 var data = {
-                    serialno: { value: self.serial() },
+                    product: { fieldName: 'stockid', op: 2, value: 1117 },
                     toobjectid: { value: self.confirmedCustomer().customerid },
                 };
-                crmAPI.getStock(data, function (a, b, c) {
-                    self.movement(a.data.rows[0]);
-                    if (self.movement() && self.movement().stockcardid == 1117) {
-                        var data = {
-                            serialno: { value: self.serial() },
-                            fromobjectid: { value: self.confirmedCustomer().customerid },
-                        };
-                        crmAPI.getStock(data, function (a, b, c) {
-                            self.frommovement(a.data.rows[0]);
-                            if (!self.frommovement()) {
-                                self.newmovement(false);
-                                self.insert();
-                            }
-                            else
-                                alert(self.serial() + " Serili Modem Müşteriden Alınmış !");
-                        }, null, null);
+                crmAPI.getSerialOnCustomer(data, function (a, b, c) {
+                    self.movement(a);
+                    // taskqueueeditform aynı metodu kullanıyor. bu şekilde aynı serileri yakalayacaklar (eğer müşteri üzerinde 2 seri var ve diğerini yakalarsa yanlışlık vardır bize gelmek zorundalar (bir müşteride bir modem olabilir !!))
+                    if (self.movement()) {
+                        if (self.movement().serialno == self.serial()) {
+                            self.newmovement(false);
+                            self.insert();
+                        }
+                        else
+                            alert("Seri No Eşleştirilemedi. Doğru Seri No Girdiğinizden Emin Olun ! \r\n Eminseniz Sistem Yöneticinize Başvurunuz !");
                     }
                     else {
-                        var data = {
-                            product: { fieldName: 'stockid', op: 2, value: 1117 },
-                            toobjectid: { value: self.confirmedCustomer().customerid },
-                        };
-                        crmAPI.getStock(data, function (a, b, c) {
-                            self.frommovement(a.data.rows[0]);
-                            if (!self.frommovement()) {
-                                self.newmovement(true);
-                                self.insert();
-                            }
-                            else
-                                alert("Girdiğiniz Bilgiler Eşleştirilemedi ! \r\n TC Kimlik No Veya Seri No Kontrol ediniz !");
-                        }, null, null);
+                        self.newmovement(true);
+                        self.insert();
                     }
                 }, null, null);
             }
@@ -246,7 +228,7 @@ var dataModel = {
                 };
                 crmAPI.getStock(data, function (a, b, c) {
                     self.movement(a.data.rows[0]);
-                    if (self.movement() && self.movement().toobject != null) {
+                    if (self.movement()) {
                         alert("Seri No Kontrol Ediniz !");
                     }
                     else {
