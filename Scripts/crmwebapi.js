@@ -328,6 +328,9 @@
          BSLOrt: function (data, onsuccess, onerror, before) {
              getData("POST", "Reports/BSLOrt", data, onsuccess, onerror, before)
          },
+         KSLOrt: function (onsuccess, onerror, before) {
+             getData("POST", "Reports/KSLOrt", {} ,onsuccess, onerror, before)
+         },
          InsertStock: function (data, onsucces, onerror, before) {
              getData("POST", "Stock/InsertStock", data, onsucces, onerror, before)
          },

@@ -1,5 +1,5 @@
 ﻿var dataModel = {
-
+    appointmentdate: ko.observable(""),
     returntaskorderno:ko.observable(),
     tckimlikno: ko.observable(""),
     superonlineCustNo: ko.observable(),
@@ -59,7 +59,7 @@
     selectedNet: ko.observable(""),
     selectedSes: ko.observable(),
     isSelectedKaynak: ko.pureComputed(function () {
-        return ((dataModel.isSirketPersonel() == true && dataModel.salespersonel() > 0 && dataModel.fault() != '' || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0);
+        return (((dataModel.isSirketPersonel() == true && dataModel.salespersonel() > 0 && dataModel.fault() != '' && (dataModel.cc() == true && dataModel.appointmentdate() != "" || dataModel.cc() == false)) || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0);
     }),
     errorControl:ko.pureComputed(function(){
         return  (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
@@ -278,7 +278,7 @@
             mahalleKimlikNo: self.selectedMahalle(),
             email: self.email(),
             yolKimlikNo: 61,
-            binaKimlikNo:61,
+            binaKimlikNo: 61,
             daire: 61,
             taskdescription: self.taskdescription(),
             description: self.fulladdress(),
@@ -288,8 +288,9 @@
             campaignid: self.campaignid(),
             fault: self.fault(),
             superonlineCustNo: self.superonlineCustNo(),
+            appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
-        if (data.tc != null && data.gsm != null &&(self.yalin()||self.churn()))
+        if (data.tc != null && data.gsm != null && (self.yalin() || self.churn()))
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
         else alert("Eksik Bilgi Girdiniz.!");
     },
@@ -343,6 +344,17 @@
             selectAllText: 'Tümünü Seç!',
             enableFiltering: true,
             filterPlaceholder: 'Ara'
+        });
+        $('#daterangepicker4').daterangepicker({
+            "singleDatePicker": true,
+            "autoApply": false,
+            "linkedCalendars": false,
+            "timePicker": true,
+            "timePicker24Hour": true,
+            "timePickerSeconds": true,
+            "locale": {
+                "format": 'MM/DD/YYYY h:mm A',
+            },
         });
         $('#tc').maxlength({   
             threshold: 10,

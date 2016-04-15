@@ -53,6 +53,20 @@ $(window).bind("hashchange", function () {
             if (a.userRole != 2147483647) {
                 $("#tanimlamalar").hide(true);
                 $("#musteriler").hide(true);
+                $("#kocslort").hide(true);
+                var id = { BayiID: pid };
+                crmAPI.BSLOrt(id, function (a, b, c) {
+                    var ort = a;
+                    $("#sl").text("KOÇ SL = " + ort[0]);
+                    $("#gsl").text("Geçen Ay KOÇ SL = " + ort[1]);
+                }, null, null);
+            }
+            else {
+                $("#bayislort").hide(true);
+                crmAPI.KSLOrt(function (a, b, c) {
+                    $("#ksl").text("SL'iniz = " + a[0]);
+                    $("#kgsl").text("Geçen Ay SL'iniz = " + a[1]);
+                }, null, null);
             }
             var arr = a.userName.split('@');
             if (arr[1] == 'kociletisim.com.tr') {
@@ -69,12 +83,7 @@ $(window).bind("hashchange", function () {
                     $("#notice").text("Güvenliğiniz için Şifrenizi değiştiriniz!");
                 }
             }, null, null);
-            var id = { BayiID: pid };
-            crmAPI.BSLOrt(id, function (a, b, c) {
-                var ort = a;
-                $("#sl").text("SL'iniz = " + ort[0]);
-                $("#gsl").text("Geçen Ay SL'iniz = " + ort[1]);
-            }, null, null);
+            
         }, null, null);
         
     });
