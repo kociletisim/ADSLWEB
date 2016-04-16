@@ -529,8 +529,16 @@ var dataModel = {
         var self = this;
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
-                self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement().frompersonel.roles, self.stockmovement().frompersonel.personelid, self.eskiserial());
-                self.save();
+                if (self.stockmovement().frompersonel != null && self.stockmovement().frompersonel != "") {
+                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement().frompersonel.roles, self.stockmovement().frompersonel.personelid, self.eskiserial());
+                    self.save();
+                }
+                else if (self.stockmovement().fromobject != null && self.stockmovement().fromobject != "") {
+                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement().fromobjecttype, self.stockmovement().fromobject, self.eskiserial());
+                    self.save();
+                }
+                else
+                    alert("Personel Bilgileri Okunamadı !");
             }
             else
                 alert("Müşterinin Eski Modem Bilgisinde Hata !");

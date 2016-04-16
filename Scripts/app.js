@@ -12,6 +12,8 @@ jQuery.fn.extend({
     }
 });
 
+var perId;
+
 $(window).bind("hashchange", function () {
     document.location.reload();
 }).load(function () {
@@ -34,6 +36,13 @@ $(window).bind("hashchange", function () {
         $("#ModalContainer").loadTemplate("Templates/New/NewCorporateSales.html");
     });
     
+    $("#slrep").click(function () {
+        window.location.href = 'http://crmapitest.kociletisim.com.tr/api/Adsl/Reports/SLBayiGet?BayiId=' + perId;
+    });
+    $("#gslrep").click(function () {
+        window.location.href = 'http://crmapitest.kociletisim.com.tr/api/Adsl/Reports/GSLBayiGet?BayiId=' + perId;
+    });
+
     $("#username,#notice").click(function () {
         $("#ModalContainer").loadTemplate("Templates/New/Profil.html");
     });
@@ -50,6 +59,7 @@ $(window).bind("hashchange", function () {
         crmAPI.userInfo(function (a, b, c) {
             pid = a.userId;
             $("#username").text(a.userFullName);
+            var role = a.userRole;
             if (a.userRole != 2147483647) {
                 $("#tanimlamalar").hide(true);
                 $("#musteriler").hide(true);
@@ -57,23 +67,27 @@ $(window).bind("hashchange", function () {
                 var id = { BayiID: pid };
                 crmAPI.BSLOrt(id, function (a, b, c) {
                     var ort = a;
-                    $("#sl").text("KOÇ SL = " + ort[0]);
-                    $("#gsl").text("Geçen Ay KOÇ SL = " + ort[1]);
+                    $("#sl").text("SL'iniz = " + ort[0]);
+                    $("#gsl").text("Geçen Ay SL'iniz = " + ort[1]);
                 }, null, null);
             }
             else {
                 $("#bayislort").hide(true);
                 crmAPI.KSLOrt(function (a, b, c) {
-                    $("#ksl").text("SL'iniz = " + a[0]);
-                    $("#kgsl").text("Geçen Ay SL'iniz = " + a[1]);
+                    $("#ksl").text("Koç SL = " + a[0]);
+                    $("#kgsl").text("Geçen Ay Koç SL = " + a[1]);
                 }, null, null);
             }
             var arr = a.userName.split('@');
             if (arr[1] == 'kociletisim.com.tr') {
                 $("#newtask").show();
+                $("#bayisldetay").hide();
             }
-            else
+            else {
                 $("#newtask").hide();
+                $("#bayisldetay").show();
+                perId = pid;
+            }
             var data = {
                 personel: { fieldName: 'personelid', op: 2, value: pid },
             };
