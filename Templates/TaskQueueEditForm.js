@@ -529,12 +529,12 @@ var dataModel = {
         var self = this;
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
-                if (self.stockmovement().frompersonel != null && self.stockmovement().frompersonel != "") {
-                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement().frompersonel.roles, self.stockmovement().frompersonel.personelid, self.eskiserial());
+                if (self.stockmovement()[0].frompersonel != null && self.stockmovement()[0].frompersonel != "") {
+                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement()[0].frompersonel.roles, self.stockmovement()[0].frompersonel.personelid, self.eskiserial());
                     self.save();
                 }
-                else if (self.stockmovement().fromobject != null && self.stockmovement().fromobject != "") {
-                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement().fromobjecttype, self.stockmovement().fromobject, self.eskiserial());
+                else if (self.stockmovement()[0].fromobject != null && self.stockmovement()[0].fromobject != "") {
+                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement()[0].fromobjecttype, self.stockmovement()[0].fromobject, self.eskiserial());
                     self.save();
                 }
                 else
