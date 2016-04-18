@@ -1,0 +1,120 @@
+﻿<!-- Modem değişim & iade işlemi For Modal Start-->
+<div id="bindingmodal" class="modal-dialog modal-md" role="document" style="margin-top: 50px;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Modem Değişim & İade İşlemi</h4>
+        </div>
+        <div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
+            <div class="col-xs-6 col-sm-4 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <p>Tc Kimlik Numarası</p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                <input type="number" data-bind="value:tckimlikno ,valueUpdate: 'afterkeydown',event: { keypress: enterfilter }" class="form-control" id="tc" value="" placeholder="">
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <p></p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                <button type="button" data-bind="click:function(){confirmCustomer()},visible:isTcValid" class="btn btn-warning">Doğrula</button>
+            </div>
+            <div data-bind="visible:confirmMessage">
+                <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p><label>Müşteriye Bilgileri Sitemde Yoktur, Lütfen Alanları Doldurunuz !</label></p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Müşteri Adı Soyadı</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:customername" type="text" class="form-control" id="Text3" value="">
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Gsm</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:gsm" type="text" class="form-control" id="Text3" value="">
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Ev Telefonu</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:phone" type="text" class="form-control" id="Text3" value="">
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>E-Posta</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:email" type="text" class="form-control" id="Text3" value="">
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>İl</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="optionIl" data-bind="options:ilList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedIl,optionsCaption:'İl Seçiniz..'"></select>
+                </div>
+                <div data-bind="visible:selectedIl" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>İlçe</p>
+                </div>
+                <div data-bind="visible:selectedIl" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="optionIlce" data-bind="options:ilceList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedIlce,optionsCaption:'İlçe Seçiniz..'"></select>
+                </div>
+                <div data-bind="visible:selectedIlce" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Bucak</p>
+                </div>
+                <div data-bind="visible:selectedIlce" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="optionBucak" data-bind="options:bucakList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedBucak,optionsCaption:'Bucak Seçiniz..'"></select>
+                </div>
+                <div data-bind="visible:selectedBucak" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Mahalle/Köy</p>
+                </div>
+                <div data-bind="visible:selectedBucak" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="optionMahalle" data-bind="options:mahalleList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedMahalle,optionsCaption:'Mahalle Seçiniz..'"></select>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Açık Adres</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:fulladdress" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
+                </div>
+            </div>
+            <div data-bind="visible:confirmedCustomer()||confirmMessage()">
+                <div data-bind="visible:confirmMessage()!='-1'" class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p><label> Kayıt Bulundu!     -</label><label data-bind="text:ccname"></label> <label data-bind="text:cil"></label> <label data-bind="text:cilce"></label></p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>İşlem Türünü Seçiniz</p>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <select id="process" data-bind="options:processList,optionsText:'name',optionsValue:'id', value:selectedProcess, optionsCaption: 'Seçiniz'"></select>
+                </div>
+                <div data-bind="visible:selectedProcess() == 1 || selectedProcess() == 2" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Müşterideki Cihaz Seri No</p>
+                </div>
+                <div data-bind="visible:selectedProcess() == 1 || selectedProcess() == 2" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:serial" placeholder="Serial" type="text" class="form-control" id="Text3" value="">
+                </div>
+                <div data-bind="visible:selectedProcess() == 1" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Yeni Cihaz Seri No</p>
+                </div>
+                <div data-bind="visible:selectedProcess() == 1" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                    <input data-bind="value:newserial" placeholder="Serial" type="text" class="form-control" id="Text3" value="">
+                </div>
+
+            </div>
+            <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
+            <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+            <button type="button" class="btn btn-success" data-bind="click:function(){save()},enable:kaydetEnable()">Kaydet</button>
+        </div>
+    </div>
+</div>
+<!-- Modem Değişim & İade İşlemi For Modal Finish-->
+
+<script type="text/javascript" src="Templates/New/ModemChangeReturn.js"></script>
+<script>
+    $(document).ready(function () {
+        moment.locale('tr');
+    });
+</script>

@@ -39,6 +39,7 @@
 /// <reference path="../Templates/New/Cayma.js" />
 /// <reference path="../Templates/New/CCSales.js" />
 /// <reference path="../Templates/New/FiberSales.js" />
+/// <reference path="../Templates/New/ModemChangeReturn.js" />
 /// <reference path="../Templates/New/NewAdslSales.js" />
 /// <reference path="../Templates/New/NewCorporateSales.js" />
 /// <reference path="../Templates/New/Profil.js" />
