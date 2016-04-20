@@ -23,6 +23,7 @@ var dataModel = {
     cil: ko.observable(),
     cilce: ko.observable(),
     serial: ko.observable(), // bağlanti problemi taskı seçilirse geri alınacak modem serisi girilmesi gerekmektedir (Hüseyin KOZ)
+    serialtext: ko.observable(),
     newserial: ko.observable(),
     movement: ko.observable(),
     loadingmessage: ko.observable(0),
@@ -35,7 +36,7 @@ var dataModel = {
     newcustomer: ko.observable(),
     returnHomePage : ko.observable(),
     kaydetEnable: ko.pureComputed(function () { // kaydet butonunu aktif etmek için gerekli şartlar !
-        if (dataModel.selectedProcess() != null && dataModel.serial() != null && ((dataModel.selectedProcess() == 1 && dataModel.newserial() != null) || dataModel.selectedProcess() == 2) && (dataModel.confirmedCustomer() != null || (dataModel.customername() != null && dataModel.gsm() != null && dataModel.selectedMahalle() != null && dataModel.fulladdress() != null)))
+        if (dataModel.selectedProcess() != null && (dataModel.serial() != null || dataModel.serialtext() != null) && ((dataModel.selectedProcess() == 1 && dataModel.newserial() != null) || dataModel.selectedProcess() == 2) && (dataModel.confirmedCustomer() != null || (dataModel.customername() != null && dataModel.gsm() != null && dataModel.selectedMahalle() != null && dataModel.fulladdress() != null)))
             return true;
         else return false;
     }),
@@ -125,31 +126,33 @@ var dataModel = {
         };
         crmAPI.InsertStock(data, function (a, b, c) {
             if (self.newserial()) {
-                var data = {
-                    serialno: { value: self.newserial() },
-                    toobjectid: { value: self.confirmMessage() == null ? self.confirmedCustomer().customerid : self.newcustomer().customer.customerid },
+                var dat = {
+                    stockcardid: 1117,
+                    fromobject: self.confirmMessage() == null ? self.confirmedCustomer().customerid : self.newcustomer().customer.customerid,
                 };
-                crmAPI.getSerialOnCustomer(data, function (a, b, c) {
-                    self.returnHomePage(a);
-                    if (self.returnHomePage() && self.returnHomePage().movementid != 0) {
-                        window.setTimeout(function () {
-                            self.loadinghomepage(1);
-                            window.location.href = "app.html#ListTaskqueue";
-                        }, 1000);
+                crmAPI.getSerialOnPersonel(dat, function (a, b, c) {
+                    for (var i = 0; i < a.length; i++) {
+                        if (a[i] == self.newserial())
+                            window.setTimeout(function () {
+                                self.loadinghomepage(1);
+                                window.location.href = "app.html#ListTaskqueue";
+                                window.location.reload();
+                            }, 1000);
                     }
                 }, null, null);
             }
             else {
-                var data = {
+                var d = {
                     stockcardid: 1117,
-                    fromobject: dataModel.user().userId,
+                    fromobject: self.user().userId,
                 }
-                crmAPI.getSerialOnPersonel(data, function (a, b, c) {
+                crmAPI.getSerialOnPersonel(d, function (a, b, c) {
                     for (var i = 0; i < a.length; i++) {
-                        if (a[i] == self.serial())
+                        if (a[i] == self.serial() || a[i] == self.serialtext())
                             window.setTimeout(function () {
                                 self.loadinghomepage(1);
                                 window.location.href = "app.html#ListTaskqueue";
+                                window.location.reload();
                             }, 1000);
                     }
                 }, null, null);
@@ -160,9 +163,9 @@ var dataModel = {
         var self = this;
         if (self.confirmMessage() == null) {
             if (self.newmovement() == true) {
-                self.insertStockMovements(33554433, 33554433, 2, 1007, self.serial());
-                self.insertStockMovements(2, 1007, 16777217, self.confirmedCustomer().customerid, self.serial());
-                self.insertStockMovements(16777217, self.confirmedCustomer().customerid, self.user().userRole, self.user().userId, self.serial()); 
+                self.insertStockMovements(33554433, 33554433, 2, 1007, self.serialtext());
+                self.insertStockMovements(2, 1007, 16777217, self.confirmedCustomer().customerid, self.serialtext());
+                self.insertStockMovements(16777217, self.confirmedCustomer().customerid, self.user().userRole, self.user().userId, self.serialtext());
                 if (self.newserial()) {
                     self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.confirmedCustomer().customerid, self.newserial());
                 }
@@ -191,9 +194,9 @@ var dataModel = {
                 self.newcustomer(a);
                 if (a.errormessage.errorCode == 1) {
                     if (self.newmovement() == true) {
-                        self.insertStockMovements(33554433, 33554433, 2, 1007, self.serial());
-                        self.insertStockMovements(2, 1007, 16777217, self.newcustomer().customer.customerid, self.serial());
-                        self.insertStockMovements(16777217, self.newcustomer().customer.customerid, self.user().userRole, self.user().userId, self.serial());
+                        self.insertStockMovements(33554433, 33554433, 2, 1007, self.serialtext());
+                        self.insertStockMovements(2, 1007, 16777217, self.newcustomer().customer.customerid, self.serialtext());
+                        self.insertStockMovements(16777217, self.newcustomer().customer.customerid, self.user().userRole, self.user().userId, self.serialtext());
                         if (self.newserial()) {
                             self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.newcustomer().customer.customerid, self.newserial());
                         }
@@ -212,46 +215,32 @@ var dataModel = {
     },
     save: function () {
         var self = this;
-        if (self.serial() != null) {
-            if (self.confirmedCustomer() != null) {
-                var data = {
-                    product: { fieldName: 'stockid', op: 2, value: 1117 },
-                    toobjectid: { value: self.confirmedCustomer().customerid },
-                };
-                crmAPI.getSerialOnCustomer(data, function (a, b, c) {
-                    self.movement(a);
-                    if (self.movement() && self.movement().movementid != 0) {
-                        if (self.movement().serialno == self.serial()) {
-                            self.newmovement(false);
-                            self.insert();
-                        }
-                        else
-                            alert("Seri No Eşleştirilemedi. Doğru Seri No Girdiğinizden Emin Olun ! \r\n Eminseniz Sistem Yöneticinize Başvurunuz !");
-                    }
-                    else {
-                        self.newmovement(true); // satın almadan -> depoya -> müşteriye stok hareketi
-                        self.insert();
-                    }
-                }, null, null);
+        if (self.confirmedCustomer() != null) {
+            if (self.serial() != null) {
+                self.newmovement(false);
+                self.insert();
             }
-            else {
-                var data = {
-                    serialno: { value: self.serial() },
-                };
-                crmAPI.getStock(data, function (a, b, c) {
-                    self.movement(a.data.rows[0]);
-                    if (self.movement() && self.movement().movementid != 0) {
-                        alert("Seri No Kontrol Ediniz !");
-                    }
-                    else {
-                        self.newmovement(true); // satın almadan -> depoya -> müşteriye stok hareketi
-                        self.insert();
-                    }
-                }, null, null);
+            else if (self.serialtext() != null) {
+                self.newmovement(true);
+                self.insert();
             }
+            else
+                alert("Seri No Giriniz !");
         }
         else {
-            alert("Seri No Giriniz !");
+            var data = {
+                serialno: { value: self.serialtext() },
+            };
+            crmAPI.getStock(data, function (a, b, c) {
+                self.movement(a.data.rows[0]);
+                if (self.movement() && self.movement().movementid != 0) {
+                    alert("Seri No Kontrol Ediniz !");
+                }
+                else {
+                    self.newmovement(true); // satın almadan -> depoya -> müşteriye stok hareketi
+                    self.insert();
+                }
+            }, null, null);
         }
     },
     enterfilter: function (d, e) {
@@ -274,7 +263,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
-        $("#optionIl,#optionIlce,#optionBucak,#optionMahalle,#process").multiselect({
+        $("#optionIl,#optionIlce,#optionBucak,#optionMahalle,#process,#serialno,#serialnoex").multiselect({
             includeSelectAllOption: false,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -338,50 +327,50 @@ dataModel.selectedProcess.subscribe(function (v) {
     if (v == "" || v == null) {
         dataModel.serial(null);
         dataModel.newserial(null);
+        dataModel.serialtext(null);
+        dataModel.newSerialList([]);
+        dataModel.serialList([]);
+        $("#serialnoex").multiselect("setOptions", dataModel.serialList()).multiselect("rebuild");
+        $("#serialno").multiselect("setOptions", dataModel.newSerialList()).multiselect("rebuild");
     }
     else if (v == 2) {
         dataModel.newserial(null);
+        dataModel.newSerialList([]);
+        $("#serialno").multiselect("setOptions", dataModel.newSerialList()).multiselect("rebuild");
         var data = {
             stockcardid: 1117,
-            fromobject: dataModel.confirmMessage() == null ? dataModel.confirmedCustomer().customerid : dataModel.newcustomer().customer.customerid
+            fromobject: dataModel.confirmMessage() == null ? dataModel.confirmedCustomer().customerid : -1,
         }
         crmAPI.getSerialOnPersonel(data, function (a, b, c) {
             dataModel.serialList(a);
-            $("#serialnoex").multiselect({
-                includeSelectAllOption: false,
-                selectAllValue: 'select-all-value',
-                maxHeight: 250,
-                buttonWidth: '100%',
-                nonSelectedText: 'Seçiniz',
-                nSelectedText: 'Seçildi!',
-                numberDisplayed: 2,
-                selectAllText: 'Tümünü Seç!',
-                enableFiltering: true,
-                filterPlaceholder: 'Ara'
-            });
-
+            $("#serialnoex").multiselect("setOptions", dataModel.serialList()).multiselect("rebuild");
         }, null, null);
     }
     else if (v == 1) {
         var data = {
             stockcardid: 1117,
-            fromobject: dataModel.user().userId,
+            fromobject: dataModel.confirmMessage() == null ? dataModel.confirmedCustomer().customerid : -1,
         }
         crmAPI.getSerialOnPersonel(data, function (a, b, c) {
-            dataModel.newSerialList(a);
-            $("#serialno").multiselect({
-                includeSelectAllOption: false,
-                selectAllValue: 'select-all-value',
-                maxHeight: 250,
-                buttonWidth: '100%',
-                nonSelectedText: 'Seçiniz',
-                nSelectedText: 'Seçildi!',
-                numberDisplayed: 2,
-                selectAllText: 'Tümünü Seç!',
-                enableFiltering: true,
-                filterPlaceholder: 'Ara'
-            });
+            dataModel.serialList(a);
+            $("#serialnoex").multiselect("setOptions", dataModel.serialList()).multiselect("rebuild");
+        }, null, null);
 
+        var d = {
+            stockcardid: 1117,
+            fromobject: dataModel.user().userId,
+        }
+        crmAPI.getSerialOnPersonel(d, function (a, b, c) {
+            dataModel.newSerialList(a);
+            $("#serialno").multiselect("setOptions", dataModel.newSerialList()).multiselect("rebuild");
         }, null, null);
     }
+});
+dataModel.confirmedCustomer.subscribe(function (v) {
+    dataModel.selectedProcess(null);
+    $("#process").multiselect("setOptions", dataModel.processList()).multiselect("rebuild");
+});
+dataModel.serialList.subscribe(function (v) {
+    if (v.length > 0)
+        dataModel.serialtext(null);
 });

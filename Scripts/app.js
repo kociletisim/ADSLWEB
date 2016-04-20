@@ -29,6 +29,9 @@ $(window).bind("hashchange", function () {
     $("#newtask").click(function () {
         $("#ModalContainer").loadTemplate("Templates/New/Task.html");
     });
+    $("#mid").click(function () {
+        $("#ModalContainer").loadTemplate("Templates/New/ModemChangeReturn.html");
+    });
     $("#worklist").click(function () {
         $("#templateContainer").loadTemplate("Templates/Worklist.html");
     });

@@ -91,10 +91,12 @@
                     <p>Müşterideki Cihaz Seri No</p>
                 </div>
                 <div data-bind="visible:selectedProcess() == 1 || selectedProcess() == 2" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <!--ko serialList-->
-                    <select id="serialnoex" data-bind="visible:serialList().lenght>0,options:newSerialList,optionsCaption:'Seçiniz...', value:newserial"></select>
-                    <!--/ko-->
-                    <input data-bind="visible:serialList().lenght == 0,value:serial" placeholder="Serial" type="text" class="form-control" id="Text3" value="">
+                    <div data-bind="visible:serialList().length > 0" class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <!--ko serialList-->
+                        <select id="serialnoex" data-bind="options:serialList,optionsCaption:'Seçiniz...', value:serial"></select>
+                        <!--/ko-->
+                    </div>
+                    <input data-bind="visible:serialList().length == 0,value:serialtext" type="text" class="form-control">
                 </div>
                 <div data-bind="visible:selectedProcess() == 1" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Yeni Cihaz Seri No</p>
@@ -108,7 +110,7 @@
             <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
             <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
             <img data-bind="visible:loadinghomepage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
-            <span data-bind="visible:loadinghomepage()==1" class="text-center col-md-12">Ana Sayfaya Dönülüyor...</span>
+            <span data-bind="visible:loadinghomepage()==1" class="text-center col-md-12">Tamamlandı Ana Sayfaya Dönülüyor...</span>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
