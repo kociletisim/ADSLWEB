@@ -1,6 +1,6 @@
 ﻿
 var dataModel = {
-    newmovement: ko.observable(false), // Bağlantı problemi seçildiğinde girilen müşteri bizde yoksa kontrolü için oluşturuldu
+    newmovement: ko.observable(false), // müşteri üzerinde modem yoksa yeni stok hareketi başlat
     tckimlikno: ko.observable(),
     customername: ko.observable(),
     gsm: ko.observable(),
@@ -22,17 +22,17 @@ var dataModel = {
     ccname: ko.observable(),
     cil: ko.observable(),
     cilce: ko.observable(),
-    serial: ko.observable(), // bağlanti problemi taskı seçilirse geri alınacak modem serisi girilmesi gerekmektedir (Hüseyin KOZ)
-    serialtext: ko.observable(),
-    newserial: ko.observable(),
+    serial: ko.observable(), // müşteri üzerinde modem bulunduysa (Hüseyin KOZ)
+    serialtext: ko.observable(), // müşteri üzerinde modem bulunamadıysa Text olarak girilip alınması için
+    newserial: ko.observable(), // işlem modem değişimi ise işlem yapan personel üzerinden modem seç
     movement: ko.observable(),
     loadingmessage: ko.observable(0),
     loadinghomepage: ko.observable(0),
     isTcValid: ko.observable(),
-    processList: ko.observableArray([]),
-    serialList: ko.observableArray([]),
-    newSerialList: ko.observableArray([]),
-    selectedProcess: ko.observable(),
+    processList: ko.observableArray([]), // başlangıçta işlemler dizisi olarak yapılabilecek işlemler listesi oluşur değiştirilmemesi veya sıfırlanmaması gerek
+    serialList: ko.observableArray([]), // müşteri üzerinde modem bulunuyorsa liste halinde kullanıcıya sun hangisi ile yapacaksa seçsin
+    newSerialList: ko.observableArray([]), // modemdeğişiminde personel üzerindeki modem listesi
+    selectedProcess: ko.observable(), // hangi işlem seçildi (Modem iade || Modem Değişimi vs.)
     newcustomer: ko.observable(),
     returnHomePage : ko.observable(),
     kaydetEnable: ko.pureComputed(function () { // kaydet butonunu aktif etmek için gerekli şartlar !
