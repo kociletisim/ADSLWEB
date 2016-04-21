@@ -113,7 +113,7 @@ var dataModel = {
             }
         })
     },
-    insertStockMovements: function (fromtype,fromobject,tootype,toobject,serial) {
+    insertStockMovements: function (fromtype,fromobject,tootype,toobject,serial,newmove) {
         var self = this;
         var data = {
             amount: 1,
@@ -123,6 +123,7 @@ var dataModel = {
             toobjecttype: tootype,
             toobject: toobject,
             stockcardid: 1117,
+            deleted: newmove,
         };
         crmAPI.InsertStock(data, function (a, b, c) {
             if (self.newserial()) {
@@ -163,17 +164,15 @@ var dataModel = {
         var self = this;
         if (self.confirmMessage() == null) {
             if (self.newmovement() == true) {
-                self.insertStockMovements(33554433, 33554433, 2, 1007, self.serialtext());
-                self.insertStockMovements(2, 1007, 16777217, self.confirmedCustomer().customerid, self.serialtext());
-                self.insertStockMovements(16777217, self.confirmedCustomer().customerid, self.user().userRole, self.user().userId, self.serialtext());
+                self.insertStockMovements(16777217, self.confirmedCustomer().customerid, self.user().userRole, self.user().userId, self.serialtext(), true);
                 if (self.newserial()) {
-                    self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.confirmedCustomer().customerid, self.newserial());
+                    self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.confirmedCustomer().customerid, self.newserial(), false);
                 }
             }
             else {
-                self.insertStockMovements(16777217, self.confirmedCustomer().customerid, self.user().userRole, self.user().userId, self.serial());
+                self.insertStockMovements(16777217, self.confirmedCustomer().customerid, self.user().userRole, self.user().userId, self.serial(), false);
                 if (self.newserial()) {
-                    self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.confirmedCustomer().customerid, self.newserial());
+                    self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.confirmedCustomer().customerid, self.newserial(), false);
                 }
             }
         }
@@ -194,17 +193,15 @@ var dataModel = {
                 self.newcustomer(a);
                 if (a.errormessage.errorCode == 1) {
                     if (self.newmovement() == true) {
-                        self.insertStockMovements(33554433, 33554433, 2, 1007, self.serialtext());
-                        self.insertStockMovements(2, 1007, 16777217, self.newcustomer().customer.customerid, self.serialtext());
-                        self.insertStockMovements(16777217, self.newcustomer().customer.customerid, self.user().userRole, self.user().userId, self.serialtext());
+                        self.insertStockMovements(16777217, self.newcustomer().customer.customerid, self.user().userRole, self.user().userId, self.serialtext(), true);
                         if (self.newserial()) {
-                            self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.newcustomer().customer.customerid, self.newserial());
+                            self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.newcustomer().customer.customerid, self.newserial(), false);
                         }
                     }
                     else {
-                        self.insertStockMovements(16777217, self.newcustomer().customer.customerid, self.user().userRole, self.user().userId, self.serial());
+                        self.insertStockMovements(16777217, self.newcustomer().customer.customerid, self.user().userRole, self.user().userId, self.serial(), false);
                         if (self.newserial()) {
-                            self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.newcustomer().customer.customerid, self.newserial());
+                            self.insertStockMovements(self.user().userRole, self.user().userId, 16777217, self.newcustomer().customer.customerid, self.newserial(), false);
                         }
                     }
                 }

@@ -166,7 +166,7 @@ var dataModel = {
     },
     getpersonel: function () {
         var self = this;
-        var data = { personel: self.newtoobjecttype() ? { fieldName: "roles", op: 10, value: self.newtoobjecttype(), } : { fieldName: "personelname", op: 6, value: '', } };
+        var data = { personel: { fieldName: "roles", op: 10, value: self.newtoobjecttype() } };
         crmAPI.getPersonels(data, function (a, b, c) {
             self.personellist(a.data.rows);
             $("#newpersonel,#editpersonel").multiselect({
@@ -371,6 +371,6 @@ dataModel.newselectedproduct.subscribe(function (v) {
         dataModel.personelStockList()[$("#newproduct")[0].selectedIndex - 1].amount : "Sıfır");
 });
 dataModel.newtoobject.subscribe(function () {
-    dataModel.isSatinalma(((dataModel.user().userRole & 2)==2));
+    dataModel.isSatinalma(dataModel.user().userRole == 2);
     dataModel.getStockCards();
 });

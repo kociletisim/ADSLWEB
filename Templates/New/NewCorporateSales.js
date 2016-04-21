@@ -1,6 +1,14 @@
 ﻿
 var dataModel = {
-
+    perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
+    BayiOrKoc: function () {
+        var self = this;
+        if (self.user() != null || self.user() != "") {
+            var arr = self.user().userName.split('@');
+            if (arr[1] == 'kociletisim.com.tr')
+                self.perOfBayiOrKoc(true);
+        }
+    },
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(),
     customername: ko.observable(),
@@ -15,7 +23,7 @@ var dataModel = {
     selectedIlce: ko.observable(),
     selectedBucak: ko.observable(),
     selectedMahalle: ko.observable(),
-    taskid: ko.observable(56),
+    taskid: ko.observable(112),
     user: ko.observable(),
     taskdescription: ko.observable(),
     personellist: ko.observableArray([]),
@@ -33,6 +41,8 @@ var dataModel = {
     sesList: ko.observableArray([]),
     selectedNet: ko.observable(),
     selectedSes: ko.observable(),
+    skaynak: ko.observable(),
+    skaynakList: ko.observableArray([]),
     errorControl: ko.pureComputed(function () {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
@@ -42,11 +52,13 @@ var dataModel = {
         var self = this;
         crmAPI.userInfo(function (a, b, c) {
             self.user(a);
+            self.BayiOrKoc();
             self.isAutorized((a.userRole & 67108896) == 67108896);
         }, null, null)
     },
     getpersonel: function () {
         var self = this;
+        $("#satisk").multiselect("setOptions", self.skaynakList()).multiselect("rebuild");
         crmAPI.getPersonel(function (a, b, c) {
             self.personellist(a);
             $("#salesPersonel").multiselect({
@@ -169,35 +181,6 @@ var dataModel = {
             $("#ses").multiselect("refresh");
         }, null, null)
     },
-    //getCadde: function (mahalleKoyBaglisiKimlikNo) {
-    //    var self = this;
-    //    var data = {
-    //        adres: { fieldName: "mahalleKoyBaglisiKimlikNo", op: 2, value: mahalleKoyBaglisiKimlikNo },
-    //    };
-    //    crmAPI.getAdress(data, function (a, b, c) {
-    //        self.caddeList(a);
-    //    }, null, null);
-    //},
-    //getBina: function (mahalleKoyBaglisiKimlikNo,yolKimlikNo) {
-    //    var self = this;
-    //    var data = {
-    //        adres: { fieldName: "mahalleKoyBaglisiKimlikNo", op: 2, value: mahalleKoyBaglisiKimlikNo },
-    //        subAdres: { fieldName: "yolKimlikNo", op: 2, value: yolKimlikNo },
-    //    };
-    //    crmAPI.getAdress(data, function (a, b, c) {
-    //        self.binaList(a);
-    //    }, null, null);
-    //},
-    //getDaire: function (mahalleKoyBaglisiKimlikNo, binaKimlikNo) {
-    //    var self = this;
-    //    var data = {
-    //        adres: { fieldName: "mahalleKoyBaglisiKimlikNo", op: 2, value: mahalleKoyBaglisiKimlikNo },
-    //        subAdres: { fieldName: "yolKimlikNo", op: 2, value: binaKimlikNo },
-    //    };
-    //    crmAPI.getAdress(data, function (a, b, c) {
-    //        self.daireList(a);
-    //    }, null, null);
-    //},
     insertAdslSalesTask: function () {
         var self = this;
         if (self.selectedNet()) self.pids().push(self.selectedNet());
@@ -253,7 +236,7 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#kampanya,#product,#ses").multiselect({
+        $("#kampanya,#product,#ses,#satisk").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -265,6 +248,10 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
+        var elmn1 = { id: 1, name: "Koç İletişim" };
+        var elmn2 = { id: 2, name: "CC" };
+        self.skaynakList().push(elmn1);
+        self.skaynakList().push(elmn2);
         $("#optionIl,#optionIlce,#optionBucak,#optionMahalle").multiselect({
             includeSelectAllOption: false,
             selectAllValue: 'select-all-value',
@@ -288,24 +275,8 @@ var dataModel = {
         self.getIl();
         self.getcategory();
         ko.applyBindings(dataModel, $("#bindingmodal")[0]);
-
     }
 }
-//dataModel.selectedIl.subscribe(function (v) {
-//    dataModel.getIlce(v);
-//});
-//dataModel.selectedIlce.subscribe(function (v) {
-//    dataModel.getMahalle(v);
-//});
-//dataModel.selectedMahalle.subscribe(function (v) {
-//    dataModel.getCadde(v);
-//});
-//dataModel.selectedCadde.subscribe(function (v) {
-//    dataModel.getBina(selectedMahalle,v);
-//});
-//dataModel.selectedBina.subscribe(function (v) {
-//    dataModel.getBina(selectedMahalle, v);
-//});
 dataModel.returntaskorderno.subscribe(function (v) {
     if (v == "Girilen TC Numarası Başkasına Aittir") {
         alert(v);
@@ -357,4 +328,10 @@ dataModel.campaignid.subscribe(function (v) {
     dataModel.sesList([]);
     if (v)
         dataModel.getproduct();
+});
+dataModel.skaynak.subscribe(function (v) {
+    if (v == 1)
+        dataModel.taskid(112);
+    else if (v == 2)
+        dataModel.taskid(56);
 });

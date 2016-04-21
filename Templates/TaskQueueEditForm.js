@@ -451,6 +451,7 @@ var dataModel = {
             toobjecttype: tootype,
             toobject: toobject,
             stockcardid: 1117,
+            deleted: false,
         };
         crmAPI.InsertStock(data, function (a, b, c) {
         }, null, null);
