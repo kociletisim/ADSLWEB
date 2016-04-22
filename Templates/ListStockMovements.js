@@ -166,7 +166,7 @@ var dataModel = {
     },
     getpersonel: function () {
         var self = this;
-        var data = { personel: { fieldName: "roles", op: 10, value: self.newtoobjecttype() } };
+        var data = { personel: self.newtoobjecttype() ? { fieldName: "roles", op: 10, value: self.newtoobjecttype(), } : { fieldName: "personelname", op: 6, value: '', } };
         crmAPI.getPersonels(data, function (a, b, c) {
             self.personellist(a.data.rows);
             $("#newpersonel,#editpersonel").multiselect({
