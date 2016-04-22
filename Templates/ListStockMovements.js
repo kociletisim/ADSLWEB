@@ -295,6 +295,7 @@ var dataModel = {
             window.setTimeout(function () {
                 $('#myModal2').modal('hide');
                 self.getStockMovements(1, dataModel.rowsPerPage());
+                window.location.reload();
             }, 1000);
         });
     },

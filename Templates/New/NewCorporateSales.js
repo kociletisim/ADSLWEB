@@ -23,7 +23,7 @@ var dataModel = {
     selectedIlce: ko.observable(),
     selectedBucak: ko.observable(),
     selectedMahalle: ko.observable(),
-    taskid: ko.observable(112),
+    taskid: ko.observable(),
     user: ko.observable(),
     taskdescription: ko.observable(),
     personellist: ko.observableArray([]),
@@ -46,7 +46,29 @@ var dataModel = {
     errorControl: ko.pureComputed(function () {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
+    kaydetEnable: ko.pureComputed(function () {
+        return dataModel.selectedNet() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && ((dataModel.perOfBayiOrKoc() == false && dataModel.yalin() != null) || (dataModel.salespersonel() && (dataModel.skaynak() == 2 || dataModel.yalin() != null)));
+    }),
 
+    smno: ko.observable(), // süperonline müşteri no 
+    yalin: ko.observable(),
+    churn: ko.observable(),
+    isYalin: function () {
+        var self = this;
+        self.yalin(true);
+        self.churn(false);
+        self.taskid(112); // satış adsl kurumsal
+        $('#adsl').css({ width: '68%' });
+        $('#churn').css({ width: '28%' });
+    },
+    isChurn: function () {
+        var self = this;
+        self.churn(true);
+        self.yalin(false);
+        self.taskid(113); // satış churn kurumsal 
+        $('#adsl').css({ width: '28%' });
+        $('#churn').css({ width: '68%' });
+    },
     isAutorized: ko.observable(),
     getUserInfo: function () {
         var self = this;
@@ -189,6 +211,7 @@ var dataModel = {
         var data = {
             tc: self.tckimlikno(),
             customername: self.customername(),
+            superonlineCustNo: self.smno(),
             gsm: self.gsm(),
             phone: self.phone(),
             ilKimlikNo: self.selectedIl(),
@@ -212,6 +235,8 @@ var dataModel = {
     renderBindings: function () {
         var self = this;
         self.getUserInfo();
+        $('#adsl').css({ width: '48%' });
+        $('#churn').css({ width: '48%' });
         $("#kategori").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
@@ -330,8 +355,6 @@ dataModel.campaignid.subscribe(function (v) {
         dataModel.getproduct();
 });
 dataModel.skaynak.subscribe(function (v) {
-    if (v == 1)
-        dataModel.taskid(112);
-    else if (v == 2)
-        dataModel.taskid(56);
+    if (v == 2)
+        dataModel.taskid(56); // satış CC kurumsal
 });

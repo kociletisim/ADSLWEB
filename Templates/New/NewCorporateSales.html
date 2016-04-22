@@ -12,11 +12,24 @@
                 <div data-bind="visible:perOfBayiOrKoc()" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <select id="satisk" data-bind="options:skaynakList,optionsText:'name',optionsValue:'id', value:skaynak,optionsCaption:'Seçiniz..'" class="form-control"></select>
                 </div>
-                <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <div data-bind="visible:(perOfBayiOrKoc() == false || skaynak() == 1)" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>Satışı Türü <span class="text-danger pull-right" data-bind="visible:(yalin() == null && churn() == null)">Tür Seçimi Yapınız ! &rArr; &nbsp;</span></p>
+                </div>
+                <div data-bind="visible:(perOfBayiOrKoc() == false || skaynak() == 1)" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <button id="adsl" data-bind="click:isYalin" type="button" class="btn btn-success pull-left">ADSL</button>
+                    <button id="churn" data-bind="click:isChurn" type="button" class="btn btn-warning pull-right">CHURN</button>
+                </div>
+                <div data-bind="visible:perOfBayiOrKoc()" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Satışı Yapan Kişi</p>
                 </div>
-                <div data-bind="visible:isAutorized" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <div data-bind="visible:perOfBayiOrKoc()" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <select id="salesPersonel" data-bind="options:personellist,optionsText:'personelname',optionsValue:'personelid', value:salespersonel" type="text" class="form-control" value=""></select>
+                </div>
+                <div data-bind="visible:skaynak() == 2" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <p>SüperOnline Müşteri No</p>
+                </div>
+                <div data-bind="visible:skaynak() == 2" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <input data-bind="value:smno" type="text" class="form-control" id="smno">
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Vergi Kimlik No</p>
@@ -108,7 +121,7 @@
                     <p>Task Açıklama</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <input data-bind="value:taskdescription" placeholder="Adres Detay" type="text" class="form-control" id="Text3" value="">
+                    <input data-bind="value:taskdescription" placeholder="Task Açıklaması" type="text" class="form-control" id="Text3" value="">
                 </div>
                 <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
                 <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
@@ -119,7 +132,7 @@
             <span data-bind="visible:errorControl()">Tekrar Deneyiniz</span>
             <div data-bind="visible: !errorControl()">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
-                <button data-bind="click:insertAdslSalesTask, enable:(tckimlikno && gsm &&customername && salespersonel && fulladdress && selectedNet)" type="button" class="btn btn-success">Kaydet</button>
+                <button data-bind="click:insertAdslSalesTask, enable:kaydetEnable()" type="button" class="btn btn-success">Kaydet</button>
             </div>
         </div>
     </div>
