@@ -43,7 +43,8 @@ var dataModel = {
     }),
     loadingmessage: ko.observable(0),
     selectedTasks: ko.observableArray([]),
-    isTcValid:ko.observable(),
+    isTcValid: ko.observable(),
+    krmcheck: ko.observable(false),
     getUserInfo: function () {
         var self = this;
         crmAPI.userInfo(function (a, b, c) {
@@ -278,14 +279,6 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $('#tc').maxlength({
-            threshold: 10,
-            warningClass: "label label-danger",
-            limitReachedClass: "label label-success",
-            separator: ' / ',
-            validate: true,
-            customMaxAttribute: "11"
-        });
         $("#task").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
@@ -309,6 +302,22 @@ var dataModel = {
             selectAllText: 'Tümünü Seç!',
             enableFiltering: true,
             filterPlaceholder: 'Ara'
+        });
+        $('#tc').maxlength({
+            threshold: 10,
+            warningClass: "label label-danger",
+            limitReachedClass: "label label-success",
+            separator: ' / ',
+            validate: true,
+            customMaxAttribute: "11"
+        });
+        $('#vergino').maxlength({
+            threshold: 9,
+            warningClass: "label label-danger",
+            limitReachedClass: "label label-success",
+            separator: ' / ',
+            validate: true,
+            customMaxAttribute: "10"
         });
         $("#urun").multiselect({
             includeSelectAllOption: true,
@@ -375,5 +384,15 @@ dataModel.selectedBucak.subscribe(function (v) {
     return true;
 });
 dataModel.tckimlikno.subscribe(function (v) {
-    v.length > 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+    if (v != null)
+    {
+        if (dataModel.krmcheck())
+            v.length == 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+        else
+            v.length > 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+    }
+});
+dataModel.krmcheck.subscribe(function (v) {
+    dataModel.tckimlikno(null);
+    dataModel.isTcValid(false)
 });

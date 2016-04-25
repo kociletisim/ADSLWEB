@@ -29,6 +29,7 @@ var dataModel = {
     loadingmessage: ko.observable(0),
     loadinghomepage: ko.observable(0),
     isTcValid: ko.observable(),
+    krmcheck: ko.observable(false),
     processList: ko.observableArray([]), // başlangıçta işlemler dizisi olarak yapılabilecek işlemler listesi oluşur değiştirilmemesi veya sıfırlanmaması gerek
     serialList: ko.observableArray([]), // müşteri üzerinde modem bulunuyorsa liste halinde kullanıcıya sun hangisi ile yapacaksa seçsin
     newSerialList: ko.observableArray([]), // modemdeğişiminde personel üzerindeki modem listesi
@@ -280,6 +281,14 @@ var dataModel = {
             validate: true,
             customMaxAttribute: "11"
         });
+        $('#vergino').maxlength({
+            threshold: 9,
+            warningClass: "label label-danger",
+            limitReachedClass: "label label-success",
+            separator: ' / ',
+            validate: true,
+            customMaxAttribute: "10"
+        });
         var elmn1 = { id: 1, name: "Modem Değişimi" };
         var elmn2 = { id: 2, name: "Modem İade" };
         self.processList().push(elmn1);
@@ -318,9 +327,17 @@ dataModel.selectedBucak.subscribe(function (v) {
     return true;
 });
 dataModel.tckimlikno.subscribe(function (v) {
-    v.length > 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+    if (v != null) {
+        if (dataModel.krmcheck())
+            v.length == 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+        else
+            v.length > 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+    }
 });
-dataModel.selectedProcess.subscribe(function (v) {
+dataModel.krmcheck.subscribe(function (v) {
+    dataModel.tckimlikno(null);
+    dataModel.isTcValid(false)
+}); dataModel.selectedProcess.subscribe(function (v) {
     if (v == "" || v == null) {
         dataModel.serial(null);
         dataModel.newserial(null);

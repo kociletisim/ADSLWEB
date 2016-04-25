@@ -7,10 +7,22 @@
         </div>
         <div class="modal-body" style="display: inline-block;position:relative; min-height:50px;">
             <div class="col-xs-6 col-sm-4 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                <p>Tc Kimlik Numarası</p>
+                <p>Kurumsal Mı ?</p>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                <input type="number" data-bind="value:tckimlikno ,valueUpdate: 'afterkeydown',event: { keypress: enterfilter }" class="form-control" id="tc" value="" placeholder="">
+                <input type="checkbox" data-bind="checked:krmcheck" class="form-control" id="kcheck">
+            </div>
+            <div data-bind="visible:krmcheck() == false" class="col-xs-6 col-sm-4 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <p>Tc Kimlik Numarası</p>
+            </div>
+            <div data-bind="visible:krmcheck() == false" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                <input type="number" data-bind="value:tckimlikno ,valueUpdate: 'afterkeydown',event: { keypress: enterfilter }" class="form-control" id="tc">
+            </div>
+            <div data-bind="visible:krmcheck() == true" class="col-xs-6 col-sm-4 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                <p>Vergi Numarası</p>
+            </div>
+            <div data-bind="visible:krmcheck() == true" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                <input type="number" data-bind="value:tckimlikno ,valueUpdate: 'afterkeydown',event: { keypress: enterfilter }" class="form-control" id="vergino">
             </div>
             <div class="col-xs-6 col-sm-4 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                 <p></p>
