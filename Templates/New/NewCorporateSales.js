@@ -23,7 +23,7 @@ var dataModel = {
     selectedIlce: ko.observable(),
     selectedBucak: ko.observable(),
     selectedMahalle: ko.observable(),
-    taskid: ko.observable(),
+    taskid: ko.observable(112),
     user: ko.observable(),
     taskdescription: ko.observable(),
     personellist: ko.observableArray([]),
@@ -58,16 +58,16 @@ var dataModel = {
         self.yalin(true);
         self.churn(false);
         self.taskid(112); // satış adsl kurumsal
-        $('#adsl').css({ width: '68%' });
-        $('#churn').css({ width: '28%' });
+        $('#adsl').css({ width: '71%' });
+        $('#churn').css({ width: '25%' });
     },
     isChurn: function () {
         var self = this;
         self.churn(true);
         self.yalin(false);
         self.taskid(113); // satış churn kurumsal 
-        $('#adsl').css({ width: '28%' });
-        $('#churn').css({ width: '68%' });
+        $('#adsl').css({ width: '25%' });
+        $('#churn').css({ width: '71%' });
     },
     isAutorized: ko.observable(),
     getUserInfo: function () {
@@ -228,9 +228,9 @@ var dataModel = {
             productids: self.pids(),
             campaignid: self.campaignid(),
         };
-        if (data.tc != null && data.gsm != null )
+        if (data.tc != null && data.gsm != null && self.taskid() != null)
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
-        else alert("Eksik Bilgi Girdiniz.!");
+        else alert("Eksik Bilgi Girdiniz.! Bilgileri Kontrol Ediniz veya Tarayıcı Geçmişini Temizleyerek Tekrar Deneyiniz !");
     },
     renderBindings: function () {
         var self = this;
