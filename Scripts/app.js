@@ -67,6 +67,7 @@ $(window).bind("hashchange", function () {
                 $("#tanimlamalar").hide(true);
                 $("#musteriler").hide(true);
                 $("#kocslort").hide(true);
+                $("#bayisldetay").show();
                 var id = { BayiID: pid };
                 crmAPI.BSLOrt(id, function (a, b, c) {
                     var ort = a;
@@ -76,6 +77,7 @@ $(window).bind("hashchange", function () {
             }
             else {
                 $("#bayislort").hide(true);
+                $("#bayisldetay").hide();
                 crmAPI.KSLOrt(function (a, b, c) {
                     $("#ksl").text("Koç SL = " + a[0]);
                     $("#kgsl").text("Geçen Ay Koç SL = " + a[1]);
@@ -84,11 +86,9 @@ $(window).bind("hashchange", function () {
             var arr = a.userName.split('@');
             if (arr[1] == 'kociletisim.com.tr') {
                 $("#newtask").show();
-                $("#bayisldetay").hide();
             }
             else {
                 $("#newtask").hide();
-                $("#bayisldetay").show();
                 perId = pid;
             }
             var data = {

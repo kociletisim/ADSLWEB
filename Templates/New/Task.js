@@ -208,7 +208,7 @@ var dataModel = {
                 crmAPI.getSerialOnCustomer(data, function (a, b, c) {
                     self.movement(a);
                     // taskqueueeditform aynı metodu kullanıyor. bu şekilde aynı serileri yakalayacaklar (eğer müşteri üzerinde 2 seri var ve diğerini yakalarsa yanlışlık vardır bize gelmek zorundalar (bir müşteride bir modem olabilir !!))
-                    if (self.movement()) {
+                    if (self.movement() && self.movement().movementid != 0) {
                         if (self.movement().serialno == self.serial()) {
                             self.newmovement(false);
                             self.insert();
@@ -228,7 +228,7 @@ var dataModel = {
                 };
                 crmAPI.getStock(data, function (a, b, c) {
                     self.movement(a.data.rows[0]);
-                    if (self.movement()) {
+                    if (self.movement() && self.movement().movementid != 0) {
                         alert("Seri No Kontrol Ediniz !");
                     }
                     else {
