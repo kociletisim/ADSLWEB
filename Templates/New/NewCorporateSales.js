@@ -23,7 +23,7 @@ var dataModel = {
     selectedIlce: ko.observable(),
     selectedBucak: ko.observable(),
     selectedMahalle: ko.observable(),
-    taskid: ko.observable(112),
+    taskid: ko.observable(null),
     user: ko.observable(),
     taskdescription: ko.observable(),
     personellist: ko.observableArray([]),
@@ -47,7 +47,7 @@ var dataModel = {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
     kaydetEnable: ko.pureComputed(function () {
-        return dataModel.selectedNet() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && ((dataModel.perOfBayiOrKoc() == false && dataModel.yalin() != null) || (dataModel.salespersonel() && (dataModel.skaynak() == 2 || dataModel.yalin() != null)));
+        return dataModel.selectedNet() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && dataModel.yalin() != null && ((dataModel.perOfBayiOrKoc() == false) || (dataModel.salespersonel() && dataModel.skaynak()));
     }),
 
     smno: ko.observable(), // süperonline müşteri no 
@@ -57,17 +57,40 @@ var dataModel = {
         var self = this;
         self.yalin(true);
         self.churn(false);
-        self.taskid(112); // satış adsl kurumsal
         $('#adsl').css({ width: '71%' });
         $('#churn').css({ width: '25%' });
+        self.setTaskid();
     },
     isChurn: function () {
         var self = this;
         self.churn(true);
         self.yalin(false);
-        self.taskid(113); // satış churn kurumsal 
         $('#adsl').css({ width: '25%' });
         $('#churn').css({ width: '71%' });
+        self.setTaskid();
+    },
+    setTaskid: function () {
+        var self = this;
+        if (self.perOfBayiOrKoc() == true) {
+            if (self.skaynak() == 1) {
+                if (self.yalin() == true)
+                    self.taskid(112); // satış adsl kurumsal
+                else if (self.churn() == true)
+                    self.taskid(113); // satış churn kurumsal 
+            }
+            else if (self.skaynak() == 2) {
+                if (self.yalin() == true)
+                    self.taskid(56); // satış CC adsl kurumsal
+                else if (self.churn() == true)
+                    self.taskid(114); // satış CC churn kurumsal
+            }
+        }
+        else {
+            if (self.yalin() == true)
+                self.taskid(112); // satış adsl kurumsal
+            else if (self.churn() == true)
+                self.taskid(113); // satış churn kurumsal 
+        }
     },
     isAutorized: ko.observable(),
     getUserInfo: function () {
@@ -228,7 +251,7 @@ var dataModel = {
             productids: self.pids(),
             campaignid: self.campaignid(),
         };
-        if (data.tc != null && data.gsm != null && self.taskid() != null)
+        if (data.tc != null && data.gsm != null && self.taskid() != null && self.taskid() != "")
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
         else alert("Eksik Bilgi Girdiniz.! Bilgileri Kontrol Ediniz veya Tarayıcı Geçmişini Temizleyerek Tekrar Deneyiniz !");
     },
@@ -355,6 +378,16 @@ dataModel.campaignid.subscribe(function (v) {
         dataModel.getproduct();
 });
 dataModel.skaynak.subscribe(function (v) {
-    if (v == 2)
-        dataModel.taskid(56); // satış CC kurumsal
+    if (v == 1) // Koç kurumsal Satılı
+    {
+        dataModel.yalin(null);
+        dataModel.churn(null);
+        dataModel.setTaskid();
+    }
+    else if (v == 2) // satış CC kurumsal
+    {
+        dataModel.yalin(null);
+        dataModel.churn(null);
+        dataModel.setTaskid();
+    }
 });

@@ -41,6 +41,7 @@ $(window).bind("hashchange", function () {
     
     $("#slrep").click(function () {
         window.location.href = 'http://crmapitest.kociletisim.com.tr/api/Adsl/Reports/SLBayiGet?BayiId=' + perId;
+        //window.location.href = 'http://localhost:50752/api/Adsl/Reports/SLBayiGet?BayiId=' + perId;
     });
     $("#gslrep").click(function () {
         window.location.href = 'http://crmapitest.kociletisim.com.tr/api/Adsl/Reports/GSLBayiGet?BayiId=' + perId;
@@ -61,6 +62,7 @@ $(window).bind("hashchange", function () {
         var pid = 0;
         crmAPI.userInfo(function (a, b, c) {
             pid = a.userId;
+            perId = pid;
             $("#username").text(a.userFullName);
             var role = a.userRole;
             if (a.userRole != 2147483647) {
@@ -89,7 +91,6 @@ $(window).bind("hashchange", function () {
             }
             else {
                 $("#newtask").hide();
-                perId = pid;
             }
             var data = {
                 personel: { fieldName: 'personelid', op: 2, value: pid },
