@@ -244,8 +244,11 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Çıkış Yapılan Birim</p>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select id="editpersonel" data-bind="options:$root.personellist,optionsText:'personelname',optionsValue:'personelid',value:toobject,optionsCaption:'Seçiniz'" class="form-control"></select>
+                    <div data-bind="visible:topersonel" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="editpersonel" data-bind="options:$root.personellist, optionsText:'personelname', optionsValue:'personelid', value:toobject, optionsCaption:'Seçiniz'" class="form-control"></select>
+                    </div>
+                    <div data-bind="visible:tocustomer" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <label class="form-control" data-bind="text:tocustomer ? tocustomer.customername:null"></label>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Ürün Adi</p>

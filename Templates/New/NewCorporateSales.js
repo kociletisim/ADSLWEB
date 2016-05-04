@@ -11,6 +11,7 @@ var dataModel = {
                 self.fault("Bayi");
         }
     },
+    appointmentdate: ko.observable(""),
     fault: ko.observable(),
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(),
@@ -50,7 +51,7 @@ var dataModel = {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
     kaydetEnable: ko.pureComputed(function () {
-        return dataModel.selectedNet() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && dataModel.yalin() != null && ((dataModel.perOfBayiOrKoc() == false) || (dataModel.salespersonel() && dataModel.skaynak()));
+        return dataModel.selectedNet() && dataModel.fault() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && dataModel.yalin() != null && ((dataModel.perOfBayiOrKoc() == false) || (dataModel.salespersonel() && dataModel.skaynak() && ((dataModel.skaynak() == 2 && dataModel.smno() && dataModel.appointmentdate() && dataModel.appointmentdate() != "") || dataModel.skaynak() == 1)));
     }),
 
     smno: ko.observable(), // süperonline müşteri no 
@@ -254,6 +255,7 @@ var dataModel = {
             productids: self.pids(),
             campaignid: self.campaignid(),
             fault: self.fault(),
+            appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
         if (data.tc != null && data.gsm != null && self.taskid() != null && self.taskid() != "")
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
@@ -276,7 +278,7 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#urun").multiselect({
+        $("#urun,#kaynak").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -287,6 +289,17 @@ var dataModel = {
             selectAllText: 'Tümünü Seç!',
             enableFiltering: true,
             filterPlaceholder: 'Ara'
+        });
+        $('#daterangepicker4').daterangepicker({
+            "singleDatePicker": true,
+            "autoApply": false,
+            "linkedCalendars": false,
+            "timePicker": true,
+            "timePicker24Hour": true,
+            "timePickerSeconds": true,
+            "locale": {
+                "format": 'MM/DD/YYYY h:mm A',
+            },
         });
         $("#kampanya,#product,#ses,#satisk").multiselect({
             includeSelectAllOption: true,
@@ -386,12 +399,16 @@ dataModel.skaynak.subscribe(function (v) {
     {
         dataModel.yalin(null);
         dataModel.churn(null);
-        dataModel.setTaskid();
+        dataModel.smno(null);
+        dataModel.appointmentdate("");
+        $('#adsl').css({ width: '48%' });
+        $('#churn').css({ width: '48%' });
     }
     else if (v == 2) // satış CC kurumsal
     {
         dataModel.yalin(null);
         dataModel.churn(null);
-        dataModel.setTaskid();
+        $('#adsl').css({ width: '48%' });
+        $('#churn').css({ width: '48%' });
     }
 });

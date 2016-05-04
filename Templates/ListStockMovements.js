@@ -181,17 +181,14 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
-            $("#newpersonel").multiselect("setOptions", dataModel.personellist()).multiselect("rebuild");
+            $("#newpersonel,#editpersonel").multiselect("setOptions", dataModel.personellist()).multiselect("rebuild");
         }, null, null)
     },
     getStockMovementCard: function (movementid) {
         var self = this;
-        self.getpersonel();
         var data = { movement: { value: movementid } };
         crmAPI.getStockMovements(data, function (a, b, c) {
             self.selectedMovementCard(a.data.rows[0]);
-            if (($('#editpersonel').val() == "") || ($('#editpersonel').val() == null))
-                self.getStockMovementCard(movementid);
             $("#editpersonel,#editobject,#editproduct").multiselect({
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -203,9 +200,10 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
+            if (a.data.rows[0].toobjecttype != 16777217 && ($('#editpersonel').val() == "") || ($('#editpersonel').val() == null))
+                self.getStockMovementCard(movementid);
             $("#editpersonel,#editobject,#editproduct").multiselect("rebuild");
         }, null, null);
-
     },
     getSerialControl: function (stockid) {
         var self = this;
