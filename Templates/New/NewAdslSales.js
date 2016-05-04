@@ -59,7 +59,7 @@
     selectedNet: ko.observable(""),
     selectedSes: ko.observable(),
     isSelectedKaynak: ko.pureComputed(function () {
-        return (((dataModel.isSirketPersonel() == true && dataModel.salespersonel() > 0 && dataModel.fault() != '' && (dataModel.cc() == true && dataModel.appointmentdate() != "" || dataModel.cc() == false)) || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0);
+        return (((dataModel.isSirketPersonel() == true && dataModel.salespersonel() > 0 && dataModel.fault() != '' && dataModel.fault() != null && (dataModel.cc() == true && dataModel.appointmentdate() != "" || dataModel.cc() == false)) || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0);
     }),
     errorControl:ko.pureComputed(function(){
         return  (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
@@ -95,8 +95,10 @@
             if (arr[1] == 'kociletisim.com.tr') {
                 self.isSirketPersonel(true);
             }
-            else
+            else {
                 self.isSirketPersonel(false);
+                self.fault("Bayi");
+            }
             self.isAutorized((a.userRole & 67108896) == 67108896);
         }, null, null)
     },

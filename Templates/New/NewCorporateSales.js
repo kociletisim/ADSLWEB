@@ -7,8 +7,11 @@ var dataModel = {
             var arr = self.user().userName.split('@');
             if (arr[1] == 'kociletisim.com.tr')
                 self.perOfBayiOrKoc(true);
+            else
+                self.fault("Bayi");
         }
     },
+    fault: ko.observable(),
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(),
     customername: ko.observable(),
@@ -250,6 +253,7 @@ var dataModel = {
             salespersonel: self.salespersonel(),
             productids: self.pids(),
             campaignid: self.campaignid(),
+            fault: self.fault(),
         };
         if (data.tc != null && data.gsm != null && self.taskid() != null && self.taskid() != "")
             crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
