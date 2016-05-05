@@ -202,14 +202,14 @@ var dataModel = {
         if (self.serial() != null) {
             if (self.confirmedCustomer() != null) {
                 var data = {
-                    product: { fieldName: 'stockid', op: 2, value: 1117 },
-                    toobjectid: { value: self.confirmedCustomer().customerid },
+                    stockcardid: 1117,
+                    fromobject: self.confirmedCustomer().customerid,
                 };
                 crmAPI.getSerialOnCustomer(data, function (a, b, c) {
-                    self.movement(a);
+                    self.movement(a[0]);
                     // taskqueueeditform aynı metodu kullanıyor. bu şekilde aynı serileri yakalayacaklar (eğer müşteri üzerinde 2 seri var ve diğerini yakalarsa yanlışlık vardır bize gelmek zorundalar (bir müşteride bir modem olabilir !!))
-                    if (self.movement() && self.movement().movementid != 0) {
-                        if (self.movement().serialno == self.serial()) {
+                    if (self.movement()) {
+                        if (self.movement() == self.serial()) {
                             self.newmovement(false);
                             self.insert();
                         }

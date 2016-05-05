@@ -134,8 +134,23 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
-    
-        self.getBlockList(dataModel.pageNo(), dataModel.rowsPerPage());
+
+        var service_url = "http://netflowext.superonline.net/NetflowSecureApiService/NetflowTellcomWS.asmx"
+        $.ajax({
+            type: "GET",
+            url: service_url,
+            dataType: "xml",
+            data: "'Username' : 'EXT0348896_KOCILETISIM', 'Password' : '6qRF0687'",
+            processData: false,
+            beforeSend: function (req) {
+                req.setRequestHeader('Authorization', 'EXT0348896_KOCILETISIM', '6qRF0687');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                ajaxError(XMLHttpRequest, textStatus, errorThrown);
+                alert("xxx");
+            },
+            success: function (xml) { DoSomething(xml); alert("ddd") }
+        });
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     }
 }

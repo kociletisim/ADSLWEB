@@ -132,7 +132,7 @@ var dataModel = {
                     stockcardid: 1117,
                     fromobject: self.confirmMessage() == null ? self.confirmedCustomer().customerid : self.newcustomer().customer.customerid,
                 };
-                crmAPI.getSerialOnPersonel(dat, function (a, b, c) {
+                crmAPI.getSerialOnCustomer(dat, function (a, b, c) {
                     for (var i = 0; i < a.length; i++) {
                         if (a[i] == self.newserial())
                             window.setTimeout(function () {
@@ -355,7 +355,7 @@ dataModel.krmcheck.subscribe(function (v) {
             stockcardid: 1117,
             fromobject: dataModel.confirmMessage() == null ? dataModel.confirmedCustomer().customerid : -1,
         }
-        crmAPI.getSerialOnPersonel(data, function (a, b, c) {
+        crmAPI.getSerialOnCustomer(data, function (a, b, c) {
             dataModel.serialList(a);
             $("#serialnoex").multiselect("setOptions", dataModel.serialList()).multiselect("rebuild");
         }, null, null);
@@ -365,7 +365,7 @@ dataModel.krmcheck.subscribe(function (v) {
             stockcardid: 1117,
             fromobject: dataModel.confirmMessage() == null ? dataModel.confirmedCustomer().customerid : -1,
         }
-        crmAPI.getSerialOnPersonel(data, function (a, b, c) {
+        crmAPI.getSerialOnCustomer(data, function (a, b, c) {
             dataModel.serialList(a);
             $("#serialnoex").multiselect("setOptions", dataModel.serialList()).multiselect("rebuild");
         }, null, null);

@@ -826,13 +826,13 @@ dataModel.stockmovement.subscribe(function (v) {
     if (dataModel.taskid() == 66 && dataModel.stockmovement().length > 0 && dataModel.stockmovement().serialno != "") { // Bağlantı problemi taskı modem geri almak için
         dataModel.movement(null);
         var data = {
-            product: { fieldName: 'stockid', op: 2, value: 1117 },
-            toobjectid: { value: dataModel.customer().customerid },
+            stockcardid: 1117,
+            fromobject: dataModel.customer().customerid,
         };
         crmAPI.getSerialOnCustomer(data, function (a, b, c) {
-            dataModel.movement(a);
+            dataModel.movement(a[0]);
             if (dataModel.movement()) {
-                dataModel.eskiserial(dataModel.movement().serialno);
+                dataModel.eskiserial(dataModel.movement());
             }
             else
                 alert("Müşteride Sisteme Kayıtlı Modem Bulunamadı. Sistem Yöneticinize Başvurunuz !");
