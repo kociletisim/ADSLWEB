@@ -33,7 +33,7 @@ var dataModel = {
             return false;
     }),
     isEnterDateOption: ko.pureComputed(function () {
-        if (dataModel.perOfBayiOrKoc() == true && dataModel.isNetflowDate() == true && (dataModel.appointmentdate() == "" || dataModel.appointmentdate() == null))
+        if (dataModel.perOfBayiOrKoc() == true && dataModel.isNetflowDate() == true && (dataModel.appointmentdate() == "" || dataModel.appointmentdate() == null || dataModel.smno() == null || dataModel.smno() == ""))
             return false;
         else
             return true;
@@ -44,6 +44,8 @@ var dataModel = {
         }, 50);
     },
     eskiserial: ko.observable(null), // modem değiştirilecek olan tasklarda kullanılacak olan iade modem seri
+    smno: ko.observable(), // süperonline müşteri no
+    isClickKaydet: ko.observable(false),
     movement: ko.observable(),
     taskorderno: ko.observable(),
     taskname: ko.observable(),
@@ -228,6 +230,7 @@ var dataModel = {
            self.selectedCustomer(a.data.rows[0]);
            self.getMahalle(a.data.rows[0].bucakKimlikNo);
            self.getBucak(a.data.rows[0].ilceKimlikNo);
+           self.smno(a.data.rows[0].superonlineCustNo);
            $("#ilcombo,#ilcecombo").multiselect({
                selectAllValue: 'select-all-value',
                maxHeight: 250,
@@ -240,15 +243,18 @@ var dataModel = {
                filterPlaceholder: 'Ara'
            });
        },null,null);
-   },
+    },
     saveCustomer: function () {
         var self = this;
         self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
         self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
+        if (self.isClickKaydet())
+            self.selectedCustomer().superonlineCustNo = self.smno();
        var data = self.selectedCustomer();
        crmAPI.saveCustomerCard(data, function (a, b, c) {
-           if (a == "ok")
+           if (a == "ok" && !self.isClickKaydet()) {
                self.refresh();
+           }
        }, null, null);
    },
     subcategorylist: ko.observableArray([]),
@@ -372,9 +378,6 @@ var dataModel = {
              });
          }, null, null)
     },
-    redirect : function () {
-        window.location.href = "app.html";
-    },
     getUserInfo: function () {
         var self = this;
         crmAPI.userInfo(function (a, b, c) {
@@ -460,13 +463,14 @@ var dataModel = {
         var self = this;
         $('.btn').prop('disabled', true);
         self.flag(false);
-        if (!dataModel.modelIsValid()) crmAPI.saveTaskQueues(data, function (a, b, c) {
-            self.message(a);
-            window.setTimeout(function () {
-                $("#id_alert").alert('close');
-                self.redirect();
-            }, 1250);
-        }, null, null); //return alert("Eksik veriler var. Lütfen gerekli tüm alanları doldurunuz."); 
+        if (!dataModel.modelIsValid())
+            crmAPI.saveTaskQueues(data, function (a, b, c) {
+                self.message(a);
+                window.setTimeout(function () {
+                    $("#id_alert").alert('close');
+                    window.location.href = "app.html";
+                }, 2000);
+            }, null, null); //return alert("Eksik veriler var. Lütfen gerekli tüm alanları doldurunuz."); 
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
@@ -506,28 +510,33 @@ var dataModel = {
                 if (b)
                     return alert("Tüm Belgeleri Yükleyiniz...");
                 else
-                    return crmAPI.saveTaskQueues(data, function (a, b, c) {
+                    crmAPI.saveTaskQueues(data, function (a, b, c) {
                         self.message(a);
                         window.setTimeout(function () {
                             $("#id_alert").alert('close');
-                            self.redirect();
-                        }, 1250);
+                            window.location.href = "app.html";
+                        }, 2000);
                     }, null, null);
             }
 
             $("#fileUpload").fileinput("upload");
         }
-        else
+        else {
             crmAPI.saveTaskQueues(data, function (a, b, c) {
                 self.message(a);
                 window.setTimeout(function () {
                     $("#id_alert").alert('close');
-                    self.redirect();
-                }, 1250);
+                    window.location.href = "app.html";
+                }, 2000);
             }, null, null);
+        }
     },
     saveTaskQueues: function () {
         var self = this;
+        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno() && self.isNetflowDate() == true) {
+            self.isClickKaydet(true);
+            self.saveCustomer();
+        }
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
                 if (self.stockmovement()[0].frompersonel != null && self.stockmovement()[0].frompersonel != "") {
@@ -549,6 +558,10 @@ var dataModel = {
     },
     saveTaskQueueDescription: function () {
         var self = this;
+        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno() && self.isNetflowDate() == true) {
+            self.isClickKaydet(true);
+            self.saveCustomer();
+        }
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: null },
@@ -567,7 +580,7 @@ var dataModel = {
                 self.message(a);
                 window.setTimeout(function () {
                     $("#id_alert").alert('close');
-                    self.redirect();
+                    window.location.href = "app.html";
                 }, 1250);
             }, null, null);
     },
@@ -680,10 +693,6 @@ var dataModel = {
             });
             $('#fileUpload').on('filebatchuploadsuccess', function (event, data, previewId, index) {
                 dataModel.message("ok");
-                //window.setTimeout(function () {
-                //    $("#id_alert").alert('close');
-                //    self.redirect();
-                //}, 1250);
             });
             var data = { taskOrderNo: hashSearches[1] };
             crmAPI.getTaskQueues(data, function (a, b, c) {
@@ -708,6 +717,7 @@ var dataModel = {
                 self.ilce(a.data.rows[0].attachedcustomer.ilce && a.data.rows[0].attachedcustomer.ilce.ad || '');
                 self.customername(a.data.rows[0].attachedcustomer.customername && (a.data.rows[0].attachedcustomer.customername) || '');
                 self.customerid(a.data.rows[0].attachedcustomer.customerid && (a.data.rows[0].attachedcustomer.customerid) || '');
+                self.getCustomerCard();
                 self.customer(a.data.rows[0].attachedcustomer);
                 self.flat(a.data.rows[0].attachedcustomer && (a.data.rows[0].attachedcustomer.daire) || '');
                 self.customergsm(a.data.rows[0].attachedcustomer && a.data.rows[0].attachedcustomer.gsm || '');
@@ -762,7 +772,6 @@ var dataModel = {
                     "format": 'MM/DD/YYYY h:mm A',
                 },
             });
-           
             ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         }
         self.getIl();

@@ -138,10 +138,10 @@
                         <div data-bind="text:ilce" class="col-xs-6 col-sm-6 col-md-6 "></div>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-3 height-40">
-                        <div class="col-xs-4 col-sm-4 col-md-4 ">Müşteri Statü</div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">S. Müşteri No</div>
                         <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
-                            <select id="abonedurumu" data-bind="options: ctstatuslist, optionsText: 'Text', optionsValue: 'Text', value: customerstatus" multiple="multiple"></select>
+                            <input type="text" id="somn" class="form-control" data-bind="enable: perOfBayiOrKoc(), value:smno">
                         </div>
                     </div>
 
@@ -311,12 +311,12 @@
 
     <div class="col-md-3 height-30 navbar-form pull-right">
         <span data-bind="visible:taskstatus()==0" class="label label-danger">Taskın Durumu Henüz Girilmemiş</span>
-        <span data-bind="visible:!isEnterDateOption()" class="label label-danger">NetFlow Tarihi Henüz Girilmemiş</span>
+        <span data-bind="visible:!isEnterDateOption()" class="label label-danger">NetFlow Tarihi Veya S. Müşteri No Henüz Girilmemiş</span>
         <span data-bind="visible:!campaignIsValid()" class="label label-danger">Kampanya Bilgileri Girilmemiş</span>
         <span data-bind="visible:!cdIsValid()" class="label label-danger">Döküman Yüklemeniz Gerekiyor</span>
         <span data-bind="visible:!smIsValid()" class="label label-danger">Donanım Girmeniz Gerekiyor</span>
         <span data-bind="visible:errormessage(), text:errormessage" class="label label-danger"></span>
-        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:(modelIsValid() ||descriptionControl()) && isEnterDateOption() " type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
+        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:(modelIsValid() ||descriptionControl()) && isEnterDateOption()" type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
     </div>
     <!-- müşteri bilgilerini düzenleme For Modal Start -->
     <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
