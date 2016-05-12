@@ -229,6 +229,7 @@
     },
     insertAdslSalesTask: function () {
         var self = this;
+        $('.btn').prop('disabled', true);
         if (self.selectedNet()) self.pids().push(self.selectedNet());
         if (self.selectedSes()) self.pids().push(self.selectedSes());
 
