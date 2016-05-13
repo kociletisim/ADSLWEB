@@ -26,6 +26,15 @@ var dataModel = {
     documentListCombo: ko.observableArray([]),
     documentIds: ko.observableArray([]),
 
+    user: ko.observable(),
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647 )
+                window.location.href = "app.html";
+        }, null, null)
+    },
     getCampaigns: function (pageno, rowsperpage) {
         var self = this;
         var data = {
@@ -245,6 +254,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         self.getCampaigns(dataModel.pageNo(), dataModel.rowsPerPage());
         self.getcamapign();
         self.getcategory();

@@ -29,7 +29,16 @@ var dataModel = {
     newkurulumbayi: ko.observable(),
     yoneticiList: ko.observableArray([]),
     yoneticiId: ko.observable(),
+    user: ko.observable(),
 
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     getyonetici: function () {
         var self = this;
         crmAPI.getPersonel(function (a, b, c) {
@@ -263,6 +272,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         self.getPersonels(dataModel.pageNo(), dataModel.rowsPerPage());
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         $('#new').click(function () {

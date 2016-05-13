@@ -14,6 +14,7 @@ var dataModel = {
     tc: ko.observable(),
     gsm: ko.observable(),
     smno: ko.observable(), // süperonline müşteri no 
+
     // filtreleme finish
 
     customerList: ko.observableArray([]),
@@ -25,6 +26,15 @@ var dataModel = {
     selectil: ko.observable(),
     selectilce: ko.observable(),
 
+    user: ko.observable(),
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     getFilter: function (pageno, rowsperpage) {
         var self = this;
         self.pageNo(pageno);
@@ -161,6 +171,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         //self.getIl();
         //self.getIlce();
         //self.getFilter(dataModel.pageNo(), dataModel.rowsPerPage());

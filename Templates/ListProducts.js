@@ -21,6 +21,16 @@ var dataModel = {
     maxduration: ko.observable(),
     newproductname: ko.observable(),
     newdocdescription: ko.observable(),
+    user: ko.observable(),
+
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     getProducts: function (pageno, rowsperpage) {
         var self = this;
         self.pageNo(pageno);
@@ -195,6 +205,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         self.getProducts(dataModel.pageNo(), dataModel.rowsPerPage());
         ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         $('#new').click(function () {

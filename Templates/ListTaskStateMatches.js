@@ -26,7 +26,16 @@ var dataModel = {
     opTaskIds: ko.observableArray([]),
     stockIds: ko.observableArray([]),
     docIds:ko.observableArray([]),
+    user: ko.observable(),
 
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     getTsmTable: function (pageno, rowsperpage) {
         var self = this;
         self.pageNo(pageno);
@@ -237,6 +246,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         self.getStates();
         self.getTaskList();
         self.getTsmTable(dataModel.pageNo(), dataModel.rowsPerPage());

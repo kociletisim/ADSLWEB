@@ -7,7 +7,16 @@ var dataModel = {
     tqs: ko.observableArray([]),
     startDate: ko.observable(),
     endDate: ko.observable(),
+    user: ko.observable(),
 
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     clean: function () {
         var self = this;
         self.startDate(null);
@@ -36,6 +45,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         $('#daterangepicker1,#daterangepicker2').daterangepicker({
             "singleDatePicker": true,
             "autoApply": false,

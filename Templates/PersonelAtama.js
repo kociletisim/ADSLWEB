@@ -29,11 +29,19 @@ var dataModel = {
     totalpagecount: ko.observable(0),
     totalRowCount: ko.observable(),
     selectedAtama: ko.observable(),
-    user: ko.observable(),
     kaydetButonEnabla: ko.pureComputed(function () {
         return (dataModel.selectedformedtasktype() != null) && (dataModel.selectedappointedpersonel() != null)
     }),
+    user: ko.observable(),
 
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     queryButtonClick: function () {
         var self = this;
         self.getFilter(1, dataModel.rowsPerPage());
@@ -227,12 +235,6 @@ var dataModel = {
     },
     redirect: function () {
         window.location.href = "app.html";
-    },
-    getUserInfo: function () {
-        var self = this;
-        crmAPI.userInfo(function (a, b, c) {
-            self.user(a);
-        }, null, null)
     },
     navigate: {
         gotoPage: function (pageNo) {

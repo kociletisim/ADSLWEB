@@ -29,6 +29,15 @@ var dataModel = {
     newtaskdesc: ko.observable(),
     taskTypeList: ko.observableArray([]),
 
+    user: ko.observable(),
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     //combo için
     getTaskList: function () {
         var self = this;
@@ -235,6 +244,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         self.getTask(dataModel.pageNo(), dataModel.rowsPerPage());
         self.getTaskList();
         self.getTaskType();

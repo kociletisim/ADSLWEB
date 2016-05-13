@@ -10,8 +10,6 @@ var dataModel = {
     errorcode: ko.observable(),
     totalpagecount: ko.observable(0),
     totalRowCount: ko.observable(),
-    user: ko.observable(),
-
     sllist: ko.observableArray([]), // task sl list
     selectedSL: ko.observable(),
     tasks: ko.observableArray([]),
@@ -26,7 +24,16 @@ var dataModel = {
     kaydetButonEnable: ko.pureComputed(function () {
         return true
     }),
+    user: ko.observable(),
 
+    getUserInfo: function () {
+        var self = this;
+        crmAPI.userInfo(function (a, b, c) {
+            self.user(a);
+            if (!self.user() || self.user().userRole != 2147483647)
+                window.location.href = "app.html";
+        }, null, null)
+    },
     queryButtonClick: function () {
         var self = this;
         self.getFilter(1, dataModel.rowsPerPage());
@@ -100,12 +107,6 @@ var dataModel = {
     },
     redirect: function () {
         window.location.href = "app.html";
-    },
-    getUserInfo: function () {
-        var self = this;
-        crmAPI.userInfo(function (a, b, c) {
-            self.user(a);
-        }, null, null)
     },
     navigate: {
         gotoPage: function (pageNo) {

@@ -41,7 +41,6 @@
 /// <reference path="../Templates/New/Profil.js" />
 /// <reference path="../Templates/New/Task.js" />
 /// <reference path="../Templates/PersonelAtama.js" />
-/// <reference path="../Templates/Sites.js" />
 /// <reference path="../Templates/SKReport.js" />
 /// <reference path="../Templates/TaskQueueEditForm.js" />
 /// <reference path="../Templates/Worklist.js" />
