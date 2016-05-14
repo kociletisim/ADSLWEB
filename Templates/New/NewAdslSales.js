@@ -229,7 +229,8 @@
     },
     insertAdslSalesTask: function () {
         var self = this;
-        $('.btn').prop('disabled', true);
+        self.returntaskorderno(null);
+        $('.btn-success').prop('disabled', true);
         if (self.selectedNet()) self.pids().push(self.selectedNet());
         if (self.selectedSes()) self.pids().push(self.selectedSes());
 
@@ -294,8 +295,23 @@
             appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
         if (data.tc != null && data.gsm != null && (self.yalin() || self.churn()))
-            crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
+            crmAPI.saveAdslSalesTask(data, function (a, b, c) {
+                self.returntaskorderno(a);
+                self.redirect();
+            }, null, null);
         else alert("Eksik Bilgi Girdiniz.!");
+    },
+    redirect: function () 
+    {
+        var self = this;
+        if (self.returntaskorderno() == "Girilen TC Numarası Başkasına Aittir") {
+            $('.btn-success').prop('disabled', false);
+            alert(self.returntaskorderno());
+        }
+        else {
+            window.location.href = "app.html#TaskQueueEditForm?" + self.returntaskorderno();
+        }
+
     },
     renderBindings: function () {
         var self = this;
@@ -377,14 +393,6 @@
 
     }
 }
-dataModel.returntaskorderno.subscribe(function (v) {
-    if (v == "Girilen TC Numarası Başkasına Aittir") {
-        alert(v);
-    }
-    else {
-        window.location.href = "app.html#TaskQueueEditForm?" + v;
-    }
-});
 dataModel.isAutorized.subscribe(function (v) {
     if (v == true) dataModel.getpersonel();
     else return true;
