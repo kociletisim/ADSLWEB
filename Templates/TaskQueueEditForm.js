@@ -248,7 +248,7 @@ var dataModel = {
         var self = this;
         self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
         self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
-        if (self.isClickKaydet())
+        if (self.isClickKaydet() == true)
             self.selectedCustomer().superonlineCustNo = self.smno();
        var data = self.selectedCustomer();
        crmAPI.saveCustomerCard(data, function (a, b, c) {
@@ -461,7 +461,6 @@ var dataModel = {
     },
     save: function () {
         var self = this;
-        $('.btn').prop('disabled', true);
         self.flag(false);
         if (!dataModel.modelIsValid())
             crmAPI.saveTaskQueues(data, function (a, b, c) {
@@ -470,7 +469,7 @@ var dataModel = {
                     $("#id_alert").alert('close');
                     window.location.href = "app.html";
                 }, 2000);
-            }, null, null); //return alert("Eksik veriler var. Lütfen gerekli tüm alanları doldurunuz."); 
+            }, null, null);
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
@@ -533,7 +532,8 @@ var dataModel = {
     },
     saveTaskQueues: function () {
         var self = this;
-        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno() && self.isNetflowDate() == true) {
+        $('.btn').prop('disabled', true);
+        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
         }
@@ -558,7 +558,8 @@ var dataModel = {
     },
     saveTaskQueueDescription: function () {
         var self = this;
-        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno() && self.isNetflowDate() == true) {
+        $('.btn').prop('disabled', true);
+        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
         }
