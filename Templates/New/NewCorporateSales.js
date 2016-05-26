@@ -269,7 +269,7 @@ var dataModel = {
     redirect: function () {
         var self = this;
         if (self.returntaskorderno() == "Girilen TC Numarası Başkasına Aittir") {
-            $('.btn-success').prop('disabled', false);
+            $('.btn').prop('disabled', false);
             alert(self.returntaskorderno());
         }
         else {
