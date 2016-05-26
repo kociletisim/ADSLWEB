@@ -232,6 +232,7 @@ var dataModel = {
     },
     insertAdslSalesTask: function () {
         var self = this;
+        self.returntaskorderno(null);
         $('.btn').prop('disabled', true);
         if (self.selectedNet()) self.pids().push(self.selectedNet());
         if (self.selectedSes()) self.pids().push(self.selectedSes());
@@ -258,9 +259,23 @@ var dataModel = {
             fault: self.fault(),
             appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
-        if (data.tc != null && data.gsm != null && self.taskid() != null && self.taskid() != "")
-            crmAPI.saveAdslSalesTask(data, function (a, b, c) { self.returntaskorderno(a) }, null, null);
+        if (data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && self.taskid() != null && self.taskid() != "")
+            crmAPI.saveAdslSalesTask(data, function (a, b, c) {
+                self.returntaskorderno(a)
+                self.redirect();
+            }, null, null);
         else alert("Eksik Bilgi Girdiniz.! Bilgileri Kontrol Ediniz veya Tarayıcı Geçmişini Temizleyerek Tekrar Deneyiniz !");
+    },
+    redirect: function () {
+        var self = this;
+        if (self.returntaskorderno() == "Girilen TC Numarası Başkasına Aittir") {
+            $('.btn-success').prop('disabled', false);
+            alert(self.returntaskorderno());
+        }
+        else {
+            window.location.href = "app.html#TaskQueueEditForm?" + self.returntaskorderno();
+        }
+
     },
     renderBindings: function () {
         var self = this;
@@ -343,14 +358,6 @@ var dataModel = {
         ko.applyBindings(dataModel, $("#bindingmodal")[0]);
     }
 }
-dataModel.returntaskorderno.subscribe(function (v) {
-    if (v == "Girilen TC Numarası Başkasına Aittir") {
-        alert(v);
-    }
-    else {
-        window.location.href = "app.html#TaskQueueEditForm?" + v;
-    }
-});
 dataModel.isAutorized.subscribe(function (v) {
     if (v == true) dataModel.getpersonel();
     else return true;

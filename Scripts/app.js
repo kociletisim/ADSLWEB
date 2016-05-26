@@ -42,6 +42,7 @@ $(window).bind("hashchange", function () {
     });
     $("#gslrep").click(function () {
         window.location.href = 'http://crmapitest.kociletisim.com.tr/api/Adsl/Reports/GSLBayiGet?BayiId=' + perId;
+        //window.location.href = 'http://localhost:50752/api/Adsl/Reports/GSLBayiGet?BayiId=' + perId;
     });
 
     $("#username,#notice").click(function () {

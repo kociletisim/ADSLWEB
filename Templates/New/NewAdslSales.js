@@ -294,7 +294,7 @@
             superonlineCustNo: self.superonlineCustNo(),
             appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
-        if (data.tc != null && data.gsm != null && (self.yalin() || self.churn()))
+        if (data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {
                 self.returntaskorderno(a);
                 self.redirect();
