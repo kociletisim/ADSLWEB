@@ -67,11 +67,13 @@
 
     isBayi: function () {
         var self = this;
+        self.fault("Bayi");
         self.bayi(true);
         self.cc(false);
     },
     isCC: function () {
         var self = this;
+        self.fault(null);
         self.cc(true);
         self.bayi(false);
     },

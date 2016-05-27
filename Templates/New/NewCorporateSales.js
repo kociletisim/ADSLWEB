@@ -408,12 +408,14 @@ dataModel.skaynak.subscribe(function (v) {
         dataModel.yalin(null);
         dataModel.churn(null);
         dataModel.smno(null);
+        dataModel.fault("Bayi");
         dataModel.appointmentdate("");
         $('#adsl').css({ width: '48%' });
         $('#churn').css({ width: '48%' });
     }
     else if (v == 2) // satış CC kurumsal
     {
+        dataModel.fault(null);
         dataModel.yalin(null);
         dataModel.churn(null);
         $('#adsl').css({ width: '48%' });
