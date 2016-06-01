@@ -18,10 +18,8 @@ var dataModel = {
             self.isNetflowDate(true);
             self.dateoption("Netflow Tarihi");
         }
-        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9) {
-            self.isNetflowDate(true);
+        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9) 
             self.dateoption("Satış Tarihi");
-        }
         else if (self.tasktype() == 3)
             self.dateoption("Kurulum Tarihi");
         else if (self.tasktype() == 5)
