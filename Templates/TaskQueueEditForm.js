@@ -18,8 +18,10 @@ var dataModel = {
             self.isNetflowDate(true);
             self.dateoption("Netflow Tarihi");
         }
-        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9)
-            self.dateoption("Satış Tarihi");   
+        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9) {
+            self.isNetflowDate(true);
+            self.dateoption("Satış Tarihi");
+        }
         else if (self.tasktype() == 3)
             self.dateoption("Kurulum Tarihi");
         else if (self.tasktype() == 5)
@@ -88,7 +90,8 @@ var dataModel = {
     editable: ko.observable(),
     tasktype: ko.observable(),
     errormessage: ko.observable(),
-    dosya:ko.observable(),
+    productlist: ko.observableArray([]),
+    dosya: ko.observable(),
     campaignEditable: ko.pureComputed(function () {
         var b = true;
         $.each(dataModel.productlist(), function (index, cp) {
@@ -132,10 +135,9 @@ var dataModel = {
         return !dataModel.cdEditable() || b;
     }),
     modelIsValid: ko.pureComputed(function () {
-        return dataModel.campaignIsValid() && dataModel.smIsValid() && dataModel.cdIsValid();
+        return dataModel.campaignIsValid() && dataModel.smIsValid() && dataModel.cdIsValid()==1;
     }),
 
-    productlist: ko.observableArray([]),
     selectedProducts: ko.pureComputed(function () {
         var self = dataModel;
         var res = [];
@@ -565,15 +567,16 @@ var dataModel = {
         }
         data = {
             taskorderno: self.taskorderno(),
-            task: { taskid: null },
+            task: { taskid: self.taskid() },
             taskstatepool:
                 {
                     taskstateid: 0,
                     taskstate: "AÇIK"
                 },
+            stockmovement: self.stockmovement(),
             description: self.description() ? self.description() == "" ? null : (self.description() + " " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")") : null,
             customerdocument: self.customerdocument(),
-            stockmovement: self.stockmovement(),
+            //stockmovement: self.stockmovement(),
             customerproduct: self.selectedProducts(),
             asistanPersonel: { personelid: self.assistantpersonel() > 0 ? self.assistantpersonel() : null },
         };
@@ -858,6 +861,4 @@ dataModel.uploadControl.subscribe(function (v) {
 });
 dataModel.description.subscribe(function () {
     dataModel.descriptionControl() == false ? dataModel.descriptionControl(true) : dataModel.descriptionControl(false);
-
-    
 });

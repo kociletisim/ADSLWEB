@@ -192,14 +192,14 @@
                     <div id="collapse2" class="panel-collapse collapse" data-bind="css:{'in': campaignEditable}">
                         <fieldset data-bind="enable: campaignEditable">
                             <div class="panel-body">
-                                <div class=" row">
+                                <div class="row">
                                     <div class="col-md-4  form-group-sm has-info cls-margin-bottom">
                                         <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Kategori Seçiniz...'"></select>
                                     </div>
-                                    <div data-bind="visible:category" class="col-md-4  form-group-sm has-info">
+                                    <div data-bind="visible:category" class="col-md-4 form-group-sm has-info">
                                         <select id="urun" data-bind="options:subcategorylist,optionsText:'subcategory',optionsValue:'subcategory',value:subcategory,optionsCaption: 'Alt Kategori Seçiniz...'"></select>
                                     </div>
-                                    <div data-bind="visible:subcategory" class=" col-md-4 form-group-sm has-info">
+                                    <div data-bind="visible:subcategory" class="col-md-4 form-group-sm has-info">
                                         <select id="kampanya" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
                                     </div>
                                 </div>
@@ -248,7 +248,7 @@
                                                     </thead>
                                                     <tbody data-bind="foreach:{ data:stockmovement , as:'sm'}">
                                                         <tr class="cls_line" onclick="">
-                                                            <td data-bind="text:moment().format('lll')"></td>
+                                                            <td data-bind="text:moment(movementdate).format('lll')"></td>
                                                             <td data-bind="text:$root.personelname"></td>
                                                             <td data-bind="text:$root.customername"></td>
                                                             <td data-bind="text:sm.stockcard.productname"></td>
