@@ -454,7 +454,7 @@ var dataModel = {
             toobjecttype: tootype,
             toobject: toobject,
             stockcardid: 1117,
-            deleted: false,
+            deleted: false, // yeni stok hareketi değil
         };
         crmAPI.InsertStock(data, function (a, b, c) {
         }, null, null);
@@ -574,7 +574,6 @@ var dataModel = {
             stockmovement: self.stockmovement(),
             description: self.description() ? self.description() == "" ? null : (self.description() + " " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")") : null,
             customerdocument: self.customerdocument(),
-            //stockmovement: self.stockmovement(),
             customerproduct: self.selectedProducts(),
             asistanPersonel: { personelid: self.assistantpersonel() > 0 ? self.assistantpersonel() : null },
         };

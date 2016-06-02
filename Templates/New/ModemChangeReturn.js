@@ -213,6 +213,7 @@ var dataModel = {
     },
     save: function () {
         var self = this;
+        $('#onay').prop('disabled', true);
         if (self.confirmedCustomer() != null) {
             if (self.serial() != null) {
                 self.newmovement(false);
