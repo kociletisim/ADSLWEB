@@ -33,7 +33,7 @@ var dataModel = {
             return false;
     }),
     isEnterDateOption: ko.pureComputed(function () {
-        if (dataModel.perOfBayiOrKoc() == true && dataModel.isNetflowDate() == true && (dataModel.appointmentdate() == "" || dataModel.appointmentdate() == null || dataModel.smno() == null || dataModel.smno() == ""))
+        if (dataModel.perOfBayiOrKoc() == true && dataModel.isNetflowDate() == true && (dataModel.appointmentdate() == "" || dataModel.appointmentdate() == null))
             return false;
         else
             return true;
@@ -246,10 +246,12 @@ var dataModel = {
     },
     saveCustomer: function () {
         var self = this;
-        self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
-        self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
         if (self.isClickKaydet() == true)
             self.selectedCustomer().superonlineCustNo = self.smno();
+        else {
+            self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
+            self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
+        }
        var data = self.selectedCustomer();
        crmAPI.saveCustomerCard(data, function (a, b, c) {
            if (a == "ok" && !self.isClickKaydet()) {
@@ -533,10 +535,10 @@ var dataModel = {
     saveTaskQueues: function () {
         var self = this;
         $('.btn').prop('disabled', true);
-        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
-            self.isClickKaydet(true);
-            self.saveCustomer();
-        }
+        //if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
+        //    self.isClickKaydet(true);
+        //    self.saveCustomer();
+        //}
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
                 if (self.stockmovement()[0].frompersonel != null && self.stockmovement()[0].frompersonel != "") {
@@ -559,10 +561,10 @@ var dataModel = {
     saveTaskQueueDescription: function () {
         var self = this;
         $('.btn').prop('disabled', true);
-        if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
-            self.isClickKaydet(true);
-            self.saveCustomer();
-        }
+        //if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
+        //    self.isClickKaydet(true);
+        //    self.saveCustomer();
+        //}
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
@@ -637,7 +639,7 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#fileUpload").fileinput({
-              // uploadUrl: "http://localhost:50752/api/Adsl/TaskQueues/upload", // server upload action
+               //uploadUrl: "http://localhost:50752/api/Adsl/TaskQueues/upload", // server upload action
                uploadUrl: "http://crmapitest.kociletisim.com.tr/api/Adsl/TaskQueues/upload", // server upload action
                 uploadAsync: false,
                 minFileCount: 1,
@@ -688,7 +690,7 @@ var dataModel = {
                 $.each(self.customerdocument(), function (index, doc) {
                     if (doc.documentid === fu.documentid) doc.documenturl(file.name);
                 });
-            })
+            });
             $('#fileUpload').on('filebatchpreupload', function (event, data, previewId, index) {
                 data.jqXHR.setRequestHeader("X-KOC-Token", crmAPI.getCookie("token"));
             });
@@ -718,7 +720,7 @@ var dataModel = {
                 self.ilce(a.data.rows[0].attachedcustomer.ilce && a.data.rows[0].attachedcustomer.ilce.ad || '');
                 self.customername(a.data.rows[0].attachedcustomer.customername && (a.data.rows[0].attachedcustomer.customername) || '');
                 self.customerid(a.data.rows[0].attachedcustomer.customerid && (a.data.rows[0].attachedcustomer.customerid) || '');
-                self.getCustomerCard();
+                //self.getCustomerCard();
                 self.customer(a.data.rows[0].attachedcustomer);
                 self.flat(a.data.rows[0].attachedcustomer && (a.data.rows[0].attachedcustomer.daire) || '');
                 self.customergsm(a.data.rows[0].attachedcustomer && a.data.rows[0].attachedcustomer.gsm || '');

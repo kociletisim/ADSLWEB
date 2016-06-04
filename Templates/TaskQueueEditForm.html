@@ -141,7 +141,7 @@
                         <div class="col-xs-4 col-sm-4 col-md-4 ">S. Müşteri No</div>
                         <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
-                            <input type="text" id="somn" class="form-control" data-bind="enable: perOfBayiOrKoc(), value:smno">
+                            <input type="text" id="somn" class="form-control" data-bind="enable: false, value:smno">
                         </div>
                     </div>
 
@@ -311,7 +311,7 @@
 
     <div class="col-md-3 height-30 navbar-form pull-right">
         <span data-bind="visible:taskstatus()==0" class="label label-danger">Taskın Durumu Henüz Girilmemiş</span>
-        <span data-bind="visible:!isEnterDateOption()" class="label label-danger">NetFlow Tarihi Veya S. Müşteri No Henüz Girilmemiş</span>
+        <span data-bind="visible:!isEnterDateOption()" class="label label-danger">NetFlow Tarihi Henüz Girilmemiş</span>
         <span data-bind="visible:!campaignIsValid()" class="label label-danger">Kampanya Bilgileri Girilmemiş</span>
         <span data-bind="visible:!cdIsValid()" class="label label-danger">Döküman Yüklemeniz Gerekiyor</span>
         <span data-bind="visible:!smIsValid()" class="label label-danger">Donanım Girmeniz Gerekiyor</span>

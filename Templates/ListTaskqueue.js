@@ -220,8 +220,10 @@ var dataModel = {
         };
         crmAPI.getCustomer(data, function (a, b, c) {
             self.selectedCustomer(a.data.rows[0]);
-            self.getMahalle(a.data.rows[0].bucakKimlikNo);
-            self.getBucak(a.data.rows[0].ilceKimlikNo);
+            if (self.selectedCustomer().bucakKimlikNo != null)
+                self.getMahalle(a.data.rows[0].bucakKimlikNo);
+            if (self.selectedCustomer().ilceKimlikNo != null)
+                self.getBucak(a.data.rows[0].ilceKimlikNo);
             $("#ilcombo,#ilcecombo,#mahallecombo").multiselect({
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
