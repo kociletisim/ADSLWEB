@@ -482,7 +482,7 @@ var dataModel = {
                 },
             customerdocument: self.customerdocument(),
             stockmovement: self.stockmovement(),
-            customerproduct: self.selectedProducts(),
+            customerproduct: self.campaignEditable() == true ? self.selectedProducts() : null,
             description: self.description() ? self.description() == "" ? null : (self.description() + " " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")") : null,
             asistanPersonel: { personelid: self.assistantpersonel() > 0 ? self.assistantpersonel() : null },
             appointmentdate: self.appointmentdate() ? moment(self.appointmentdate()).format() : null,

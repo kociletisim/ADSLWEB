@@ -58,7 +58,7 @@ var dataModel = {
         };
         crmAPI.getProducts(data, function (a, b, c) {
             self.selectedProduct(a.data.rows[0]);
-            self.getDocs();
+            //self.getDocs();
         }, null, null);
     },
     getProductsCombo: function () {
@@ -223,10 +223,10 @@ dataModel.selectedProduct.subscribe(function (v) {
         dataModel.autoTaskIds(v.automandatorytasks.split(","));
     else
         dataModel.autoTaskIds(null);
-    if (v.docuemnts != null)
+    if (v.documents != null)
         dataModel.docIds(v.documents.split(","));
     else
         dataModel.docIds(null);
     dataModel.getTaskList();
-
+    dataModel.getDocs();
 });
