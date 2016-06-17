@@ -38,6 +38,9 @@ var dataModel = {
         else
             return true;
     }),
+    isEnterSmno: ko.pureComputed(function () {
+        return dataModel.perOfBayiOrKoc() == false || (dataModel.taskid() != 47 && dataModel.taskid() != 90 && dataModel.taskid() != 35) || (dataModel.smno() != null && dataModel.smno() != "");
+    }), // süperonline müş. no girilmesi zorunludur
     ff: function () { // netflow tarih seçilip silindiğinde tarih nesnesini temizle
         window.setTimeout(function () {
             dataModel.appointmentdate($('#daterangepicker2').val());
@@ -69,7 +72,8 @@ var dataModel = {
     flat:ko.observable(),
     locationid: ko.observable(),
     customer: ko.observableArray([]),
-    selectedCustomer:ko.observable(),
+    selectedCustomer: ko.observable(),
+    smnoCustomer: ko.observable(),
     customergsm: ko.observable(),
     customerstatus: ko.observable(),
     description: ko.observable(),
@@ -244,15 +248,29 @@ var dataModel = {
            });
        },null,null);
     },
+    getCustomerSmno: function () {
+        // taskın içerisinde Süperonline m. no değişmek için çağrılıp kaydedildiğinde adres bilgilerinde hataya yok açıyor yeni müşteri object'i ve fonksiyonu
+        var self = this;
+        var data = {
+            customername: { fieldName: 'customerid', op: 2, value: self.customerid() },
+        };
+        crmAPI.getCustomer(data, function (a, b, c) {
+            self.smnoCustomer(a.data.rows[0]);
+            self.smno(a.data.rows[0].superonlineCustNo);
+        }, null, null);
+    },
     saveCustomer: function () {
         var self = this;
-        if (self.isClickKaydet() == true)
-            self.selectedCustomer().superonlineCustNo = self.smno();
+        var data = self.selectedCustomer();
+        if (self.isClickKaydet() == true) {
+            self.smnoCustomer().superonlineCustNo = self.smno();
+            data = self.smnoCustomer();
+        }
         else {
             self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
             self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
+            data = self.selectedCustomer();
         }
-       var data = self.selectedCustomer();
        crmAPI.saveCustomerCard(data, function (a, b, c) {
            if (a == "ok" && !self.isClickKaydet()) {
                self.refresh();
@@ -326,9 +344,6 @@ var dataModel = {
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             $.each(a, function (index, category) {
                 category.selectedProduct = ko.observable("0");
-                category.selectedProduct.subscribe(function () {
-                    dataModel.getTQDocuments();
-                });
                 $.each(category.products, function (pindex, product) {
                     $.each(self.customerProductList(), function (cpIndex, customerProduct) {
                         if (product.productid === customerProduct.productid)
@@ -339,20 +354,6 @@ var dataModel = {
                 });
             });
             self.productlist(a);
-            var data = {
-                taskorderno: dataModel.taskorderno(),
-                taskid: dataModel.taskid(),
-                stateid: dataModel.taskstatus(),
-                campaignid: dataModel.campaignid(),
-                customerproducts: dataModel.selectedProductIds(),
-                isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9)
-            };
-            crmAPI.getTQDocuments(data, function (a, b, c) {
-                $.each(a, function (index, doc) {
-                    doc.documenturl = ko.observable(doc.documenturl);
-                });
-                dataModel.customerdocument(a);
-            });
         }, null, null)
     },
     stockcardlist: ko.observableArray([]),
@@ -534,11 +535,12 @@ var dataModel = {
     },
     saveTaskQueues: function () {
         var self = this;
+        self.isClickKaydet(false);
         $('.btn').prop('disabled', true);
-        //if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
-        //    self.isClickKaydet(true);
-        //    self.saveCustomer();
-        //}
+        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
+            self.isClickKaydet(true);
+            self.saveCustomer();
+        }
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
                 if (self.stockmovement()[0].frompersonel != null && self.stockmovement()[0].frompersonel != "") {
@@ -560,11 +562,12 @@ var dataModel = {
     },
     saveTaskQueueDescription: function () {
         var self = this;
+        self.isClickKaydet(false);
         $('.btn').prop('disabled', true);
-        //if (self.perOfBayiOrKoc() == true && self.selectedCustomer() && self.smno()) {
-        //    self.isClickKaydet(true);
-        //    self.saveCustomer();
-        //}
+        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
+            self.isClickKaydet(true);
+            self.saveCustomer();
+        }
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
@@ -720,7 +723,7 @@ var dataModel = {
                 self.ilce(a.data.rows[0].attachedcustomer.ilce && a.data.rows[0].attachedcustomer.ilce.ad || '');
                 self.customername(a.data.rows[0].attachedcustomer.customername && (a.data.rows[0].attachedcustomer.customername) || '');
                 self.customerid(a.data.rows[0].attachedcustomer.customerid && (a.data.rows[0].attachedcustomer.customerid) || '');
-                //self.getCustomerCard();
+                self.getCustomerSmno();
                 self.customer(a.data.rows[0].attachedcustomer);
                 self.flat(a.data.rows[0].attachedcustomer && (a.data.rows[0].attachedcustomer.daire) || '');
                 self.customergsm(a.data.rows[0].attachedcustomer && a.data.rows[0].attachedcustomer.gsm || '');
@@ -795,7 +798,7 @@ dataModel.campaignid.subscribe(function (v) {
     if(v)
     dataModel.getproduct();
 });
-dataModel.taskstatus.subscribe(function () {
+dataModel.taskstatus.subscribe(function (v) {
     dataModel.errormessage(null);
     var data = {
         taskorderno: dataModel.taskorderno(),
@@ -832,7 +835,12 @@ dataModel.taskstatus.subscribe(function () {
         });
         dataModel.stockmovement(a);
     });
-    dataModel.getTQDocuments();
+    dataModel.customerdocument([]);
+    dataModel.taskstatuslist().forEach(function (entry) {
+        if (entry.taskstateid == v && entry.statetype == 1) {
+            dataModel.getTQDocuments();
+        }
+    });
 });
 dataModel.stockmovement.subscribe(function (v) {
     if (dataModel.taskid() == 66 && dataModel.stockmovement().length > 0 && dataModel.stockmovement().serialno != "") { // Bağlantı problemi taskı modem geri almak için
