@@ -354,6 +354,9 @@ var dataModel = {
                 });
             });
             self.productlist(a);
+            if (self.taskstatetype() == 1) {
+                dataModel.getTQDocuments();
+            }
         }, null, null)
     },
     stockcardlist: ko.observableArray([]),
@@ -710,6 +713,7 @@ var dataModel = {
                 self.taskstatetype(a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.statetype || null)
                 var status = a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.taskstateid || null;
                 self.gettaskstatus(status);
+                $("#abonedurumu").multiselect("refresh");
                 self.previoustask(a.data.rows[0].previoustaskorderid);
                 self.relatedtask(a.data.rows[0].relatedtaskorderid);
                 self.creationdate(a.data.rows[0].creationdate);
@@ -727,7 +731,6 @@ var dataModel = {
                 self.customer(a.data.rows[0].attachedcustomer);
                 self.flat(a.data.rows[0].attachedcustomer && (a.data.rows[0].attachedcustomer.daire) || '');
                 self.customergsm(a.data.rows[0].attachedcustomer && a.data.rows[0].attachedcustomer.gsm || '');
-                $("#abonedurumu").multiselect("refresh");
                 self.description(a.data.rows[0].description);
                 self.descriptionControl(false);
                 self.customerProductList(a.data.rows[0].customerproduct);
@@ -764,7 +767,7 @@ var dataModel = {
                 self.editable(a.data.rows[0].editable);
                 self.stockmovement(a.data.rows[0].stockmovement);
                 self.stockcardlist(a.data.rows[0].stockcardlist);
-            }, null, null);          
+            }, null, null);
             self.getpersonel();
             self.getCustomerStatus();
             $('#daterangepicker1,#daterangepicker2,#daterangepicker3,#daterangepicker4').daterangepicker({
