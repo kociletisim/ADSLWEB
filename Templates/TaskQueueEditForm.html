@@ -64,17 +64,34 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-3 height-40">
-                        <div class="col-xs-4 col-sm-4 col-md-4" style="padding:0;">Yardımcı Personel</div>
+                        <div class="col-xs-4 col-sm-4 col-md-4" style="padding:0;">Satış Kaynağı</div>
                         <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
-                            <select id="assistantPersonel" data-bind="options: personellist, optionsText: 'personelname', optionsValue: 'personelid', value: assistantpersonel, optionsCaption: 'Seçiniz',enable: perOfBayiOrKoc()"></select>
+                            <select id="kaynak" data-bind="value:fault, enable:faultEditable()">
+                                <option value="">Seçiniz</option>
+                                <option value="Müşteri Hizmetleri">Müşteri Hizmetleri</option>
+                                <option value="Ürünler Arası Geçiş">Ürünler Arası Geçiş</option>
+                                <option value="Gatio">Gatio</option>
+                                <option value="Giza">Giza</option>
+                                <option value="Samline">Samline</option>
+                                <option value="Jade">Jade</option>
+                                <option value="Tim">Tim</option>
+                                <option value="Telekomone">Telekomone</option>
+                                <option value="Krea Doğrudan Pazarlama">Krea Doğrudan Pazarlama</option>
+                                <option value="Mert Yükler">Mert Yükler</option>
+                                <option value="KÇM">KÇM</option>
+                                <option value="Techline İletişim">Techline İletişim</option>
+                                <option value="Bornet">Bornet</option>
+                                <option value="Bayi">Bayi</option>
+                                <option value="Diğer">Diğer</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-3 height-40">
-                        <div class="col-xs-4 col-sm-4 col-md-4 ">Location ID</div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 ">TC</div>
                         <div class="col-xs-2 col-sm-2 col-md-2 ">:</div>
                         <div class="col-xs-6 col-sm-6 col-md-6 ">
-                            <a href="#customerinfo" data-bind="text:locationid,click:getCustomerCard" role="button" data-toggle="modal"></a>
+                            <input type="text" id="custTc" class="form-control" data-bind="enable: perOfBayiOrKoc(), value:tc">
                         </div>
                     </div>
 
@@ -89,7 +106,7 @@
                         <div class="col-xs-6 col-sm-6 col-md-6" data-bind="visible:relatedtask">
                             <a href="#TaskQueueEditForm" data-bind="attr: {href:'#TaskQueueEditForm?'+ relatedtask()}">
                                 <button id="duzenle" type="button" class="btn btn-warning btn-small ">
-                                    İlişkili Task
+                                    Satış Taskı
                                 </button>
                             </a>
                         </div>
@@ -313,11 +330,12 @@
         <span data-bind="visible:taskstatus()==0" class="label label-danger">Taskın Durumu Henüz Girilmemiş</span>
         <span data-bind="visible:!isEnterDateOption()" class="label label-danger">NetFlow Tarihi Henüz Girilmemiş</span>
         <span data-bind="visible:!isEnterSmno()" class="label label-danger">Superonline Müşteri No Henüz Girilmemiş</span>
+        <span data-bind="visible:il() == '' || ilce() == ''" class="label label-danger">Müşteri Bilgilerini Güncelleyiniz</span>
         <span data-bind="visible:!campaignIsValid()" class="label label-danger">Kampanya Bilgileri Girilmemiş</span>
         <span data-bind="visible:!cdIsValid()" class="label label-danger">Döküman Yüklemeniz Gerekiyor</span>
         <span data-bind="visible:!smIsValid()" class="label label-danger">Donanım Girmeniz Gerekiyor</span>
         <span data-bind="visible:errormessage(), text:errormessage" class="label label-danger"></span>
-        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:(modelIsValid() ||descriptionControl()) && isEnterDateOption() && isEnterSmno()" type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
+        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:(modelIsValid() ||descriptionControl()) && isEnterDateOption() && isEnterSmno() && il() != '' && ilce() != ''" type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
     </div>
     <!-- müşteri bilgilerini düzenleme For Modal Start -->
     <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -381,25 +399,25 @@
                         <p>İl</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select class="form-control" id="ilcombo" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilKimlikNo , optionsCaption:'Seçiniz'"></select>
+                        <select class="form-control" id="ilcombo" data-bind="options: $root.ilList, optionsText: 'ad', optionsValue: 'kimlikNo', value:$root.ilKimlik , optionsCaption:'Seçiniz'"></select>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <div data-bind="visible:$root.ilKimlik" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>İlçe</p>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select id="ilcecombo" data-bind="options: $root.ilceList, optionsText: 'ad', optionsValue: 'kimlikNo', value:ilceKimlikNo,optionsCaption:'Seçiniz'" class="form-control"></select>
+                    <div data-bind="visible:$root.ilKimlik" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="ilcecombo" data-bind="options: $root.ilceList, optionsText: 'ad', optionsValue: 'kimlikNo',optionsCaption:'Seçiniz', event: { change: $root.ilceChanged }" class="form-control"></select>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <div data-bind="visible:$root.ilceKimlik" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Bucak</p>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select id="bucakcombo" data-bind="options: $root.bucakList, optionsText: 'ad', optionsValue: 'kimlikNo',optionsCaption:'Seçiniz'" class="form-control"></select>
+                    <div data-bind="visible:$root.ilceKimlik" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="bucakcombo" data-bind="options: $root.bucakList, optionsText: 'ad', optionsValue: 'kimlikNo',optionsCaption:'Seçiniz', event: { change: $root.regionChanged }" class="form-control"></select>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                    <div data-bind="visible:$root.regionKimlik" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Mahalle</p>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select id="mahallecombo" data-bind="options: $root.mahalleList, optionsText: 'ad', optionsValue: 'kimlikNo',optionsCaption:'Seçiniz'" class="form-control"></select>
+                    <div data-bind="visible:$root.regionKimlik" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="mahallecombo" data-bind="options: $root.mahalleList, optionsText: 'ad', optionsValue: 'kimlikNo',optionsCaption:'Seçiniz',event: { change: $root.mahalleChanged }" class="form-control"></select>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Açıklama / Açık Adres</p>

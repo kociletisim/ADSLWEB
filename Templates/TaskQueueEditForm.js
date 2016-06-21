@@ -48,6 +48,13 @@ var dataModel = {
     },
     eskiserial: ko.observable(null), // modem değiştirilecek olan tasklarda kullanılacak olan iade modem seri
     smno: ko.observable(), // süperonline müşteri no
+    tc: ko.observable(), // müşteri tc
+    fault: ko.observable(), // satış kaynağı
+    startProcces: ko.observable(), // satış kaynağı düzenlenebilir mi ?
+    faultEditable: ko.pureComputed(function () {
+        return dataModel.perOfBayiOrKoc() && dataModel.startProcces() && (dataModel.editable() || dataModel.fault() == null || dataModel.startProcces() == "");
+    }),
+    resSaveCustomer: ko.observable(),
     isClickKaydet: ko.observable(false),
     movement: ko.observable(),
     taskorderno: ko.observable(),
@@ -66,6 +73,11 @@ var dataModel = {
     assistantpersonel: ko.observable(),
     il: ko.observable(),
     ilce: ko.observable(),
+    ilKimlik: ko.observable(),
+    ilceKimlik: ko.observable(),
+    regionKimlik: ko.observable(),
+    mahalleKimlik: ko.observable(),
+    isSelection: ko.observable(false), // müşteri adres bilgileri doldurulma işlemi sağlıklı olabilmesi için oluşturuldu
     region: ko.observable(),
     customername: ko.observable(),
     customerid: ko.observable(),
@@ -167,24 +179,44 @@ var dataModel = {
             adres: { fieldName: "ad", op: 6, value: "" },
         };
         crmAPI.getAdress(data, function (a, b, c) {
-            self.ilList(a);        
+            self.ilList(a);
             $("#ilcombo").multiselect("setOptions", self.ilList()).multiselect("rebuild");
         }, null, null)
     },
     getIlce: function () {
         var self = this;
         var data = {
-            adres: { fieldName: "ilKimlikNo", op: 6, value: '' },
+            adres: { fieldName: "ilKimlikNo", op: 2, value: self.ilKimlik() },
         };
         crmAPI.getAdress(data, function (a, b, c) {
             self.ilceList(a);         
+            $("#ilcecombo").multiselect({
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
             $("#ilcecombo").multiselect("setOptions", self.ilceList()).multiselect("rebuild");
+            if (self.ilceKimlik() != null)
+                $("#ilcecombo").multiselect('select', self.ilceKimlik());
+            else
+                self.isSelection(true);
+            $("#ilcecombo").multiselect("refresh");
         }, null, null)
     },
-    getBucak: function (ilce) {
+    ilceChanged: function () {
+        dataModel.ilceKimlik($("#ilcecombo").val());
+        return true;
+    },
+    getBucak: function () {
         self = this;
         var data = {
-            adres: { fieldName: "ilceKimlikNo", op: 2, value: ilce },
+            adres: { fieldName: "ilceKimlikNo", op: 2, value: self.ilceKimlik() },
         };
         crmAPI.getAdress(data, function (a, b, c) {
             self.bucakList(a);
@@ -200,13 +232,21 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#bucakcombo").multiselect("setOptions", self.bucakList()).multiselect("rebuild");
-            $("#bucakcombo").multiselect('select', dataModel.selectedCustomer().bucakKimlikNo);
+            if (self.regionKimlik() != null)
+                $("#bucakcombo").multiselect('select', self.regionKimlik());
+            else
+                self.isSelection(true);
+            $("#bucakcombo").multiselect("refresh");
         }, null, null)
     },
-    getMahalle: function (x) {
+    regionChanged: function () {
+        dataModel.regionKimlik($("#bucakcombo").val());
+        return true;
+    },
+    getMahalle: function () {
         self = this;
         var data = {
-            adres: { fieldName: "bucakKimlikNo", op: 2, value: x },
+            adres: { fieldName: "bucakKimlikNo", op: 2, value: self.regionKimlik() },
         };
         crmAPI.getAdress(data, function (a, b, c) {
             self.mahalleList(a);
@@ -222,20 +262,36 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#mahallecombo").multiselect("setOptions", self.mahalleList()).multiselect("rebuild");
-            $("#mahallecombo").multiselect('select', dataModel.selectedCustomer().mahalleKimlikNo);
+            if (self.mahalleKimlik() != null)
+                $("#mahallecombo").multiselect('select', self.mahalleKimlik());
+            self.isSelection(true);
+            $("#mahallecombo").multiselect("refresh");
         }, null, null)
     },
-    getCustomerCard : function () {
+    mahalleChanged: function () {
+        dataModel.mahalleKimlik($("#mahallecombo").val());
+        return true;
+    },
+    getCustomerCard: function () {
        var self = this;
        var data = {
            customername:{fieldName:'customerid',op:2,value:self.customerid()},
        };
        crmAPI.getCustomer(data, function (a, b, c) {
            self.selectedCustomer(a.data.rows[0]);
-           self.getMahalle(a.data.rows[0].bucakKimlikNo);
-           self.getBucak(a.data.rows[0].ilceKimlikNo);
-           self.smno(a.data.rows[0].superonlineCustNo);
-           $("#ilcombo,#ilcecombo").multiselect({
+           self.ilKimlik(a.data.rows[0].ilKimlikNo);
+           if (a.data.rows[0].ilKimlikNo != null)
+               self.getIlce();
+           else
+               self.isSelection(true);
+           self.ilceKimlik(a.data.rows[0].ilKimlikNo && a.data.rows[0].ilceKimlikNo);
+           if (self.ilceKimlik() != null)
+               self.getBucak();
+           self.regionKimlik(self.ilceKimlik() && a.data.rows[0].bucakKimlikNo);
+           if (self.regionKimlik() != null)
+               self.getMahalle();
+           self.mahalleKimlik(self.regionKimlik() && a.data.rows[0].mahalleKimlikNo);
+           $("#ilcombo").multiselect({
                selectAllValue: 'select-all-value',
                maxHeight: 250,
                buttonWidth: '100%',
@@ -264,14 +320,18 @@ var dataModel = {
         var data = self.selectedCustomer();
         if (self.isClickKaydet() == true) {
             self.smnoCustomer().superonlineCustNo = self.smno();
+            self.smnoCustomer().tc = self.tc();
             data = self.smnoCustomer();
         }
         else {
+            self.selectedCustomer().ilKimlikNo = self.ilKimlik();
+            self.selectedCustomer().ilceKimlikNo = self.ilceKimlik();
             self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
             self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
             data = self.selectedCustomer();
         }
-       crmAPI.saveCustomerCard(data, function (a, b, c) {
+        crmAPI.saveCustomerCard(data, function (a, b, c) {
+            self.resSaveCustomer(a);
            if (a == "ok" && !self.isClickKaydet()) {
                self.refresh();
            }
@@ -479,6 +539,7 @@ var dataModel = {
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
+            fault: self.fault(),
             taskstatepool:
                 {
                     taskstateid: self.taskstatus() ? self.taskstatus() : null,
@@ -536,14 +597,7 @@ var dataModel = {
             }, null, null);
         }
     },
-    saveTaskQueues: function () {
-        var self = this;
-        self.isClickKaydet(false);
-        $('.btn').prop('disabled', true);
-        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
-            self.isClickKaydet(true);
-            self.saveCustomer();
-        }
+    saveTaskQueue: function () {
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
                 if (self.stockmovement()[0].frompersonel != null && self.stockmovement()[0].frompersonel != "") {
@@ -563,17 +617,29 @@ var dataModel = {
         else
             self.save();
     },
-    saveTaskQueueDescription: function () {
+    saveTaskQueues: function () {
         var self = this;
+        self.resSaveCustomer(null);
         self.isClickKaydet(false);
         $('.btn').prop('disabled', true);
         if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
+            dataModel.resSaveCustomer.subscribe(function (v) {
+                if (self.resSaveCustomer() == "ok")
+                    self.saveTaskQueue();
+                else
+                    alert("Müşteri Bilgileri Kaaydedilemedi. Tc Numarasını Kontrol ediniz !");
+            });
         }
+        else
+            self.saveTaskQueue();
+    },
+    saveTaskQueueDesc: function () {
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
+            fault: self.fault(),
             taskstatepool:
                 {
                     taskstateid: 0,
@@ -585,13 +651,31 @@ var dataModel = {
             customerproduct: self.selectedProducts(),
             asistanPersonel: { personelid: self.assistantpersonel() > 0 ? self.assistantpersonel() : null },
         };
-         crmAPI.saveTaskQueues(data, function (a, b, c) {
-                self.message(a);
-                window.setTimeout(function () {
-                    $("#id_alert").alert('close');
-                    window.location.href = "app.html";
-                }, 1250);
-            }, null, null);
+        crmAPI.saveTaskQueues(data, function (a, b, c) {
+            self.message(a);
+            window.setTimeout(function () {
+                $("#id_alert").alert('close');
+                window.location.href = "app.html";
+            }, 1250);
+        }, null, null);
+    },
+    saveTaskQueueDescription: function () {
+        var self = this;
+        self.resSaveCustomer(null);
+        self.isClickKaydet(false);
+        $('.btn').prop('disabled', true);
+        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
+            self.isClickKaydet(true);
+            self.saveCustomer();
+            dataModel.resSaveCustomer.subscribe(function (v) {
+                if (self.resSaveCustomer() == "ok")
+                    self.saveTaskQueueDesc();
+                else
+                    alert("Müşteri Bilgileri Kaaydedilemedi. Tc Numarasını Kontrol ediniz !");
+            });
+        }
+        else
+            self.saveTaskQueueDesc();
     },
     download: function () {
         var self = this;
@@ -605,6 +689,7 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this; var i = 0;
+        self.getIl();
         var hashSearches = document.location.hash.split("?");
         if (hashSearches.length > 1) {
             self.getUserInfo();
@@ -621,6 +706,18 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#urun").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#kaynak,#ilsec").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
@@ -705,9 +802,12 @@ var dataModel = {
             });
             var data = { taskOrderNo: hashSearches[1] };
             crmAPI.getTaskQueues(data, function (a, b, c) {
-                self.taskorderno(a.data.rows[0].taskorderno);               
+                self.taskorderno(a.data.rows[0].taskorderno);
+                self.fault(a.data.rows[0].fault);
+                $("#kaynak").multiselect("refresh");
                 self.taskname(a.data.rows[0].task.taskname);
                 self.taskid(a.data.rows[0].task.taskid);
+                self.startProcces(a.data.rows[0].task && a.data.rows[0].task.tasktypes && a.data.rows[0].task.tasktypes.startsProccess || false);
                 self.tasktype(a.data.rows[0].task.tasktypes.TaskTypeId);
                 self.NetFlowOrRand();
                 self.taskstatetype(a.data.rows[0].taskstatepool && a.data.rows[0].taskstatepool.statetype || null)
@@ -727,6 +827,7 @@ var dataModel = {
                 self.ilce(a.data.rows[0].attachedcustomer.ilce && a.data.rows[0].attachedcustomer.ilce.ad || '');
                 self.customername(a.data.rows[0].attachedcustomer.customername && (a.data.rows[0].attachedcustomer.customername) || '');
                 self.customerid(a.data.rows[0].attachedcustomer.customerid && (a.data.rows[0].attachedcustomer.customerid) || '');
+                self.tc(a.data.rows[0].attachedcustomer.tc);
                 self.getCustomerSmno();
                 self.customer(a.data.rows[0].attachedcustomer);
                 self.flat(a.data.rows[0].attachedcustomer && (a.data.rows[0].attachedcustomer.daire) || '');
@@ -740,7 +841,6 @@ var dataModel = {
                 self.customerdocument(a.data.rows[0].customerdocument);
                 self.info(a.data.rows[0].customerproduct[0] ?a.data.rows[0].customerproduct[0].campaigns.category:null);
                 self.getcategory();
-
                 $.each(a.data.rows[0].stockmovement, function (index, stockmovement) {
                     var ssAmount = (stockmovement.stockStatus ? stockmovement.stockStatus.amount : 0);
                     var ssSerials = (stockmovement.stockStatus ? stockmovement.stockStatus.serials : []);
@@ -783,8 +883,6 @@ var dataModel = {
             });
             ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         }
-        self.getIl();
-        self.getIlce();
     }
 }
 
@@ -871,4 +969,28 @@ dataModel.uploadControl.subscribe(function (v) {
 });
 dataModel.description.subscribe(function () {
     dataModel.descriptionControl() == false ? dataModel.descriptionControl(true) : dataModel.descriptionControl(false);
+});
+dataModel.ilKimlik.subscribe(function (v) {
+    if (dataModel.isSelection()) {
+        dataModel.ilceKimlik(null);
+        dataModel.regionKimlik(null);
+        dataModel.mahalleKimlik(null);
+        if (v != null && v != "")
+            dataModel.getIlce();
+    }
+});
+dataModel.ilceKimlik.subscribe(function (v) {
+    if (dataModel.isSelection()) {
+        dataModel.regionKimlik(null);
+        dataModel.mahalleKimlik(null);
+        if (v != null && v != "")
+            dataModel.getBucak();
+    }
+});
+dataModel.regionKimlik.subscribe(function (v) {
+    if (dataModel.isSelection()) {
+        dataModel.mahalleKimlik(null);
+        if (v != null && v != "")
+            dataModel.getMahalle();
+    }
 });
