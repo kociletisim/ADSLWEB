@@ -53,7 +53,7 @@ var dataModel = {
     faultList: ko.observableArray([{ name: "Müşteri Hizmetleri" }, { name: "Ürünler Arası Geçiş" }, { name: "Gatio" }, { name: "Giza" }, { name: "Samline" }, { name: "Jade" }, { name: "Tim" }, { name: "Telekomone" }, { name: "Krea Doğrudan Pazarlama" }, { name: "Mert Yükler" }, { name: "KÇM" }, { name: "Techline İletişim" }, { name: "Bornet" }, { name: "Bayi" }, { name: "Diğer" }]),
     startProcces: ko.observable(), // satış kaynağı düzenlenebilir mi ?
     faultEditable: ko.pureComputed(function () {
-        return dataModel.perOfBayiOrKoc() && (dataModel.tasktype() == 1 || dataModel.tasktype() == 9) && (dataModel.editable() || dataModel.fault() == null || dataModel.startProcces() == "");
+        return dataModel.perOfBayiOrKoc() && (dataModel.tasktype() == 1 || dataModel.tasktype() == 9) && (dataModel.editable() || dataModel.fault() == null || dataModel.fault() == "");
     }),
     isFaultSaved: ko.pureComputed(function () {
         return !dataModel.perOfBayiOrKoc() || (!(dataModel.tasktype() == 1 || dataModel.tasktype() == 9) || (dataModel.fault() != null && dataModel.fault() != ''));
