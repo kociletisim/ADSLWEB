@@ -50,9 +50,13 @@ var dataModel = {
     smno: ko.observable(), // süperonline müşteri no
     tc: ko.observable(), // müşteri tc
     fault: ko.observable(), // satış kaynağı
+    faultList: ko.observableArray([{ name: "Müşteri Hizmetleri" }, { name: "Ürünler Arası Geçiş" }, { name: "Gatio" }, { name: "Giza" }, { name: "Samline" }, { name: "Jade" }, { name: "Tim" }, { name: "Telekomone" }, { name: "Krea Doğrudan Pazarlama" }, { name: "Mert Yükler" }, { name: "KÇM" }, { name: "Techline İletişim" }, { name: "Bornet" }, { name: "Bayi" }, { name: "Diğer" }]),
     startProcces: ko.observable(), // satış kaynağı düzenlenebilir mi ?
     faultEditable: ko.pureComputed(function () {
-        return dataModel.perOfBayiOrKoc() && dataModel.startProcces() && (dataModel.editable() || dataModel.fault() == null || dataModel.startProcces() == "");
+        return dataModel.perOfBayiOrKoc() && (dataModel.tasktype() == 1 || dataModel.tasktype() == 9) && (dataModel.editable() || dataModel.fault() == null || dataModel.startProcces() == "");
+    }),
+    isFaultSaved: ko.pureComputed(function () {
+        return !dataModel.perOfBayiOrKoc() || (!(dataModel.tasktype() == 1 || dataModel.tasktype() == 9) || (dataModel.fault() != null && dataModel.fault() != ''));
     }),
     resSaveCustomer: ko.observable(),
     isClickKaydet: ko.observable(false),
@@ -804,7 +808,7 @@ var dataModel = {
             crmAPI.getTaskQueues(data, function (a, b, c) {
                 self.taskorderno(a.data.rows[0].taskorderno);
                 self.fault(a.data.rows[0].fault);
-                $("#kaynak").multiselect("refresh");
+                $("#kaynak").multiselect("setOptions", self.faultList()).multiselect("rebuild");
                 self.taskname(a.data.rows[0].task.taskname);
                 self.taskid(a.data.rows[0].task.taskid);
                 self.startProcces(a.data.rows[0].task && a.data.rows[0].task.tasktypes && a.data.rows[0].task.tasktypes.startsProccess || false);
