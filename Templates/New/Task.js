@@ -133,7 +133,7 @@ var dataModel = {
         }, null, null);
 
     },
-    insertStockMovements: function (fromtype,fromobject,tootype,toobject) {
+    insertStockMovements: function (fromtype,fromobject,tootype,toobject,id) {
         var self = this;
         var data = {
             amount: 1,
@@ -143,6 +143,7 @@ var dataModel = {
             toobjecttype: tootype,
             toobject: toobject,
             stockcardid: 1117,
+            movementid:id, // id -1 ise satın alma -> depo -> müşteri
         };
         crmAPI.InsertStock(data, function (a, b, c) {
             if (a)
@@ -158,8 +159,7 @@ var dataModel = {
             };
             crmAPI.insertTaskqueue(data, function (a, b, c) {
                 if (self.newmovement()) {
-                    self.insertStockMovements(33554433, 33554433, 2, 1007);
-                    self.insertStockMovements(2, 1007, 16777217, self.confirmedCustomer().customerid);
+                    self.insertStockMovements(2, 1007, 16777217, self.confirmedCustomer().customerid, -1);
                     self.geciciton(a)
                 }
                 else
@@ -186,8 +186,7 @@ var dataModel = {
                         tc: { fieldName: 'tc', op: 2, value: self.tckimlikno() },
                     }
                     crmAPI.getCustomer(data, function (a, b, c) {
-                        self.insertStockMovements(33554433, 33554433, 2, 1007);
-                        self.insertStockMovements(2, 1007, 16777217, a.data.rows[0].customerid);
+                        self.insertStockMovements(2, 1007, 16777217, a.data.rows[0].customerid, -1);
                     }, null, null);
                 }
                 else

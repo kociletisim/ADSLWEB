@@ -58,6 +58,10 @@ var dataModel = {
     isFaultSaved: ko.pureComputed(function () {
         return !dataModel.perOfBayiOrKoc() || (!(dataModel.tasktype() == 1 || dataModel.tasktype() == 9) || (dataModel.fault() != null && dataModel.fault() != ''));
     }),
+    baglantiKontrol: ko.observable(false),
+    baglantiSeri: ko.pureComputed(function () { // task bağlantı problemi taskı'ysa ve seri yoksa seri girdir
+        return dataModel.taskid() != 51 || (dataModel.eskiserial() != null && dataModel.eskiserial() != "");
+    }),
     resSaveCustomer: ko.observable(),
     isClickKaydet: ko.observable(false),
     movement: ko.observable(),
@@ -513,7 +517,7 @@ var dataModel = {
             self.customerdocument(a);
         });
     },
-    insertStockMovements: function (fromtype,fromobject,tootype,toobject,seri) {
+    insertStockMovements: function (fromtype,fromobject,tootype,toobject,seri,id) {
         // taskda geri modem alınacak tasklar için oluşturuldu
         var self = this;
         var data = {
@@ -525,6 +529,7 @@ var dataModel = {
             toobject: toobject,
             stockcardid: 1117,
             deleted: false, // yeni stok hareketi değil
+            movementid:id,
         };
         crmAPI.InsertStock(data, function (a, b, c) {
         }, null, null);
@@ -605,11 +610,11 @@ var dataModel = {
         if (self.taskid() == 66 && self.stockmovement().length > 0) {
             if (self.eskiserial()) { // bağlantı problemi taskında modem değiştirildi sonucunda müşteri üzerinde eski modem varsa işlem yap
                 if (self.stockmovement()[0].frompersonel != null && self.stockmovement()[0].frompersonel != "") {
-                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement()[0].frompersonel.roles, self.stockmovement()[0].frompersonel.personelid, self.eskiserial());
+                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement()[0].frompersonel.roles, self.stockmovement()[0].frompersonel.personelid, self.eskiserial(),0);
                     self.save();
                 }
                 else if (self.stockmovement()[0].fromobject != null && self.stockmovement()[0].fromobject != "") {
-                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement()[0].fromobjecttype, self.stockmovement()[0].fromobject, self.eskiserial());
+                    self.insertStockMovements(16777217, self.customer().customerid, self.stockmovement()[0].fromobjecttype, self.stockmovement()[0].fromobject, self.eskiserial(),0);
                     self.save();
                 }
                 else
@@ -622,18 +627,23 @@ var dataModel = {
             self.save();
     },
     saveTaskQueues: function () {
+        $('.btn').prop('disabled', true);
         var self = this;
         self.resSaveCustomer(null);
         self.isClickKaydet(false);
-        $('.btn').prop('disabled', true);
+        // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
+        if (self.taskid() == 51 && self.eskiserial() != null && self.eskiserial() != "")
+            self.insertStockMovements(2, 1007, 16777217, self.customer().customerid, self.eskiserial(), -1);
         if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
             dataModel.resSaveCustomer.subscribe(function (v) {
                 if (self.resSaveCustomer() == "ok")
                     self.saveTaskQueue();
-                else
+                else {
                     alert("Müşteri Bilgileri Kaaydedilemedi. Tc Numarasını Kontrol ediniz !");
+                    $('.btn').prop('disabled', false);
+                }
             });
         }
         else
@@ -664,18 +674,23 @@ var dataModel = {
         }, null, null);
     },
     saveTaskQueueDescription: function () {
+        $('.btn').prop('disabled', true);
         var self = this;
         self.resSaveCustomer(null);
         self.isClickKaydet(false);
-        $('.btn').prop('disabled', true);
+        // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
+        if (self.taskid() == 51 && self.eskiserial() != null && self.eskiserial() != "")
+            self.insertStockMovements(2, 1007, 16777217, self.customer().customerid, self.eskiserial(), -1);
         if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
             dataModel.resSaveCustomer.subscribe(function (v) {
                 if (self.resSaveCustomer() == "ok")
                     self.saveTaskQueueDesc();
-                else
+                else {
                     alert("Müşteri Bilgileri Kaaydedilemedi. Tc Numarasını Kontrol ediniz !");
+                    $('.btn').prop('disabled', false);
+                }
             });
         }
         else
@@ -810,6 +825,7 @@ var dataModel = {
                 self.fault(a.data.rows[0].fault);
                 $("#kaynak").multiselect("setOptions", self.faultList()).multiselect("rebuild");
                 self.taskname(a.data.rows[0].task.taskname);
+                self.customerid(a.data.rows[0].attachedcustomer.customerid && (a.data.rows[0].attachedcustomer.customerid) || '');
                 self.taskid(a.data.rows[0].task.taskid);
                 self.startProcces(a.data.rows[0].task && a.data.rows[0].task.tasktypes && a.data.rows[0].task.tasktypes.startsProccess || false);
                 self.tasktype(a.data.rows[0].task.tasktypes.TaskTypeId);
@@ -830,7 +846,6 @@ var dataModel = {
                 self.il(a.data.rows[0].attachedcustomer.il && a.data.rows[0].attachedcustomer.il.ad || '');
                 self.ilce(a.data.rows[0].attachedcustomer.ilce && a.data.rows[0].attachedcustomer.ilce.ad || '');
                 self.customername(a.data.rows[0].attachedcustomer.customername && (a.data.rows[0].attachedcustomer.customername) || '');
-                self.customerid(a.data.rows[0].attachedcustomer.customerid && (a.data.rows[0].attachedcustomer.customerid) || '');
                 self.tc(a.data.rows[0].attachedcustomer.tc);
                 self.getCustomerSmno();
                 self.customer(a.data.rows[0].attachedcustomer);
@@ -963,7 +978,7 @@ dataModel.stockmovement.subscribe(function (v) {
                 alert("Müşteride Sisteme Kayıtlı Modem Bulunamadı. Sistem Yöneticinize Başvurunuz !");
         }, null, null);
     }
-    else {
+    else if (dataModel.taskid() != 51) {
         dataModel.eskiserial(null);
     }
 });
@@ -996,5 +1011,18 @@ dataModel.regionKimlik.subscribe(function (v) {
         dataModel.mahalleKimlik(null);
         if (v != null && v != "")
             dataModel.getMahalle();
+    }
+});
+dataModel.taskid.subscribe(function (v) {
+    if (v == 51) {
+        var data = {
+            stockcardid: 1117,
+            fromobject: dataModel.customerid(),
+        };
+        crmAPI.getSerialOnCustomer(data, function (a, b, c) {
+            dataModel.eskiserial(a[0]);
+            if (dataModel.eskiserial() == null || dataModel.eskiserial() == "")
+                dataModel.baglantiKontrol(true);
+        }, null, null);
     }
 });

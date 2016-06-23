@@ -124,7 +124,8 @@ var dataModel = {
             toobjecttype: tootype,
             toobject: toobject,
             stockcardid: 1117,
-            deleted: newmove,
+            deleted: newmove, // stok hareketi modem kayıtlı durumuna göre çalışacak
+            movementid:0, // depodan müşteriye kadar olarak stok hareketi kayıt işlemine girme
         };
         crmAPI.InsertStock(data, function (a, b, c) {
             if (self.newserial()) {

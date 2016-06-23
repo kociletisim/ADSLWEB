@@ -160,13 +160,23 @@
                             <textarea data-bind="value:description" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
-                    <div data-bind="visible:eskiserial()" class="col-xs-12 col-sm-12 col-md-12">
+                    <div data-bind="visible:eskiserial() || baglantiKontrol()" class="col-xs-12 col-sm-12 col-md-12">
                         
                     </div>
                     <div data-bind="visible:eskiserial()" class="col-xs-12 col-sm-12 col-md-12 label-warning">
                         <div class="col-xs-6 col-sm-6 col-md-6"><strong>Müşteriden Alınacak Olan Modem Seri</strong></div>
                         <div class="col-xs-1 col-sm-1 col-md-1"><strong>:</strong></div>
                         <div class="col-xs-5 col-sm-5 col-md-5" data-bind="text:eskiserial"></div>
+                    </div>
+                    <div data-bind="visible:eskiserial() || baglantiKontrol()" class="col-xs-12 col-sm-12 col-md-12">
+
+                    </div>
+                    <div data-bind="visible:baglantiKontrol()" class="col-xs-12 col-sm-12 col-md-12 label-warning">
+                        <div class="col-xs-6 col-sm-6 col-md-6"><strong>Müşteriden Alınacak Olan Modem Seri</strong></div>
+                        <div class="col-xs-1 col-sm-1 col-md-1"><strong>:</strong></div>
+                        <div class="col-xs-5 col-sm-5 col-md-5">
+                            <input type="text" id="seri" class="form-control" data-bind="value:eskiserial">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -312,6 +322,7 @@
 
     <div class="col-md-3 height-30 navbar-form pull-right">
         <span data-bind="visible:taskstatus()==0" class="label label-danger">Taskın Durumu Henüz Girilmemiş</span>
+        <span data-bind="visible:!baglantiSeri()" class="label label-danger">Müşteriden Alınacak Seri Girilmemiş</span>
         <span data-bind="visible:!isEnterDateOption()" class="label label-danger">NetFlow Tarihi Henüz Girilmemiş</span>
         <span data-bind="visible:!isFaultSaved()" class="label label-danger">Kaynak Henüz Seçilmemiş</span>
         <span data-bind="visible:!isEnterSmno()" class="label label-danger">Superonline Müşteri No Henüz Girilmemiş</span>
@@ -320,7 +331,7 @@
         <span data-bind="visible:!cdIsValid()" class="label label-danger">Döküman Yüklemeniz Gerekiyor</span>
         <span data-bind="visible:!smIsValid()" class="label label-danger">Donanım Girmeniz Gerekiyor</span>
         <span data-bind="visible:errormessage(), text:errormessage" class="label label-danger"></span>
-        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:(modelIsValid() ||descriptionControl()) && isEnterDateOption() && isEnterSmno() && il() != '' && ilce() != '' && isFaultSaved()" type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
+        <button data-bind="click:modelIsValid()?function() {saveTaskQueues() }:(descriptionControl()?function() {saveTaskQueueDescription() }:null),enable:(modelIsValid() ||descriptionControl()) && isEnterDateOption() && isEnterSmno() && il() != '' && ilce() != '' && isFaultSaved() && baglantiSeri()" type="button" class="btn btn-success cls-right cls-button-control">Kaydet ve Anasayfaya Dön</button>
     </div>
     <!-- müşteri bilgilerini düzenleme For Modal Start -->
     <div class="modal fade" id="customerinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
