@@ -58,12 +58,13 @@ var dataModel = {
     isFaultSaved: ko.pureComputed(function () {
         return !dataModel.perOfBayiOrKoc() || (!(dataModel.tasktype() == 1 || dataModel.tasktype() == 9) || (dataModel.fault() != null && dataModel.fault() != ''));
     }),
-    baglantiKontrol: ko.observable(false),
+    baglantiKontrol: ko.observable(false), // Bağlantı problemi taskı içine müşteride eski modem bilgisi yoksa girilmesi lazım kontrolü yapıldı
+    bpKaydet: ko.observable(true),
     baglantiSeri: ko.pureComputed(function () { // task bağlantı problemi taskı'ysa ve seri yoksa seri girdir
         return dataModel.taskid() != 51 || (dataModel.eskiserial() != null && dataModel.eskiserial() != "");
     }),
     resSaveCustomer: ko.observable(),
-    isClickKaydet: ko.observable(false),
+    isClickKaydet: ko.observable(false), // müşteri bilgilerini kaydederken bilgilerin nereden geldiği kontrolü gerekiyor
     movement: ko.observable(),
     taskorderno: ko.observable(),
     taskname: ko.observable(),
@@ -632,8 +633,10 @@ var dataModel = {
         self.resSaveCustomer(null);
         self.isClickKaydet(false);
         // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
-        if (self.taskid() == 51 && self.eskiserial() != null && self.eskiserial() != "")
+        if (self.taskid() == 51 && self.baglantiKontrol() && self.eskiserial() != null && self.eskiserial() != "") {
+            self.baglantiKontrol(false);
             self.insertStockMovements(2, 1007, 16777217, self.customer().customerid, self.eskiserial(), -1);
+        }
         if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
@@ -679,8 +682,10 @@ var dataModel = {
         self.resSaveCustomer(null);
         self.isClickKaydet(false);
         // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
-        if (self.taskid() == 51 && self.eskiserial() != null && self.eskiserial() != "")
+        if (self.taskid() == 51 && self.baglantiKontrol() && self.eskiserial() != null && self.eskiserial() != "") {
+            self.baglantiKontrol(false);
             self.insertStockMovements(2, 1007, 16777217, self.customer().customerid, self.eskiserial(), -1);
+        }
         if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
@@ -974,8 +979,10 @@ dataModel.stockmovement.subscribe(function (v) {
             if (dataModel.movement()) {
                 dataModel.eskiserial(dataModel.movement());
             }
-            else
+            else {
+                dataModel.bpKaydet(false);
                 alert("Müşteride Sisteme Kayıtlı Modem Bulunamadı. Sistem Yöneticinize Başvurunuz !");
+            }
         }, null, null);
     }
     else if (dataModel.taskid() != 51) {
