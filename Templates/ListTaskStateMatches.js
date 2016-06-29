@@ -64,7 +64,7 @@ var dataModel = {
         };
         crmAPI.getTaskStateMatches(data, function (a, b, c) {
             if (a.data.rows[0].taskstatepool.taskstateid==9116)
-            self.taskstatecontrol(false);
+            self.taskstatecontrol(true); // iptal durumuna otomatik task eklenmesi için (ilerde kullanılabilir diye işlemleri silmedim)
             self.selectedTSM(a.data.rows[0]);
             $("#edittask,#editstatus").multiselect({
                 includeSelectAllOption: true,
