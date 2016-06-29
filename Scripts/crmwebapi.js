@@ -343,6 +343,9 @@
          getSerialOnPersonel: function (data, onsucces, onerror, before) {
              getData("POST", "Stock/getSerialOnPersonel", data, onsucces, onerror, before)
          },
+         getStocksOnPersonel: function (data, onsucces, onerror, before) {
+             getData("POST", "Stock/getStocksOnPersonel", data, onsucces, onerror, before)
+         },
          insertCustomer: function (data, onsucces, onerror, before) {
              getData("POST", "Customer/insertCustomer", data, onsucces, onerror, before)
          },
