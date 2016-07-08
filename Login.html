@@ -91,7 +91,10 @@
                         userType: "ADSL"
                     };
                     crmAPI.login(data, function (a, b, c) {
-                        window.location.href = "app.html";
+                        crmAPI.userInfo(function (a, b, c) {
+                            if (a.userId != null)
+                                window.location.href = "app.html";
+                        }, null, null)
                     }, null, null);
                 }
                 else

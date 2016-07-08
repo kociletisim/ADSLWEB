@@ -20,6 +20,7 @@ var dataModel = {
     selectedtaskorderno: ko.observableArray([]),
     selectedTaskRole: ko.observable(),
     customername: ko.observable(tqlFilter.customer && tqlFilter.customer.value),
+    superonlineNo: ko.observable(),
     customerstatus: ko.observable(),
     selectedIss: ko.observable(),
     selectedPersonelname: ko.observable(),
@@ -372,6 +373,7 @@ var dataModel = {
         self.ilce(null);
         self.attachmentDate(null);
         self.customername(null);
+        self.superonlineNo(null);
         self.consummationDate(null);
         self.selectedCustomerstatus(null);
         $("#taskNameFilter,#abonedurumu,#servissaglayici,#taskdurumu,#personel,#personelatamacombo").multiselect('deselectAll', false);
@@ -407,6 +409,7 @@ var dataModel = {
             il: self.il() ? { fieldName: "ad", op: 6, value: self.il() } : null,
             ilce: self.ilce() ? { fieldName: "ad", op: 6, value: self.ilce() } : null,
             customer: self.customername() ? { fieldName: "customername", op: 6, value: self.customername() } : null,
+            superonline: self.superonlineNo() ? { fieldName: 'superonlineCustNo', op: 2, value: self.superonlineNo() } : null,
             task: self.selectedTaskname().length > 0 ? { fieldName: "taskid", op: 7, value: self.selectedTaskname() } : null,
             personel: self.selectedPersonelname().length>0 ? (self.selectedPersonelname() == "0" ? { fieldName: "personelname", op: 8, value: null } : { fieldName: "personelid", op: 7, value: self.selectedPersonelname() }) : null,
             taskstate: self.selectedTaskstatus() ? (self.selectedTaskstatus() == '0' ? { fieldName: "taskstate", op: 8, value: null } : { fieldName: "taskstateid", op: 7, value: self.selectedTaskstatus() }) :( self.firstLoad()==true ? { fieldName: "taskstate", op: 8, value: null } : null),
