@@ -401,6 +401,10 @@ dataModel.krmcheck.subscribe(function (v) {
     dataModel.tckimlikno(null);
     dataModel.isTcValid(false)
 });
+dataModel.kritersec.subscribe(function (v) {
+    dataModel.tckimlikno(null);
+    dataModel.isTcValid(false)
+});
 $(document).ready(function () {
     $('input[type=radio][name=kriter]').change(function () {
         dataModel.kritersec(this.value);
