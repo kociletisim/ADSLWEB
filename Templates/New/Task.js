@@ -3,6 +3,7 @@ var dataModel = {
     newmovement: ko.observable(false), // Bağlantı problemi seçildiğinde girilen müşteri bizde yoksa kontrolü için oluşturuldu
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(),
+    kritersec: ko.observable(),
     customername: ko.observable(),
     gsm: ko.observable(),
     phone: ko.observable(),
@@ -101,7 +102,8 @@ var dataModel = {
     confirmCustomer: function () {
         var self = this;
         var data = {
-            tc:self.tckimlikno(),
+            tc: dataModel.kritersec() == 'TCNO' ? self.tckimlikno() : null,
+            superonlineCustNo: dataModel.kritersec() == 'SMNO' ? self.tckimlikno() : null,
         };
         crmAPI.confirmCustomer(data, function (a, b, c) {
             if (a == "-1") {
@@ -385,13 +387,22 @@ dataModel.selectedBucak.subscribe(function (v) {
 dataModel.tckimlikno.subscribe(function (v) {
     if (v != null)
     {
-        if (dataModel.krmcheck())
-            v.length == 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
-        else
-            v.length > 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
-    }
+        if (dataModel.kritersec() == 'TCNO') {
+            if (dataModel.krmcheck())
+                v.length == 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+            else
+                v.length > 10 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+        }
+        else if (dataModel.kritersec() == 'SMNO')
+            v.length == 8 ? dataModel.isTcValid(true) : dataModel.isTcValid(false);
+}
 });
 dataModel.krmcheck.subscribe(function (v) {
     dataModel.tckimlikno(null);
     dataModel.isTcValid(false)
+});
+$(document).ready(function () {
+    $('input[type=radio][name=kriter]').change(function () {
+        dataModel.kritersec(this.value);
+    });
 });
