@@ -400,10 +400,14 @@ dataModel.tckimlikno.subscribe(function (v) {
 dataModel.krmcheck.subscribe(function (v) {
     dataModel.tckimlikno(null);
     dataModel.isTcValid(false)
+    dataModel.confirmedCustomer(null);
+    dataModel.confirmMessage(null);
 });
 dataModel.kritersec.subscribe(function (v) {
     dataModel.tckimlikno(null);
     dataModel.isTcValid(false)
+    dataModel.confirmedCustomer(null);
+    dataModel.confirmMessage(null);
 });
 $(document).ready(function () {
     $('input[type=radio][name=kriter]').change(function () {
