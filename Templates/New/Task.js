@@ -3,6 +3,7 @@ var dataModel = {
     newmovement: ko.observable(false), // Bağlantı problemi seçildiğinde girilen müşteri bizde yoksa kontrolü için oluşturuldu
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(),
+    smno: ko.observable(),
     kritersec: ko.observable(),
     customername: ko.observable(),
     gsm: ko.observable(),
@@ -181,6 +182,7 @@ var dataModel = {
                 description: self.fulladdress(),
                 taskid: self.taskid(),
                 email: self.email(),
+                superonlineCustNo: self.smno(),
             };
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {
                 if (self.newmovement()) {
