@@ -173,6 +173,7 @@ var dataModel = {
     getcategory: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
@@ -188,6 +189,7 @@ var dataModel = {
     getsubcategory: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
             subcategory: { fieldName: 'subcategory', op: 6, value: '' }
         },
@@ -201,6 +203,7 @@ var dataModel = {
     getcamapign: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
             subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
             campaign: { fieldName: 'name', op: 6, value: '' }
@@ -215,6 +218,7 @@ var dataModel = {
     getproduct: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
             subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
             campaign: { fieldName: 'id', op: 2, value: self.campaignid() },

@@ -363,6 +363,7 @@ var dataModel = {
     getcategory: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
@@ -378,7 +379,8 @@ var dataModel = {
     getsubcategory: function () {
         var self = this;
         data = {
-            category: { fieldName: 'category', op: 6, value: self.category()?self.category() :'' },
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
+            category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
             subcategory: { fieldName: 'subcategory', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {

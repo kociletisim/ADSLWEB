@@ -172,6 +172,7 @@
     getcategory: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
@@ -187,6 +188,7 @@
     getsubcategory: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
             subcategory: { fieldName: 'subcategory', op: 6, value: '' }
         },
@@ -200,6 +202,7 @@
     getcamapign: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
             subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
             campaign: { fieldName: 'name', op: 6, value: '' }
@@ -214,6 +217,7 @@
     getproduct: function () {
         var self = this;
         data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
             subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
             campaign: { fieldName: 'id', op: 2, value: self.campaignid() },
