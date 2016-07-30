@@ -115,6 +115,14 @@ var dataModel = {
     errormessage: ko.observable(),
     productlist: ko.observableArray([]),
     dosya: ko.observable(),
+    relatedTaskInfo: ko.observable(),
+    getrelatedTaskInfo: function (taskorderno) {
+        var self = this;
+        var data = { taskorderno: taskorderno };
+        crmAPI.getTaskqueueInfo(data, function (a, b, c) {
+            self.relatedTaskInfo(a);
+        }, null, null)
+    },
     campaignEditable: ko.pureComputed(function () {
         var b = true;
         $.each(dataModel.productlist(), function (index, cp) {

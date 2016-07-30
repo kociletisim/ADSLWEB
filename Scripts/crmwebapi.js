@@ -349,5 +349,8 @@
          insertCustomer: function (data, onsucces, onerror, before) {
              getData("POST", "Customer/insertCustomer", data, onsucces, onerror, before)
          },
+         getTaskqueueInfo: function (data, onsucces, onerror, before) {
+             getData("POST", "TaskQueues/getTaskqueueInfo", data, onsucces, onerror, before)
+         },
      }
  })();
