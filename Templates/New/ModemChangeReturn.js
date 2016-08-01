@@ -221,8 +221,19 @@ var dataModel = {
                 self.insert();
             }
             else if (self.serialtext() != null) {
-                self.newmovement(true);
-                self.insert();
+                var data = {
+                    serialno: { value: self.serialtext() },
+                };
+                crmAPI.getStock(data, function (a, b, c) {
+                    self.movement(a.data.rows[0]);
+                    if (self.movement() && self.movement().movementid != 0) {
+                        alert("Seri Sistemde Başkasına Tanımlanmıştır !");
+                    }
+                    else {
+                        self.newmovement(true); // satın almadan -> depoya -> müşteriye stok hareketi
+                        self.insert();
+                    }
+                }, null, null);
             }
             else
                 alert("Seri No Giriniz !");
