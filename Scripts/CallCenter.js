@@ -5,6 +5,7 @@ $(document).ready(function () {
 });
 
 var dataModel = {
+    checkUrl: ko.observable(false),
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(""),
     superonlineCustNo: ko.observable(),
@@ -35,7 +36,6 @@ var dataModel = {
     taskid: ko.observable(),
     user: ko.observable(),
     taskdescription: ko.observable(),
-    personellist: ko.observableArray([]),
     salespersonel: ko.observable(),
     loadingmessage: ko.observable(0),
     subcategorylist: ko.observableArray([]),
@@ -66,25 +66,6 @@ var dataModel = {
         var self = this;
         self.churn(true);
         self.yalin(false);
-    },
-    getpersonel: function () {
-        var self = this;
-        crmcallAPI.getPersonel(function (a, b, c) {
-            self.personellist(a);
-            $("#salesPersonel").multiselect({
-                includeSelectAllOption: true,
-                selectAllValue: 'select-all-value',
-                maxHeight: 250,
-                buttonWidth: '100%',
-                nonSelectedText: 'Personel Seçiniz',
-                nSelectedText: 'Personel Seçildi!',
-                numberDisplayed: 2,
-                selectAllText: 'Tümünü Seç!',
-                enableFiltering: true,
-                filterPlaceholder: 'Ara'
-            });
-            $('#salesPersonel').multiselect('select', self.personellist()).multiselect('rebuild');
-        }, null, null)
     },
     getIl: function () {
         self = this;
@@ -256,13 +237,13 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
-        var hashSearches = document.location.hash.split("?agent=");
+        var hashSearches = document.URL.split("?agent=");
         if (hashSearches.length > 1) {
-            var info = hashSearches[1].split("&gsm=");
+            var info = hashSearches[1].split("&gsm=%22");
             if (info.length > 1) {
-                console.log("agent = " + info[0]);
-                console.log("gsm = " + info[1]);
-                self.getpersonel();
+                self.salespersonel(info[0]);
+                self.gsm(info[1].split("%22")[0]);
+                self.checkUrl(true);
                 self.getIl();
                 self.getcategory();
                 $("#kategori").multiselect({
@@ -327,11 +308,15 @@ var dataModel = {
                 });
                 ko.applyBindings(dataModel, $("#Container")[0]);
             }
-            else
+            else {
+                self.checkUrl(false);
                 alert("...?agent=****&gsm=**** şeklinde adres oluşturunuz !");
+            }
         }
-        else
+        else {
+            self.checkUrl(false);
             alert("...?agent=****&gsm=**** şeklinde adres oluşturunuz !");
+        }
     }
 }
 dataModel.selectedIl.subscribe(function (v) {
