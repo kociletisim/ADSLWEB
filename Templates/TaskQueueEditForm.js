@@ -118,10 +118,12 @@ var dataModel = {
     relatedTaskInfo: ko.observable(),
     getrelatedTaskInfo: function (taskorderno) {
         var self = this;
-        var data = { taskorderno: taskorderno };
-        crmAPI.getTaskqueueInfo(data, function (a, b, c) {
-            self.relatedTaskInfo(a);
-        }, null, null)
+        if (taskorderno != null) {
+            var data = { taskorderno: taskorderno };
+            crmAPI.getTaskqueueInfo(data, function (a, b, c) {
+                self.relatedTaskInfo(a);
+            }, null, null)
+        }
     },
     campaignEditable: ko.pureComputed(function () {
         var b = true;
@@ -644,23 +646,38 @@ var dataModel = {
         self.isClickKaydet(false);
         // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
         if (self.taskid() == 51 && self.baglantiKontrol() && self.eskiserial() != null && self.eskiserial() != "") {
-            self.baglantiKontrol(false);
-            self.insertStockMovements(2, 1007, 16777217, self.customer().customerid, self.eskiserial(), -1);
+            var data = {
+                serialno: { value: self.eskiserial() },
+            };
+            crmAPI.getStock(data, function (a, b, c) {
+                self.movement(a.data.rows[0]);
+                if (self.movement() && self.movement().movementid != 0) {
+                    alert("Seri No Kontrol Ediniz !");
+                }
+                else {
+                    self.baglantiKontrol(false);
+                    self.insertStockMovements(2, 1007, 16777217, self.customer().customerid, self.eskiserial(), -1);
+                }
+            }, null, null);
         }
-        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno()) {
+        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno() && !self.baglantiKontrol()) {
             self.isClickKaydet(true);
             self.saveCustomer();
             dataModel.resSaveCustomer.subscribe(function (v) {
                 if (self.resSaveCustomer() == "ok")
                     self.saveTaskQueue();
                 else {
-                    alert("Müşteri Bilgileri Kaaydedilemedi. Tc Numarasını Kontrol ediniz !");
+                    alert("Müşteri Bilgileri Kaydedilemedi. Tc Numarasını Kontrol ediniz !");
                     $('.btn').prop('disabled', false);
                 }
             });
         }
-        else
+        else if (!self.baglantiKontrol())
             self.saveTaskQueue();
+        else {
+            alert("Kayıt Tamamlanamadı. Alanları Kontrol Ediniz !");
+            $('.btn').prop('disabled', false);
+        }
     },
     saveTaskQueueDesc: function () {
         data = {

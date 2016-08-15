@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="Scripts/crmcallapi.js"></script>
+    <script src="Scripts/knockout-3.3.0.js"></script>
+    <script src="Scripts/jquery.js"></script>
+    <script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
+    <script type="text/javascript">
+        var data = { gsm: userip };
+        crmcallAPI.ipControl(data, function (a, b, c) {
+            if (!a) {
+                window.location.href = "Login.html";
+            }
+        }, null, null);
+    </script>
+
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="Content/bootstrap-multiselect.min.css" />
+    <link href="Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="Content/daterangepicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="Content/app.css" />
+    <link href="Content/koc-typehead-v1.0.css" rel="stylesheet" />
+
+    <title>KOCSAM ADSL CRM v2</title>
+    <script>
+        $(document).ready(function () {
+            moment.locale('tr');
+        });
+    </script>
+    <script src="Scripts/CallCenter.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/crmwebapi.js"></script>
+    <script src="Scripts/bootstrap-multiselect.js"></script>
+    <script src="Scripts/koc-typehead-v1.0.js"></script>
+    <!--<script src="Scripts/app.js"></script>-->
+    <script type="text/javascript" src="/Scripts/moment.js"></script>
+
+</head>
+<body>
+    <div class="col-md-2"></div>
+    <div id="Container" class="col-md-8 container" style="padding: 0 !important; margin: 0 0 0 0 !important; border-radius: 0 0 8px 8px !important;">
+        <div class="panel-group" id="accordion">
+            <div class="panel" id="panel2" style="border: 1px solid #fff !important;">
+                <div class="modal-header btn-success">
+                    <h4 class="modal-title" id="myModalLabel">Yeni ADSL Satış</h4>
+                </div>
+                <div class="modal-body" style="display: inline-block; min-height: 50px;">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <p></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>İnternet Türü *</p>
+                    </div>
+                    <div class="pull-right col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Seçiniz...'"></select>
+                    </div>
+                    <div data-bind="visible:category" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Kampanya Türü *</p>
+                    </div>
+                    <div data-bind="visible:category" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="kampanyaturu">
+                            <option>Seçiniz</option>
+                            <option value="1">YALIN</option>
+                            <option value="2">CHURN</option>
+                        </select>
+                    </div>
+                    <div data-bind="visible:yalin() || churn()">
+                        <div data-bind="visible:true" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Satışı Yapan Kişi</p>
+                        </div>
+                        <div data-bind="visible:true" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="salesPersonel" data-bind="options:personellist,optionsText:'personelname',optionsValue:'personelid', value:salespersonel" class="form-control"></select>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Tc Kimlik No *</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <input data-bind="value:tckimlikno" type="number" class="form-control" id="tc">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Müşteri Adı Soyadı *</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <input data-bind="value:customername" type="text" class="form-control" id="csnm">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Gsm *</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <input data-bind="value:gsm" type="text" class="form-control" id="gsmt">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Ev Telefonu</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <input data-bind="value:phone" type="text" class="form-control" id="phone">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>E-Posta</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <input data-bind="value:email" type="text" class="form-control" id="phone">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>İl *</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="optionIl" data-bind="options:ilList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedIl,optionsCaption:'İl Seçiniz..'"></select>
+                        </div>
+                        <div data-bind="visible:selectedIl" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>İlçe *</p>
+                        </div>
+                        <div data-bind="visible:selectedIl" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="optionIlce" data-bind="options:ilceList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedIlce,optionsCaption:'İlçe Seçiniz..'"></select>
+                        </div>
+                        <div data-bind="visible:selectedIlce" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Bucak *</p>
+                        </div>
+                        <div data-bind="visible:selectedIlce" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="optionBucak" data-bind="options:bucakList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedBucak,optionsCaption:'Bucak Seçiniz..'"></select>
+                        </div>
+                        <div data-bind="visible:selectedBucak" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Mahalle/Köy *</p>
+                        </div>
+                        <div data-bind="visible:selectedBucak" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="optionMahalle" data-bind="options:mahalleList,optionsValue:'kimlikNo',optionsText:'ad',value:selectedMahalle,optionsCaption:'Mahalle Seçiniz..'"></select>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Açık Adres *</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <input data-bind="value:fulladdress" placeholder="Adres Detay" type="text" class="form-control" id="fulladres">
+                        </div>
+                        <div data-bind="visible:category" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Altkategori *</p>
+                        </div>
+                        <div data-bind="visible:category" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="urun" data-bind="options:subcategorylist,optionsText:'subcategory',optionsValue:'subcategory',value:subcategory,optionsCaption: 'Alt Kategori Seçiniz...'"></select>
+                        </div>
+                        <div data-bind="visible:subcategory" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Kampanya *</p>
+                        </div>
+                        <div data-bind="visible:subcategory" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="kampanya" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
+                        </div>
+                        <div data-bind="visible:campaignid" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Net</p>
+                        </div>
+                        <div data-bind="visible:campaignid" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="product" data-bind="options:productlist,optionsValue:'productid',optionsText:'productname',value:selectedNet,optionsCaption:'Net Seçiniz..'"></select>
+                        </div>
+                        <div data-bind="visible: sesList &&sesList().length>0" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Ses</p>
+                        </div>
+                        <div data-bind="visible:sesList && sesList().length>0" class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <select id="ses" data-bind="options:sesList,optionsValue:'productid',optionsText:'productname',value:selectedSes,optionsCaption:'Ses Seçiniz..'"></select>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                            <p>Task Açıklama</p>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
+                            <input data-bind="value:taskdescription" placeholder="Task Açıklama" type="text" class="form-control" id="Text3">
+                        </div>
+                        <img data-bind="visible:loadingmessage()==1 " src="/img/loadingbar.gif" class="img-responsive col-md-12" alt="Cinque Terre">
+                        <span data-bind="visible:loadingmessage()==1" class="text-center col-md-12">Yükleniyor...</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span data-bind="visible:errorControl()" style="font-size:x-large">Hata Oluştu!</span>
+                    <span data-bind="visible:errorControl()">Tekrar Deneyiniz</span>
+                    <div data-bind="visible: !errorControl()">
+                        <button data-bind="click:insertAdslSalesTask, enable:isSelectedKaynak" type="button" class="btn btn-success">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+
+    <script src="Scripts/bootstrap-maxlengths.js"></script>
+    <script src="Scripts/canvas-to-blob.min.js"></script>
+    <script src="Scripts/bootstrap-datetimepicker.js"></script>
+    <script src="Scripts/daterangepicker.js"></script>
+</body>
+</html>
