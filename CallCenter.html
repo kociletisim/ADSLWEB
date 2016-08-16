@@ -8,12 +8,10 @@
     <script src="Scripts/crmcallapi.js"></script>
     <script src="Scripts/knockout-3.3.0.js"></script>
     <script src="Scripts/jquery.js"></script>
-    <script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
     <script type="text/javascript">
-        var data = { gsm: userip };
-        crmcallAPI.ipControl(data, function (a, b, c) {
-            if (!a) {
-                window.location.href = "Login.html";
+        crmcallAPI.Callip(function (a, b, c) {
+            if (!a.onay) {
+                window.location.href = "http://adsl.kociletisim.com.tr";
             }
         }, null, null);
     </script>

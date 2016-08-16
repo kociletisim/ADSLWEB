@@ -221,6 +221,9 @@ var dataModel = {
         };
         if (data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))
             crmcallAPI.saveAdslSalesTask(data, function (a, b, c) {
+                if (!a) {
+                    window.location.href = "http://adsl.kociletisim.com.tr";
+                }
                 self.returntaskorderno(a);
                 self.redirect();
             }, null, null);
