@@ -411,7 +411,7 @@ dataModel.selectedIl.subscribe(function (v) {
     dataModel.selectedBucak(null);
     dataModel.selectedMahalle(null);
     dataModel.getIlce(v);
-   
+    dataModel.tckimlikno($("#tc").val());
 });
 dataModel.selectedIlce.subscribe(function (v) {
     if (v != null) {
@@ -421,7 +421,7 @@ dataModel.selectedIlce.subscribe(function (v) {
         dataModel.selectedMahalle(null);
         dataModel.getBucak(v);
     }
-       
+    dataModel.tckimlikno($("#tc").val());
     return true;
 });
 dataModel.selectedBucak.subscribe(function (v) {
@@ -450,6 +450,7 @@ dataModel.subcategory.subscribe(function (v) {
 dataModel.campaignid.subscribe(function (v) {
     dataModel.productlist([]);
     dataModel.sesList([]);
+    dataModel.tckimlikno($("#tc").val());
     if (v)
         dataModel.getproduct();
 });

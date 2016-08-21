@@ -8,10 +8,12 @@ var dataModel = {
     checkUrl: ko.observable(false),
     returntaskorderno: ko.observable(),
     tckimlikno: ko.observable(""),
-    superonlineCustNo: ko.observable(),
     customername: ko.observable(""),
+    confirmedCustomer: ko.observable(),
     gsm: ko.observable(""),
     phone: ko.observable(),
+    isSmnoValid: ko.observable(),
+    somn: ko.observable(),
     email: ko.observable(),
     fulladdress: ko.observable(""),
     ilList: ko.observableArray([]),
@@ -30,6 +32,8 @@ var dataModel = {
 
     yalin: ko.observable(),
     churn: ko.observable(),
+    donanim: ko.observable(),
+    internet: ko.observable(),
 
     yalinadsl: ko.observable(),
     churnyalin: ko.observable(),
@@ -47,26 +51,13 @@ var dataModel = {
     customerProductList: ko.observableArray([]),
     productlist: ko.observableArray([]),
     pids: ko.observableArray([]),
-    sesList: ko.observableArray([]),
-    selectedNet: ko.observable(""),
-    selectedSes: ko.observable(),
     isSelectedKaynak: ko.pureComputed(function () {
-        return (dataModel.salespersonel() > 0 && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0 && dataModel.selectedMahalle() != "" && dataModel.selectedMahalle() != null);
+        return (dataModel.salespersonel() > 0 && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedMahalle() != "" && dataModel.selectedMahalle() != null && dataModel.campaignid() != null && dataModel.campaignid() != "" && (dataModel.donanim() == false || (dataModel.somn() != null && dataModel.somn() != "")));
     }),
     errorControl: ko.pureComputed(function () {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
 
-    isYalin: function () {
-        var self = this;
-        self.yalin(true);
-        self.churn(false);
-    },
-    isChurn: function () {
-        var self = this;
-        self.churn(true);
-        self.yalin(false);
-    },
     getIl: function () {
         self = this;
         var data = {
@@ -112,7 +103,18 @@ var dataModel = {
 
         }, null, null)
     },
-
+    confirmCustomer: function () {
+        var self = this;
+        var data = {
+            superonlineCustNo: self.somn(),
+        };
+        crmcallAPI.confirmCustomer(data, function (a, b, c) {
+            if (!a) {
+                window.location.href = "http://adsl.kociletisim.com.tr";
+            }
+            self.confirmedCustomer(a);
+        })
+    },
     getcategory: function () {
         var self = this;
         data = {
@@ -135,9 +137,12 @@ var dataModel = {
         },
         crmcallAPI.getCampaignInfo(data, function (a, b, c) {
             self.subcategorylist(a);
-            $("#urun").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
-            self.subcategory(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.subcategory : null);
-            $("#urun").multiselect("refresh");
+            self.campaignid(null);
+            if (self.internet()) {
+                $("#urun").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
+                self.subcategory(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.subcategory : null);
+                $("#urun").multiselect("refresh");
+            }
         }, null, null)
     },
     getcamapign: function () {
@@ -153,6 +158,12 @@ var dataModel = {
             $("#kampanya").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
             self.campaignid(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.id : null);
             $("#kampanya").multiselect("refresh");
+            if (self.donanim()) {
+                self.campaignid(7124);
+                $("#kampanya").multiselect("refresh");
+                $("#kampanya").attr("disabled", true);
+                //$("#kampanya").prop('disabled', true);
+            }
         }, null, null)
     },
     getproduct: function () {
@@ -165,22 +176,24 @@ var dataModel = {
             products: { fieldName: 'productname', op: 6, value: '' }
         },
         crmcallAPI.getCampaignInfo(data, function (a, b, c) {
-            self.productlist(a[0].products);
-            if (a[1])
-                self.sesList(a[1].products);
-            $("#product").multiselect("setOptions", self.productlist()).multiselect("rebuild");
-            $("#product").multiselect("refresh");
-            $("#ses").multiselect("setOptions", self.sesList()).multiselect("rebuild");
-            $("#ses").multiselect("refresh");
+            self.productlist(a);
         }, null, null)
     },
     insertAdslSalesTask: function () {
         var self = this;
         self.returntaskorderno(null);
         $('.btn-success').prop('disabled', true);
-        if (self.selectedNet()) self.pids().push(self.selectedNet());
-        if (self.selectedSes()) self.pids().push(self.selectedSes());
+        self.pids([]);
+        var kontrol = true;
+        for (i = 0; i < self.productlist().length; i++) {
+            if (self.productlist()[i].selectedProduct == "" || self.productlist()[i].selectedProduct == null)
+                kontrol = false;
+            else {
+                self.pids().push(self.productlist()[i].selectedProduct);
+            }
+        }
 
+        // yeni oluşan tasklar yazılacak (gönderilen tasklar bölge içi olacak bölge dışı olduğuna apide karar vercem)
         if (self.adsl()) {
             if (self.yalin()) {
                 self.taskid(30);
@@ -197,10 +210,13 @@ var dataModel = {
                 self.taskid(63);
             }
         }
+        if (self.campaignid() == 7124)
+            self.taskid(88);
 
         var data = {
             tc: self.tckimlikno(),
             customername: self.customername(),
+            superonlineCustNo: self.somn() ? self.somn() : null,
             gsm: self.gsm(),
             phone: self.phone(),
             ilKimlikNo: self.selectedIl(),
@@ -219,7 +235,7 @@ var dataModel = {
             campaignid: self.campaignid(),
             fault: self.fault(),
         };
-        if (data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))
+        if (kontrol == true && data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))
             crmcallAPI.saveAdslSalesTask(data, function (a, b, c) {
                 if (!a) {
                     window.location.href = "http://adsl.kociletisim.com.tr";
@@ -227,7 +243,10 @@ var dataModel = {
                 self.returntaskorderno(a);
                 self.redirect();
             }, null, null);
-        else alert("Eksik Bilgi Girdiniz.!");
+        else {
+            alert("Eksik Bilgi Girdiniz.!");
+            $('.btn-success').prop('disabled', false);
+        }
     },
     redirect: function () {
         var self = this;
@@ -273,7 +292,7 @@ var dataModel = {
                     enableFiltering: true,
                     filterPlaceholder: 'Ara'
                 });
-                $("#kampanya,#product,#ses,#kampanyaturu,#internetturu").multiselect({
+                $("#kampanya,#product,#ses,#kampanyaturu,#internetturu,#satisturu").multiselect({
                     includeSelectAllOption: true,
                     selectAllValue: 'select-all-value',
                     maxHeight: 250,
@@ -305,6 +324,18 @@ var dataModel = {
                     validate: true,
                     customMaxAttribute: "11"
                 });
+                $('#smno').maxlength({
+                    threshold: 7,
+                    warningClass: "label label-danger",
+                    limitReachedClass: "label label-success",
+                    separator: ' / ',
+                    validate: true,
+                    customMaxAttribute: "8"
+                });
+                $('#satisturu').on('change', function () {
+                    self.internet(this.value == 1 ? true : false);
+                    self.donanim(this.value == 2 ? true : false);
+                });
                 $('#kampanyaturu').on('change', function () {
                     self.yalin(this.value == 1 ? true : false);
                     self.churn(this.value == 2 ? true : false);
@@ -322,6 +353,11 @@ var dataModel = {
         }
     }
 }
+dataModel.somn.subscribe(function (v) {
+    if (v != null) {
+        v.length == 8 ? dataModel.isSmnoValid(true) : dataModel.isSmnoValid(false);
+    }
+});
 dataModel.selectedIl.subscribe(function (v) {
     dataModel.ilceList(null);
     dataModel.bucakList(null);
@@ -330,7 +366,7 @@ dataModel.selectedIl.subscribe(function (v) {
     dataModel.selectedBucak(null);
     dataModel.selectedMahalle(null);
     dataModel.getIlce(v);
-
+    dataModel.tckimlikno($("#tc").val());
 });
 dataModel.selectedIlce.subscribe(function (v) {
     if (v != null) {
@@ -340,35 +376,64 @@ dataModel.selectedIlce.subscribe(function (v) {
         dataModel.selectedMahalle(null);
         dataModel.getBucak(v);
     }
-
+    dataModel.tckimlikno($("#tc").val());
     return true;
 });
 dataModel.selectedBucak.subscribe(function (v) {
     if (v != null)
         dataModel.getMahalle(v);
+    dataModel.tckimlikno($("#tc").val());
     return true;
 });
 dataModel.category.subscribe(function (v) {
     $("#kampanyaturu").val('');
     $("#kampanyaturu").multiselect("refresh");
+    dataModel.subcategory(null);
     if (v == 'ADSL') {
         dataModel.adsl(true);
         dataModel.vdsl(false);
+        dataModel.yalin(false);
+        dataModel.churn(false);
     }
     else if (v == 'VDSL') {
         dataModel.adsl(false);
         dataModel.vdsl(true);
+        dataModel.yalin(false);
+        dataModel.churn(false);
+    }
+    else {
+        dataModel.adsl(false);
+        dataModel.vdsl(false);
+        dataModel.yalin(false);
+        dataModel.churn(false);
     }
     dataModel.getsubcategory();
 });
+dataModel.donanim.subscribe(function (v) {
+    dataModel.confirmedCustomer(null);
+    dataModel.category(null);
+    if (v) {
+        dataModel.category("ADSL");
+        $("#kategori").multiselect("rebuild");
+    }
+    else {
+        $("#kategori").multiselect("rebuild");
+    }
+});
+dataModel.subcategorylist.subscribe(function (v) {
+    if (dataModel.adsl() && dataModel.donanim()) {
+        dataModel.subcategory("ADSL");
+        $("#urun").multiselect("rebuild");
+    }
+});
 dataModel.subcategory.subscribe(function (v) {
     dataModel.productlist([]);
+    dataModel.campaignid(null);
     if (v)
         dataModel.getcamapign();
 });
 dataModel.campaignid.subscribe(function (v) {
     dataModel.productlist([]);
-    dataModel.sesList([]);
     if (v)
         dataModel.getproduct();
 });

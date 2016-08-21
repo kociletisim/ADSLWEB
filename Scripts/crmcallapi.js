@@ -40,5 +40,8 @@ var crmcallAPI = (function () {
         getPersonel: function (onsuccess, onerror, before) {
             getData("POST", "CallCenter/getPersonel", {}, onsuccess, onerror, before)
         },
+        confirmCustomer: function (data, onsuccess, onerror, before) {
+            getData("POST", "CallCenter/confirmCustomer", data, onsuccess, onerror, before)
+        },
     }
 })();
