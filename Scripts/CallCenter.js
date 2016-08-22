@@ -201,7 +201,8 @@ var dataModel = {
 
         if (self.donanim())
             self.taskid(131); // İkinci Donanım Çağrı (Dış'sa apide karar verilecek)
-
+        if (self.confirmedCustomer() && self.confirmedCustomer() != "-1")
+            self.selectedIl(self.confirmedCustomer().ilKimlikNo);
         var data = {
             customerid: self.donanim() ? self.confirmedCustomer() ? self.confirmedCustomer() != "-1" ? self.confirmedCustomer().customerid : 0 : 0 : 0,
             tc: self.tckimlikno(),
