@@ -35,8 +35,6 @@ var dataModel = {
     donanim: ko.observable(),
     internet: ko.observable(),
 
-    yalinadsl: ko.observable(),
-    churnyalin: ko.observable(),
     taskid: ko.observable(),
     user: ko.observable(),
     taskdescription: ko.observable(),
@@ -194,24 +192,15 @@ var dataModel = {
         }
 
         // yeni oluşan tasklar yazılacak (gönderilen tasklar bölge içi olacak bölge dışı olduğuna apide karar vercem)
-        if (self.adsl()) {
-            if (self.yalin()) {
-                self.taskid(30);
-            }
-            else {
-                self.taskid(31);
-            }
+        if (self.yalin()) {
+            self.taskid(119); // Satış-Çağrı Yalın İç (Dış'sa apide karar verilecek)
         }
-        else {
-            if (self.yalin()) {
-                self.taskid(58);
-            }
-            else {
-                self.taskid(63);
-            }
+        else if (self.churn()) {
+            self.taskid(122); // Satış-Çağrı Churn İç (Dış'sa apide karar verilecek)
         }
-        if (self.campaignid() == 7124)
-            self.taskid(88);
+
+        if (self.donanim())
+            self.taskid(131); // İkinci Donanım Çağrı (Dış'sa apide karar verilecek)
 
         var data = {
             customerid: self.donanim() ? self.confirmedCustomer() ? self.confirmedCustomer() != "-1" ? self.confirmedCustomer().customerid : 0 : 0 : 0,
@@ -236,7 +225,7 @@ var dataModel = {
             campaignid: self.campaignid(),
             fault: self.fault(),
         };
-        if (kontrol == true && ((self.confirmedCustomer() && self.confirmedCustomer() != "-1") || (data.tc != null && data.gsm != null && self.selectedIlce())))
+        if (kontrol == true && data.taskid != null && ((self.confirmedCustomer() && self.confirmedCustomer() != "-1") || (data.tc != null && data.gsm != null && self.selectedIlce())))
             crmcallAPI.saveAdslSalesTask(data, function (a, b, c) {
                 if (!a) {
                     window.location.href = "http://adsl.kociletisim.com.tr";
@@ -414,6 +403,8 @@ dataModel.donanim.subscribe(function (v) {
     dataModel.confirmedCustomer(null);
     dataModel.somn(null);
     dataModel.category(null);
+    dataModel.yalin(false);
+    dataModel.churn(false);
     if (v) {
         dataModel.category("ADSL");
         $("#kategori").multiselect("rebuild");
