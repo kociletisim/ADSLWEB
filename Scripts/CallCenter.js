@@ -52,7 +52,7 @@ var dataModel = {
     productlist: ko.observableArray([]),
     pids: ko.observableArray([]),
     isSelectedKaynak: ko.pureComputed(function () {
-        return (dataModel.salespersonel() > 0 && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedMahalle() != "" && dataModel.selectedMahalle() != null && dataModel.campaignid() != null && dataModel.campaignid() != "" && (dataModel.donanim() == false || (dataModel.somn() != null && dataModel.somn() != "")));
+        return (dataModel.donanim() && dataModel.somn() && ((dataModel.confirmedCustomer() && dataModel.confirmedCustomer() != "-1") || (dataModel.tckimlikno() && dataModel.customername() && dataModel.selectedIlce() && dataModel.fulladdress()))) || (dataModel.internet() && dataModel.tckimlikno() && dataModel.gsm() && dataModel.fulladdress() && dataModel.customername() && dataModel.selectedIlce() && dataModel.campaignid());
     }),
     errorControl: ko.pureComputed(function () {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
@@ -214,6 +214,7 @@ var dataModel = {
             self.taskid(88);
 
         var data = {
+            customerid: self.donanim() ? self.confirmedCustomer() ? self.confirmedCustomer() != "-1" ? self.confirmedCustomer().customerid : 0 : 0 : 0,
             tc: self.tckimlikno(),
             customername: self.customername(),
             superonlineCustNo: self.somn() ? self.somn() : null,
@@ -235,7 +236,7 @@ var dataModel = {
             campaignid: self.campaignid(),
             fault: self.fault(),
         };
-        if (kontrol == true && data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))
+        if (kontrol == true && ((self.confirmedCustomer() && self.confirmedCustomer() != "-1") || (data.tc != null && data.gsm != null && self.selectedIlce())))
             crmcallAPI.saveAdslSalesTask(data, function (a, b, c) {
                 if (!a) {
                     window.location.href = "http://adsl.kociletisim.com.tr";
@@ -411,6 +412,7 @@ dataModel.category.subscribe(function (v) {
 });
 dataModel.donanim.subscribe(function (v) {
     dataModel.confirmedCustomer(null);
+    dataModel.somn(null);
     dataModel.category(null);
     if (v) {
         dataModel.category("ADSL");
