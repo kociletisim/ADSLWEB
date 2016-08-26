@@ -211,13 +211,7 @@
                         <p>Durum Türü</p>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                        <select id="durum" class="form-control">
-                            <option value="1">Tamamlandı</option>
-                            <option value="3">Devam Ediyor</option>
-                            <option value="2">İptal</option>
-                            <option value="4">SOL Tamamlandı</option>
-
-                        </select>
+                        <select id="editdoc" data-bind="options:$root.poolList,optionsText:'name',optionsValue:'statetype', value: statetype" class="form-control"></select>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 cls-padding-0px" style="margin-top: 3px;" data-bind="visible: $root.savemessagecode()">
                         <span class="label label-success" data-bind="text: $root.savemessage , visible:$root.savemessagecode()==1"></span>

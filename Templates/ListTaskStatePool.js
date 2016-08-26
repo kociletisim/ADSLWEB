@@ -20,6 +20,7 @@ var dataModel = {
     newtaskstate: ko.observable(),
     newstatetype:ko.observable(),
     user: ko.observable(),
+    poolList: ko.observableArray([{ statetype: 1, name: 'Tamamlandı' }, { statetype: 3, name: 'Devam Ediyor' }, { statetype: 2, name: 'İptal' }, { statetype: 4, name: 'SOL Tamamlandı' }]),
 
     getUserInfo: function () {
         var self = this;
