@@ -224,7 +224,7 @@ var dataModel = {
             salespersonel: self.salespersonel(),
             productids: self.pids(),
             campaignid: self.campaignid(),
-            fault: self.fault(),
+            fault: self.taskid() != 131 ? self.fault() : null,
         };
         if (kontrol == true && data.taskid != null && ((self.confirmedCustomer() && self.confirmedCustomer() != "-1") || (data.tc != null && data.gsm != null && self.selectedIlce())))
             crmcallAPI.saveAdslSalesTask(data, function (a, b, c) {
