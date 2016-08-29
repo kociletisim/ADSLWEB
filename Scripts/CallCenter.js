@@ -25,7 +25,7 @@ var dataModel = {
     selectedBucak: ko.observable(),
     selectedMahalle: ko.observable(),
     kampanyaTuruList: ko.observableArray(["YALIN", "CHURN"]),
-    fault: ko.observable("Bayi"),
+    fault: ko.observable("Çağrı Merkezi"),
 
     adsl: ko.observable(),
     vdsl: ko.observable(),
