@@ -137,7 +137,7 @@ var dataModel = {
         };
         crmAPI.getTaskStatus(data, function(a, b, c) {
             self.taskstatuslist(a);
-            self.defaultstatus('0');
+            //self.defaultstatus('0');
             $("#taskdurumu").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
@@ -150,7 +150,7 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
-                $("#blokadi").multiselect('select', ['0']);
+            $("#taskdurumu").multiselect('select', ['0', '9159', '9165']);
         }, null, null)
     },
     getpersonel: function() {
