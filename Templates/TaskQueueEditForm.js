@@ -50,7 +50,7 @@ var dataModel = {
     smno: ko.observable(), // süperonline müşteri no
     tc: ko.observable(), // müşteri tc
     fault: ko.observable(), // satış kaynağı
-    faultList: ko.observableArray([{ name: "Müşteri Hizmetleri" }, { name: "Ürünler Arası Geçiş" }, { name: "Gatio" }, { name: "Giza" }, { name: "Samline" }, { name: "Jade" }, { name: "Tim" }, { name: "Telekomone" }, { name: "Krea Doğrudan Pazarlama" }, { name: "Mert Yükler" }, { name: "KÇM" }, { name: "Techline İletişim" }, { name: "Bornet" }, { name: "Bayi" }, { name: "Diğer" }]),
+    faultList: ko.observableArray([{ name: "Müşteri Hizmetleri" }, { name: "Ürünler Arası Geçiş" }, { name: "Gatio" }, { name: "Giza" }, { name: "Samline" }, { name: "Jade" }, { name: "Tim" }, { name: "Telekomone" }, { name: "Krea Doğrudan Pazarlama" }, { name: "Mert Yükler" }, { name: "KÇM" }, { name: "Techline İletişim" }, { name: "Bornet" }, { name: "Bayi" }, { name: "Çağrı Merkezi" }, { name: "Diğer" }]),
     startProcces: ko.observable(), // satış kaynağı düzenlenebilir mi ?
     faultEditable: ko.pureComputed(function () {
         return dataModel.perOfBayiOrKoc() && (dataModel.tasktype() == 1 || dataModel.tasktype() == 9) && (dataModel.editable() || dataModel.fault() == null || dataModel.fault() == "");

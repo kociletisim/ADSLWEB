@@ -412,7 +412,7 @@ var dataModel = {
             superonline: self.superonlineNo() ? { fieldName: 'superonlineCustNo', op: 2, value: self.superonlineNo() } : null,
             task: self.selectedTaskname().length > 0 ? { fieldName: "taskid", op: 7, value: self.selectedTaskname() } : null,
             personel: self.selectedPersonelname().length>0 ? (self.selectedPersonelname() == "0" ? { fieldName: "personelname", op: 8, value: null } : { fieldName: "personelid", op: 7, value: self.selectedPersonelname() }) : null,
-            taskstate: self.selectedTaskstatus() ? (self.selectedTaskstatus() == '0' ? { fieldName: "taskstate", op: 8, value: null } : { fieldName: "taskstateid", op: 7, value: self.selectedTaskstatus() }) :( self.firstLoad()==true ? { fieldName: "taskstate", op: 8, value: null } : null),
+            taskstate: self.selectedTaskstatus() ? (self.selectedTaskstatus() == '0' ? { fieldName: "taskstate", op: 8, value: null } : { fieldName: "taskstateid", op: 7, value: self.selectedTaskstatus() }) : null,
             iss: self.selectedIss() ? { fieldName: "issText", op: 6, value: self.selectedIss() } : null,
             customerstatus: self.selectedCustomerstatus() ? { fieldName: "Text", op: 6, value: self.selectedCustomerstatus() } : null,
             attachmentDate: self.attachmentDate() ? self.attachmentDate() : null,
