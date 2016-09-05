@@ -181,7 +181,7 @@
                                         <p>Kampanya *</p>
                                     </div>
                                     <div data-bind="visible:subcategory" class="col-xs-12 col-sm-6 col-md-6" style="margin-top: 3px;">
-                                        <select id="kampanya" data-bind="options:campaignlist, optionsText:'name', optionsValue:'id', value:campaignid, optionsCaption:'Kampanya Seçiniz...'"></select>
+                                        <select id="kampanya" data-bind="options:campaignlist, optionsText:'name', optionsValue:'id', value:campaignid, optionsCaption:'Kampanya Seçiniz...',optionsAfterRender: setOptionDisable"></select>
                                     </div>
                                 </fieldset>
                                 <fieldset class="col-md-12 col-lg-12 col-sm-12">

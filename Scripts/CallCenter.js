@@ -43,6 +43,7 @@ var dataModel = {
     subcategorylist: ko.observableArray([]),
     categorylist: ko.observableArray([]),
     campaignlist: ko.observableArray([]),
+    geciciListe: ko.observableArray([]),
     category: ko.observable(),
     subcategory: ko.observable(),
     campaignid: ko.observable(),
@@ -152,7 +153,18 @@ var dataModel = {
             campaign: { fieldName: 'name', op: 6, value: '' }
         },
         crmcallAPI.getCampaignInfo(data, function (a, b, c) {
-            self.campaignlist(a);
+            if (self.internet()) {
+                var list = a;
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].id == 7124) {
+                        self.geciciListe().push({ id: list[i].id, name: list[i].name, disable: ko.observable(true) });
+                    }
+                    else {
+                        self.geciciListe().push({ id: list[i].id, name: list[i].name, disable: ko.observable(false) });
+                    }
+                }
+            }
+            self.campaignlist(self.geciciListe());
             $("#kampanya").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
             self.campaignid(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.id : null);
             $("#kampanya").multiselect("refresh");
@@ -163,6 +175,12 @@ var dataModel = {
                 //$("#kampanya").prop('disabled', true);
             }
         }, null, null)
+    },
+    setOptionDisable: function (option, item) {
+        if (dataModel.campaignlist().length > 0) {
+            //console.log(item);
+            ko.applyBindingsToNode(option, { disable: item.disable }, item);
+        }
     },
     getproduct: function () {
         var self = this;
