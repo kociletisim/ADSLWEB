@@ -177,7 +177,7 @@ var dataModel = {
         }, null, null)
     },
     setOptionDisable: function (option, item) {
-        if (dataModel.campaignlist().length > 0) {
+        if (dataModel.campaignlist().length > 0 && item != null && item != undefined) {
             //console.log(item);
             ko.applyBindingsToNode(option, { disable: item.disable }, item);
         }
