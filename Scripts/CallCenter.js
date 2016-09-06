@@ -263,8 +263,10 @@ var dataModel = {
             $('.btn-success').prop('disabled', false);
             alert(self.returntaskorderno());
         }
-        else
+        else if (self.returntaskorderno() == "Tamamlandı")
             alert("Satış Yapıldı !");
+        else
+            alert("Hata Oluştu. Satışı Tekrar Giriniz ! \r\n Hata Mesajı = " + self.returntaskorderno());
     },
     renderBindings: function () {
         var self = this;
