@@ -6,7 +6,7 @@ var crmcallAPI = (function () {
     var getData = function (callType, path, sendData, onsuccess, onerror, before) {
         var baseURL = "http://crmapitest.kociletisim.com.tr/api/Adsl/";
         //var baseURL = "http://192.168.1.201/api/Adsl/"; // bu ip üzerinden yayın yapılacak sistem tamamlanınca
-        //var baseURL = "http://192.168.1.94:50752/api/Adsl/";
+        //var baseURL = "http://localhost:50752/api/Adsl/";
         $.ajax({
             method: callType,
             url: baseURL + path,

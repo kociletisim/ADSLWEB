@@ -890,7 +890,7 @@ var dataModel = {
                     doc.documenturl = ko.observable(doc.documenturl);
                 });
                 self.customerdocument(a.data.rows[0].customerdocument);
-                self.info(a.data.rows[0].customerproduct[0] ?a.data.rows[0].customerproduct[0].campaigns.category:null);
+                self.info(a.data.rows[0].customerproduct[0] ? a.data.rows[0].customerproduct[0].campaigns ? a.data.rows[0].customerproduct[0].campaigns.category:null:null);
                 self.getcategory();
                 $.each(a.data.rows[0].stockmovement, function (index, stockmovement) {
                     var ssAmount = (stockmovement.stockStatus ? stockmovement.stockStatus.amount : 0);
