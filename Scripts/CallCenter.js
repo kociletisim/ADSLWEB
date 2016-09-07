@@ -246,7 +246,7 @@ var dataModel = {
             campaignid: self.campaignid(),
             fault: self.taskid() != 131 ? self.fault() : null,
         };
-        if (self.pids().length > 0 && kontrol == true && data.taskid != null && ((self.confirmedCustomer() && self.confirmedCustomer() != "-1") || (data.tc != null && data.gsm != null && self.selectedIlce())))
+        if (data.campaignid != null && self.pids().length > 0 && kontrol == true && data.taskid != null && ((self.confirmedCustomer() && self.confirmedCustomer() != "-1") || (data.tc != null && data.gsm != null && self.selectedIlce())))
             crmcallAPI.saveAdslSalesTask(data, function (a, b, c) {
                 if (!a) {
                     window.location.href = "http://adsl.kociletisim.com.tr";
