@@ -29,7 +29,7 @@ var dataModel = {
     appointmentDate: ko.observable(),
     consummationDate: ko.observable(),
     selectedTaskstatus: ko.observable(),
-    defaultstatus:ko.observable(),
+    defaultstatus: ko.observableArray(['0', '9159', '9165']),
     selectedCustomerstatus: ko.observable(),
     description: ko.observable(),
     tasks: ko.observableArray([]),
@@ -402,7 +402,8 @@ var dataModel = {
         self.selectedAttachmentPersonelid(null);
         self.selectedTaskname($("#taskNameFilter").val()?$("#taskNameFilter").val():'');
         self.selectedTaskstatus($("#taskdurumu").val() ? $("#taskdurumu").val() : null);
-        self.selectedPersonelname($("#personel").val()?$("#personel").val():'');
+        self.selectedPersonelname($("#personel").val() ? $("#personel").val() : '');
+        console.log(self.selectedTaskstatus());
         var data = {
             pageNo: pageno,
             rowsPerPage: rowsperpage,
@@ -411,8 +412,8 @@ var dataModel = {
             customer: self.customername() ? { fieldName: "customername", op: 6, value: self.customername() } : null,
             superonline: self.superonlineNo() ? { fieldName: 'superonlineCustNo', op: 2, value: self.superonlineNo() } : null,
             task: self.selectedTaskname().length > 0 ? { fieldName: "taskid", op: 7, value: self.selectedTaskname() } : null,
-            personel: self.selectedPersonelname().length>0 ? (self.selectedPersonelname() == "0" ? { fieldName: "personelname", op: 8, value: null } : { fieldName: "personelid", op: 7, value: self.selectedPersonelname() }) : null,
-            taskstate: self.selectedTaskstatus() ? (self.selectedTaskstatus() == '0' ? { fieldName: "taskstate", op: 8, value: null } : { fieldName: "taskstateid", op: 7, value: self.selectedTaskstatus() }) : null,
+            personel: self.selectedPersonelname().length > 0 ? (self.selectedPersonelname() == "0" ? { fieldName: "personelname", op: 8, value: null } : { fieldName: "personelid", op: 7, value: self.selectedPersonelname() }) : null,
+            taskstate: self.selectedTaskstatus() ? (self.selectedTaskstatus() == '0' ? { fieldName: "taskstate", op: 8, value: null } : { fieldName: "taskstateid", op: 7, value: self.selectedTaskstatus() }) : (self.firstLoad() == true ? { fieldName: "taskstateid", op: 7, value: self.defaultstatus() } : null),
             iss: self.selectedIss() ? { fieldName: "issText", op: 6, value: self.selectedIss() } : null,
             customerstatus: self.selectedCustomerstatus() ? { fieldName: "Text", op: 6, value: self.selectedCustomerstatus() } : null,
             attachmentDate: self.attachmentDate() ? self.attachmentDate() : null,
