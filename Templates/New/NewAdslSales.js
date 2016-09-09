@@ -176,7 +176,7 @@
             category: { fieldName: 'category', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
-            self.categorylist(a);
+            self.categorylist([{ category: 'ADSL' }, { category : 'VDSL'}]);
             $("#kategori").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
 
             self.category(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.category : null);

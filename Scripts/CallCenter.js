@@ -29,9 +29,11 @@ var dataModel = {
 
     adsl: ko.observable(),
     vdsl: ko.observable(),
+    fiber: ko.observable(),
 
     yalin: ko.observable(),
     churn: ko.observable(),
+
     donanim: ko.observable(),
     internet: ko.observable(),
 
@@ -180,7 +182,7 @@ var dataModel = {
     },
     setOptionDisable: function (option, item) {
         if (dataModel.campaignlist().length > 0 && dataModel.internet() && item != null && item != undefined) {
-            console.log(item);
+            //console.log(item);
             ko.applyBindingsToNode(option, { disable: item.disable }, item);
         }
     },
@@ -221,8 +223,13 @@ var dataModel = {
 
         if (self.donanim())
             self.taskid(131); // İkinci Donanım Çağrı (Dış'sa apide karar verilecek)
+
+        if (self.fiber())
+            self.taskid(139); // Fiber Satış Taskı
+
         if (self.confirmedCustomer() && self.confirmedCustomer() != "-1")
             self.selectedIl(self.confirmedCustomer().ilKimlikNo);
+
         var data = {
             customerid: self.donanim() ? self.confirmedCustomer() ? self.confirmedCustomer() != "-1" ? self.confirmedCustomer().customerid : 0 : 0 : 0,
             tc: self.tckimlikno(),
@@ -346,6 +353,12 @@ var dataModel = {
                     customMaxAttribute: "8"
                 });
                 $('#satisturu').on('change', function () {
+                    self.confirmedCustomer(null);
+                    self.somn(null);
+                    self.campaignlist([]);
+                    self.category(null);
+                    self.yalin(false);
+                    self.churn(false);
                     self.internet(this.value == 1 ? true : false);
                     self.donanim(this.value == 2 ? true : false);
                 });
@@ -405,29 +418,35 @@ dataModel.category.subscribe(function (v) {
     if (v == 'ADSL') {
         dataModel.adsl(true);
         dataModel.vdsl(false);
+        dataModel.fiber(false);
         dataModel.yalin(false);
         dataModel.churn(false);
     }
     else if (v == 'VDSL') {
         dataModel.adsl(false);
         dataModel.vdsl(true);
+        dataModel.fiber(false);
+        dataModel.yalin(false);
+        dataModel.churn(false);
+    }
+    else if (v == 'FİBER') {
+        dataModel.fiber(true);
+        dataModel.adsl(false);
+        dataModel.vdsl(false);
         dataModel.yalin(false);
         dataModel.churn(false);
     }
     else {
         dataModel.adsl(false);
         dataModel.vdsl(false);
+        dataModel.fiber(false);
         dataModel.yalin(false);
         dataModel.churn(false);
     }
+    $("#kategori").multiselect("refresh");
     dataModel.getsubcategory();
 });
 dataModel.donanim.subscribe(function (v) {
-    dataModel.confirmedCustomer(null);
-    dataModel.somn(null);
-    dataModel.category(null);
-    dataModel.yalin(false);
-    dataModel.churn(false);
     if (v) {
         dataModel.category("ADSL");
         $("#kategori").multiselect("rebuild");
