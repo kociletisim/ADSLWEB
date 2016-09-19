@@ -131,6 +131,7 @@ var dataModel = {
     },
     getsubcategory: function () {
         var self = this;
+        self.subcategorylist([]);
         data = {
             deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
@@ -148,6 +149,7 @@ var dataModel = {
     },
     getcamapign: function () {
         var self = this;
+        self.campaignlist([]);
         data = {
             deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
