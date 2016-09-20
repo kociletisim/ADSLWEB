@@ -22,8 +22,7 @@
                                 <table class="table" id="worklisttable" data-pagination="true" data-search="true">
                                     <thead>
                                         <tr>
-                                            <th class="col-md-1" style="border-right: 1px solid #ddd;">
-                                            </th>
+                                            <th class="col-md-1" style="border-right: 1px solid #ddd;">Müşteri No</th>
                                             <th class="col-md-1" style="border-right: 1px solid #ddd;">Müşteri</th>
                                             <th class="col-md-2" style="border-right: 1px solid #ddd;">Gsm</th>
                                             <th class="col-md-2" style="border-right: 1px solid #ddd;">Açıklama</th>
@@ -35,7 +34,7 @@
                                     <tbody>
                                         <!-- ko foreach: workList -->
                                         <tr>
-                                            <td></td>
+                                            <td data-bind="text:attachedcustomer.superonlineCustNo"></td>
                                             <td data-bind="text:attachedcustomer.customername"></td>
                                             <td data-bind="text:attachedcustomer.gsm"></td>
                                             <td data-bind="text:attachedcustomer.ilce ? attachedcustomer.description + ' / ' + attachedcustomer.ilce.ad : attachedcustomer.description"></td>
