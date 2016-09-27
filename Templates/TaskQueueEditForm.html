@@ -260,8 +260,8 @@
                                                     <tbody data-bind="foreach:{ data:stockmovement , as:'sm'}">
                                                         <tr class="cls_line" onclick="">
                                                             <td data-bind="text:moment(movementdate).format('lll')"></td>
-                                                            <td data-bind="text:$root.personelname"></td>
-                                                            <td data-bind="text:$root.customername"></td>
+                                                            <td data-bind="text:$root.taskid() == 142 ? $root.customername : $root.personelname"></td>
+                                                            <td data-bind="text:$root.taskid() == 142 ? $root.personelname : $root.customername"></td>
                                                             <td data-bind="text:sm.stockcard.productname"></td>
                                                             <td>
                                                                 <!--ko if:sm.stockcard.hasserial-->

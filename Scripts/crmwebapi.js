@@ -208,6 +208,9 @@
          getTQStockMovements: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/getTQStockMovements", data, onsuccess, onerror, before)
          },
+         getStockMovementsForCustomer: function (data, onsuccess, onerror, before) {
+             getData("POST", "TaskQueues/getStockMovementsForCustomer", data, onsuccess, onerror, before)
+         },
          getTQDocuments: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/getTQDocuments", data, onsuccess, onerror, before)
          },

@@ -960,7 +960,36 @@ dataModel.taskstatus.subscribe(function (v) {
         customerproducts: dataModel.selectedProductIds(),
         isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9)
     };
-    crmAPI.getTQStockMovements(data, function (a, b, c) {
+    if (dataModel.taskid() == 142)
+        crmAPI.getStockMovementsForCustomer(data, function (a, b, c) {
+            if (a.errorMessage) dataModel.errormessage(a.errorMessage);
+            $.each(a, function (index, stockmovement) {
+                var ssAmount = (stockmovement.stockStatus ? stockmovement.stockStatus.amount : 0);
+                var ssSerials = (stockmovement.stockStatus ? stockmovement.stockStatus.serials : []);
+                stockmovement.used = ko.observable(stockmovement.amount);
+                stockmovement.max = ko.observable(stockmovement.amount + ssAmount);
+                stockmovement.available = ko.observable(ssAmount);
+                stockmovement.serial = ko.observable(stockmovement.serialno);
+                stockmovement.serials = ko.observableArray(ssSerials);
+                stockmovement.serial.subscribe(function (v) {
+                    stockmovement.used(v ? 1 : 0);
+                    stockmovement.serialno = v;
+                    stockmovement.amount = 1;
+                    return v;
+                });
+                stockmovement.used.subscribe(function (v) {
+                    if (v > stockmovement.max())
+                        stockmovement.used(stockmovement.max());
+                    else if (v < 0)
+                        stockmovement.used(0);
+                    stockmovement.available(stockmovement.max() - stockmovement.used());
+                    return v;
+                });
+            });
+            dataModel.stockmovement(a);
+        });
+    else
+        crmAPI.getTQStockMovements(data, function (a, b, c) {
         if (a.errorMessage) dataModel.errormessage(a.errorMessage);
         $.each(a, function (index, stockmovement) {
             var ssAmount = (stockmovement.stockStatus ? stockmovement.stockStatus.amount : 0);
@@ -1012,7 +1041,7 @@ dataModel.stockmovement.subscribe(function (v) {
             }
         }, null, null);
     }
-    else if (dataModel.taskid() != 51) {
+    else if (dataModel.taskid() != 51 && dataModel.taskid() != 116) {
         dataModel.eskiserial(null);
     }
 });
@@ -1057,6 +1086,18 @@ dataModel.taskid.subscribe(function (v) {
             dataModel.eskiserial(a[0]);
             if (dataModel.eskiserial() == null || dataModel.eskiserial() == "")
                 dataModel.baglantiKontrol(true);
+        }, null, null);
+    }
+    else if (v == 116) {
+        dataModel.baglantiKontrol(false);
+        console.log("FFFF");
+        var data = {
+            stockcardid: 1117,
+            fromobject: dataModel.customerid(),
+        };
+        crmAPI.getSerialOnCustomer(data, function (a, b, c) {
+            dataModel.eskiserial(a[0]);
+            console.log(a[0]);
         }, null, null);
     }
 });
