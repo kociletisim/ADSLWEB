@@ -100,6 +100,7 @@ var dataModel = {
     description: ko.observable(),
     descriptionControl:ko.observable(),
     dateoption: ko.observable(),
+    gecicitaskstatuslist: ko.observableArray([]),
     taskstatuslist: ko.observableArray([]),
     personellist:ko.observableArray([]),
     ctstatuslist: ko.observableArray([]),
@@ -368,7 +369,6 @@ var dataModel = {
     user:ko.observable(),
     docIds: ko.observableArray(),
     uploadControl:ko.observable(),
-    xx:ko.observable(),
 
     getcategory: function () {
         var self = this;
@@ -450,9 +450,16 @@ var dataModel = {
             taskstate: { fieldName: "taskstate", op: 6, value: '' },
         };
         crmAPI.getTaskStatus(data, function (a, b, c) {
-             self.taskstatuslist(a);
-             self.taskstatus(statusVal);
-             $("#taskdurumu").multiselect({
+            var list = a;
+            for (var i = 0; i < list.length; i++) {
+                if (!self.perOfBayiOrKoc() && list[i].taskstateid == 9169)
+                    self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
+                else
+                    self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(false) });
+            }
+            self.taskstatuslist(self.gecicitaskstatuslist());
+            self.taskstatus(statusVal);
+            $("#taskdurumu").multiselect({
                  includeSelectAllOption: true,
                  selectAllValue: 'select-all-value',
                  maxHeight: 250,
@@ -463,7 +470,12 @@ var dataModel = {
                  enableFiltering: true,
                  filterPlaceholder: 'Ara'
              });
-         }, null, null)
+        }, null, null)
+    },
+    setOptionDisable: function (option, item) {
+        if (dataModel.taskstatuslist().length > 0 && item != null && item != undefined) {
+            ko.applyBindingsToNode(option, { disable: item.disable }, item);
+        }
     },
     getUserInfo: function () {
         var self = this;

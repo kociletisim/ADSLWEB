@@ -404,7 +404,6 @@ var dataModel = {
         self.selectedTaskname($("#taskNameFilter").val()?$("#taskNameFilter").val():'');
         self.selectedTaskstatus($("#taskdurumu").val() ? $("#taskdurumu").val() : null);
         self.selectedPersonelname($("#personel").val() ? $("#personel").val() : '');
-        console.log(self.selectedTaskstatus());
         var data = {
             pageNo: pageno,
             rowsPerPage: rowsperpage,
