@@ -40,6 +40,7 @@ var dataModel = {
     personellist: ko.observableArray([]),
     attacheablePersonelList: ko.observableArray([]),
     attachedobjectid:ko.observable(),
+    sureclist: ko.observableArray([]),
     taskqueuelist: ko.observableArray([]),
     totalpagecount: ko.observable(0),
     totalRowCount: ko.observable(),
@@ -465,6 +466,17 @@ var dataModel = {
             self.user(a);
             self.BayiOrKoc();
         }, null, null)
+    },
+    ara: function (custid) {
+        var self = this;
+        var data = {
+            pageNo: 1,
+            rowsPerPage: 100,
+            customer: { fieldName: 'customerid', op: 2, value: custid },
+        };
+        crmAPI.getTaskqueuesForBayi(data, function (a, b, c) {
+            self.sureclist(a.data.rows);
+        }, null, null);
     },
     navigate: {
         gotoPage: function(pageNo) {

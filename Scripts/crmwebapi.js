@@ -208,9 +208,6 @@
          getTQStockMovements: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/getTQStockMovements", data, onsuccess, onerror, before)
          },
-         getStockMovementsForCustomer: function (data, onsuccess, onerror, before) {
-             getData("POST", "TaskQueues/getStockMovementsForCustomer", data, onsuccess, onerror, before)
-         },
          getTQDocuments: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/getTQDocuments", data, onsuccess, onerror, before)
          },
@@ -354,6 +351,9 @@
          },
          getTaskqueueInfo: function (data, onsucces, onerror, before) {
              getData("POST", "TaskQueues/getTaskqueueInfo", data, onsucces, onerror, before)
+         },
+         getTaskqueuesForBayi: function (data, onsuccess, onerror, before) {
+             getData("POST", "TaskQueues/getTaskqueuesForBayi", data, onsuccess, onerror, before);
          },
      }
  })();

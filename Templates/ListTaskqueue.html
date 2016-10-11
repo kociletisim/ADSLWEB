@@ -121,7 +121,7 @@
                                     <label class="control-label" for="taskdurumu">Task Durumu</label>
                                 </div>
                                 <div class="col-md-12">
-                                    <select id="taskdurumu" data-bind="options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstateid', valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple"></select>
+                                    <select id="taskdurumu" data-bind="options: taskstatuslist, optionsText: 'taskstate', optionsValue: 'taskstateid',value:defaultstatus, valueUpdate: 'keydown', event: { keypress: enterfilter }" multiple="multiple"></select>
                                 </div>
                             </div>
                         </div>
@@ -227,12 +227,18 @@
                                             <tr data-bind="attr:{class :attachedpersonel==null? '' : (taskstatepool==null ?'' :'' )}" style="line-height: 50px;">
 
                                                 <td>
+                                                    <a href="#surecinfo" class="customer" role="button" data-toggle="modal" data-bind="click: $root.ara(attachedcustomer.customerid)">
+                                                        <button id="surec" type="button" class="btn btn-success btn-small" style="margin-bottom:2px;padding: 3px; border-radius: 5px; font-size:14px;">
+                                                            Süreç
+                                                        </button>
+                                                    </a>
+                                                    <input class="sel" type="checkbox" data-bind="value:taskorderno" />
+                                                    <br />
                                                     <a href="#TaskQueueEditForm" data-bind="attr: {href:'#TaskQueueEditForm?'+taskorderno}">
                                                         <button data-bind="visible:attachedpersonel && attachedpersonel.personelname, text: editable?'Düzenle': 'Gör'" id="duzenle" type="button" class="btn btn-success btn-small" style="padding: 3px; border-radius: 5px; font-size:14px;">
                                                             Düzenle
                                                         </button>
                                                     </a>
-                                                    <input class="sel" type="checkbox" data-bind="value:taskorderno" />
                                                 </td>
                                                 <td style="color:#284af5;font-family:'Franklin Gothic Medium','Arial Narrow', Arial, sans-serif" data-bind="text:task.taskname"></td>
                                                 <td data-bind="text: attachedcustomer && (attachedcustomer.il && attachedcustomer.il.ad || '&lt;boş&gt;') "></td>
@@ -246,7 +252,7 @@
                                                 <td data-bind="text: attachmentdate ? moment(attachmentdate).format('LLL') : '&lt;boş&gt;'"></td>
                                                 <td data-bind="text: (appointmentdate ? moment(appointmentdate).format('LLL') : '&lt;boş&gt;' )"></td>
                                                 <td data-bind="text: consummationdate ? moment(consummationdate).format('LLL') : '&lt;boş&gt;'"></td>
-                                                <td style="font-size:large;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" data-bind="text:(taskstatepool &&taskstatepool.taskstate || 'AÇIK')"></td>
+                                                <td style="font-size:large;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" data-bind="text:(taskstatepool &&taskstatepool.taskstate || 'AÇIK') + '/' + '\r\n' + laststatus "></td>
                                                 <td data-bind="text: description"></td>
                                             </tr>
                                             <!-- /ko -->
@@ -400,8 +406,57 @@
         </div>
         <!-- müşteri bilgilerini düzenleme For Modal Finish-->
     </div>
-</div>
 
+    <!-- Süreç -->
+    <div class="modal fade" id="surecinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-lg center-block" role="document" style="margin-top: 50px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title center-block" id="myModalLabel">Süreç Taskları</h4>
+                </div>
+                <div class="modal-body" style="display: inline-block; position: relative;">
+                    <table class="table table-bordered table-hover" data-bind="visible:sureclist().length > 0" id="taskquetable" style="padding-right:10px;">
+                        <thead style="background-color:#8efba6">
+                            <tr>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Task</th>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">İl</th>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">İlçe</th>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Müşteri</th>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Personel</th>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Atanma Tarihi</th>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Netflow Tarihi</th>
+                                <th class="col-md-1" style="border-right: 1px solid #ddd;">Sonlanma Tarihi</th>
+                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Durum</th>
+                                <th class="col-md-2" style="border-right: 1px solid #ddd;">Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ko foreach: sureclist -->
+                            <tr>
+                                <td style="font-size:large;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" data-bind="text:task.taskname"></td>
+                                <td data-bind="text: attachedcustomer && (attachedcustomer.il && attachedcustomer.il.ad || 'Boş') "></td>
+                                <td data-bind="text: attachedcustomer && (attachedcustomer.ilce && attachedcustomer.ilce.ad || 'Boş') "></td>
+                                <td style="color:#284af5;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" data-bind="text: attachedcustomer && (attachedcustomer.customername && (attachedcustomer.customername) || 'Boş')"></td>
+                                <td data-bind="text: (attachedpersonel && attachedpersonel.personelname || 'Atanmamış') "></td>
+                                <td data-bind="text: attachmentdate ? moment(attachmentdate).format('LLL') : 'Boş'"></td>
+                                <td data-bind="text: (appointmentdate ? moment(appointmentdate).format('LLL') : 'Boş' )"></td>
+                                <td data-bind="text: consummationdate ? moment(consummationdate).format('LLL') : 'Boş'"></td>
+                                <td style="font-size:large;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" data-bind="text:(taskstatepool &&taskstatepool.taskstate || 'AÇIK')"></td>
+                                <td data-bind="text: description"></td>
+                            </tr>
+                            <!-- /ko -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger right" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Süreç Modal -->
+</div>
 
 <script>
     $(document).ready(function () {
