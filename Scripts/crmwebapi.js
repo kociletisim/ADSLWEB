@@ -355,5 +355,8 @@
          getTaskqueuesForBayi: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/getTaskqueuesForBayi", data, onsuccess, onerror, before);
          },
+         getStockMovementsForCustomer: function (data, onsuccess, onerror, before) {
+             getData("POST", "TaskQueues/getStockMovementsForCustomer", data, onsuccess, onerror, before)
+         },
      }
  })();
