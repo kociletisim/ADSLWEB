@@ -125,6 +125,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4" style="padding:1px;">
+                            <div class="form-group-sm has-info cls-margin-bottom">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="laststate">Süreç Durumu</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <select id="laststate" data-bind="options: lastStatusList, optionsText: 'name', optionsValue: 'id',value:lastStatus, valueUpdate: 'keydown', event: { keypress: enterfilter }"></select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-xs-12 col-sm-4 col-md-4 pull-right" style="margin-top: 21px;">
                             <!--								 <input  type="checkbox" data-bind="checked:atanmamistasklar" />Atanmamış Tasklar </input>-->
                             <div class="btn-group pull-right" role="group">

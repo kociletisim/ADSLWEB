@@ -6,6 +6,8 @@ var tqlFilter = crmAPI.getCookie("tqlFilter");
 
 var dataModel = {
     multiSelectTagIds: "#blokadi,#taskNameFilter,#servissaglayici,#abonedurumu,#personel,#taskdurumu",
+    lastStatusList: ko.observableArray([{ id: null, name: "Süreç Durumu Seçiniz" }, { id: 0, name: "Bekleyen" }, { id: 1, name: "Tamamlanan" }, { id: 2, name: "İptal Edilen" }, { id: 3, name: "Ertelenen" }]),
+    lastStatus: ko.observable(),
     typeHeadTagIds: "#site",
     flag: ko.observable(),
     firstLoad:ko.observable(),
@@ -152,6 +154,18 @@ var dataModel = {
                 filterPlaceholder: 'Ara'
             });
             $("#taskdurumu").multiselect('select', ['0', '9159', '9165']);
+            $("#laststate").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: 'Süreç Durumunu Seçiniz',
+                nSelectedText: 'Süreç Durumu Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
         }, null, null)
     },
     getpersonel: function() {
@@ -371,6 +385,7 @@ var dataModel = {
         var self = this;
         self.appointmentDate(null);
         self.il(null);
+        self.lastStatus(null);
         self.ilce(null);
         self.attachmentDate(null);
         self.customername(null);
@@ -378,7 +393,7 @@ var dataModel = {
         self.consummationDate(null);
         self.selectedCustomerstatus(null);
         $("#taskNameFilter,#abonedurumu,#servissaglayici,#taskdurumu,#personel,#personelatamacombo").multiselect('deselectAll', false);
-        $("#taskNameFilter,#abonedurumu,#servissaglayici,#taskdurumu,#personel,#personelatamacombo").multiselect('refresh');
+        $("#taskNameFilter,#abonedurumu,#servissaglayici,#taskdurumu,#laststate,#personel,#personelatamacombo").multiselect('refresh');
         self.selectedPersonelname(null);
         self.selectedIss(null);
         self.selectedTaskname('');
@@ -419,6 +434,7 @@ var dataModel = {
             attachmentDate: self.attachmentDate() ? self.attachmentDate() : null,
             appointmentDate: self.appointmentDate() ? self.appointmentDate() : null,
             consummationDate: self.consummationDate() ? self.consummationDate() : null,
+            laststatus: self.lastStatus(),
         };
 
         crmAPI.setCookie("tqlFilter", data);
