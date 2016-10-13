@@ -415,6 +415,10 @@ var dataModel = {
         self.rowsPerPage(rowsperpage);
         self.isLoading(true);
         self.flag(null);
+        self.customername($.trim(self.customername()));
+        self.superonlineNo($.trim(self.superonlineNo()));
+        self.il($.trim(self.il()));
+        self.ilce($.trim(self.ilce()));
         self.selectedAttachmentPersonelid(null);
         self.selectedTaskname($("#taskNameFilter").val()?$("#taskNameFilter").val():'');
         self.selectedTaskstatus($("#taskdurumu").val() ? $("#taskdurumu").val() : null);
