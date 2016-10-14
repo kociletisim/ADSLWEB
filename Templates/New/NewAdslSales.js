@@ -297,7 +297,7 @@
             productids: self.pids(),
             campaignid: self.campaignid(),
             fault: self.fault(),
-            superonlineCustNo: self.superonlineCustNo(),
+            superonlineCustNo: $.trim(self.superonlineCustNo()),
             appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
         if (data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))

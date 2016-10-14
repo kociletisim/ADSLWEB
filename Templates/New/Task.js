@@ -182,7 +182,7 @@ var dataModel = {
                 description: self.fulladdress(),
                 taskid: self.taskid(),
                 email: self.email(),
-                superonlineCustNo: self.smno(),
+                superonlineCustNo: $.trim(self.smno()),
             };
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {
                 if (self.newmovement()) {

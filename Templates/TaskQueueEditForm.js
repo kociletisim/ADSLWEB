@@ -339,13 +339,14 @@ var dataModel = {
         var self = this;
         var data = self.selectedCustomer();
         if (self.isClickKaydet() == true) {
-            self.smnoCustomer().superonlineCustNo = self.smno();
+            self.smnoCustomer().superonlineCustNo = $.trim(self.smno());
             self.smnoCustomer().tc = self.tc();
             data = self.smnoCustomer();
         }
         else {
             self.selectedCustomer().ilKimlikNo = self.ilKimlik();
             self.selectedCustomer().ilceKimlikNo = self.ilceKimlik();
+            self.smnoCustomer().superonlineCustNo = $.trim(self.smnoCustomer().superonlineCustNo);
             self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
             self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
             data = self.selectedCustomer();

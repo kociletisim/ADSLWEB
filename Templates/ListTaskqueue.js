@@ -270,6 +270,7 @@ var dataModel = {
         var self = this;
         self.selectedCustomer().ilKimlikNo = self.ilKimlik();
         self.selectedCustomer().ilceKimlikNo = self.ilceKimlik();
+        self.smnoCustomer().superonlineCustNo = $.trim(self.smnoCustomer().superonlineCustNo);
         self.selectedCustomer().bucakKimlikNo = $("#bucakcombo").val() ? $("#bucakcombo").val() : null;
         self.selectedCustomer().mahalleKimlikNo = $("#mahallecombo").val() ? $("#mahallecombo").val() : null;
         var data = self.selectedCustomer();

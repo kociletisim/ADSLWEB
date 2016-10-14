@@ -244,7 +244,7 @@ var dataModel = {
         var data = {
             tc: self.tckimlikno(),
             customername: self.customername(),
-            superonlineCustNo: self.smno(),
+            superonlineCustNo: $.trim(self.smno()),
             gsm: self.gsm(),
             phone: self.phone(),
             ilKimlikNo: self.selectedIl(),
