@@ -9,12 +9,14 @@ var dataModel = {
     savemessagecode: ko.observable(),
 
     personelList: ko.observableArray([]),
+    responseIlces: ko.observableArray([]),
     personelname: ko.observable(),
     objectList:ko.observableArray([]),
     selectedPersonel: ko.observable(),
     rolesList:ko.observableArray([]),
     ilList: ko.observableArray([]),
-    ilceList:ko.observableArray(),
+    ilceList:ko.observableArray([]),
+    ilceResList: ko.observableArray([]),
     selectedIl: ko.observable(),
     selectedIlce:ko.observable(),
     selectil: ko.observable(),
@@ -100,6 +102,19 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
+            $("#editilceres").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 3,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#editilceres").multiselect("select", self.responseIlces()).multiselect('rebuild')
         }, null, null);
     },
     getObjects: function () {
@@ -136,12 +151,13 @@ var dataModel = {
         var self = this;
         var rol = 0;
         if ($("#object").val()) {
-        for (var i = 0; i < $("#object").val().length; i++) {
-            rol |= $("#object").val()[i];
+            for (var i = 0; i < $("#object").val().length; i++) {
+                rol |= $("#object").val()[i];
+            }
         }
-        }
-            self.selectedPersonel().category = rol;
-            self.selectedPersonel().roles = rol;
+        self.selectedPersonel().category = rol;
+        self.selectedPersonel().roles = rol;
+        self.selectedPersonel().responseregions = $("#editilceres").val() ? $("#editilceres").val().toString() : null;
                 
         var data = self.selectedPersonel();
         crmAPI.savePersonel(data, function (a, b, c) {
@@ -233,6 +249,16 @@ var dataModel = {
             $("#editilce,#newilce").multiselect("setOptions", self.ilceList()).multiselect("rebuild");
         }, null, null)
     },
+    getResIlce: function () {
+        var self = this;
+        var data = {
+            adres: { fieldName: "ilKimlikNo", op: 6, value: '' },
+        };
+        crmAPI.getAdress(data, function (a, b, c) {
+            self.ilceResList(a);
+            //$("#editilceres").multiselect("setOptions", self.ilceResList()).multiselect("rebuild");
+        }, null, null)
+    },
 
     clean: function () {
         var self = this;
@@ -274,15 +300,52 @@ var dataModel = {
         var self = this;
         self.getUserInfo();
         self.getPersonels(dataModel.pageNo(), dataModel.rowsPerPage());
-        ko.applyBindings(dataModel, $("#bindingContainer")[0]);
         $('#new').click(function () {
             self.getObjects();
             self.getIl();
             self.getIlce();
+            $("#newilceres").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 3,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
         });
         self.getIl();
         self.getIlce();
-     
+        self.getResIlce();
         self.getyonetici();
+        ko.applyBindings(dataModel, $("#bindingContainer")[0]);
     }
 }
+dataModel.selectedPersonel.subscribe(function (v) {
+    dataModel.responseIlces([]);
+    if (v != null && v.responseregions != null)
+        dataModel.responseIlces(v.responseregions.split(","));
+    else
+        dataModel.responseIlces(null);
+});
+dataModel.ilceResList.subscribe(function (v) {
+    if (v != null && v.length > 0) {
+        for (var i = 0; i < v.length; i++) {
+            if (v[i].ilKimlikNo < 82) {
+                var ad = v[i].ad;
+                v[i].ad = dataModel.ilList()[(v[i].ilKimlikNo) - 1].ad + "/" + ad;
+            }
+            else {
+                for (var j = 81; j < dataModel.ilList().length; j++) {
+                    if (dataModel.ilList()[j].kimlikNo == v[i].ilKimlikNo) {
+                        var ad = v[i].ad;
+                        v[i].ad = dataModel.ilList()[j].ad + "/" + ad;
+                    }
+                }
+            }
+        }
+    }
+});

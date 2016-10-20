@@ -190,6 +190,12 @@
                         <select data-size="10" id="yonetici2" data-bind="options:$root.yoneticiList, optionsText:'personelname', optionsValue: 'personelid', value: relatedpersonelid, optionsCaption:'Seçiniz'"></select>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Sorumluluk Bölgesi</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="editilceres" data-bind="options:$root.ilceResList,optionsValue:'kimlikNo',optionsText:'ad'" class="form-control" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Şifre</p>
                     </div>
                     <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
@@ -270,6 +276,12 @@
                     </div>
                     <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
                         <select data-size="10" id="yonetici" data-bind="options: yoneticiList,optionsText:function(item) { return item.personelname}, optionsValue: 'personelid', valueUpdate: 'keydown', value:yoneticiId" multiple="multiple"></select>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
+                        <p>Sorumluluk Bölgesi</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 cls-padding-0px" style="margin-top: 3px;">
+                        <select id="newilceres" data-bind="options:$root.ilceResList,optionsValue:'kimlikNo',optionsText:'ad',optionsCaption:'Seçiniz'" class="form-control" multiple="multiple"></select>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                         <p>Şifre</p>
