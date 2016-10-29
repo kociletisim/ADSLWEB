@@ -61,7 +61,6 @@ var dataModel = {
     selectedCustomer: ko.observable(),
     user: ko.observable(),
     perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
-    backofficePersonel: ko.observable(false),
     BayiOrKoc: function () {
         var self = this;
         if (self.user() != null || self.user() != "") {
@@ -70,16 +69,6 @@ var dataModel = {
                 self.perOfBayiOrKoc(true);
             else
                 self.perOfBayiOrKoc(false);
-        }
-    },
-    BackOrPer: function () {
-        var self = this;
-        if (self.user() != null || self.user() != "") {
-            var ss = self.user().userRole & 4;
-            if (ss == 4)
-                self.backofficePersonel(true);
-            else
-                self.backofficePersonel(false);
         }
     },
 
@@ -527,7 +516,6 @@ var dataModel = {
         crmAPI.userInfo(function (a, b, c) {
             self.user(a);
             self.BayiOrKoc();
-            self.BackOrPer();
         }, null, null)
     },
     ara: function (custid) {
