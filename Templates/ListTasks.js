@@ -156,9 +156,26 @@ var dataModel = {
         crmAPI.getTaskDefination(data, function (a, b, c) {
             self.getObjectType();
             self.getPersonelType();
+            console.log(a[0]);
             self.selectedTask(a[0]);
         }, null, null);
     },
+    getGTypes: ko.pureComputed(function () {
+        var roles = [];
+        for (var i = 0; i < dataModel.personelTypeList().length; i++) {
+            if ((dataModel.selectedTask().attachablepersoneltype & dataModel.personelTypeList()[i].typeid) == dataModel.personelTypeList()[i].typeid)
+                roles.push(dataModel.personelTypeList()[i].typeid);
+        }
+        return roles;
+    }),
+    getITypes: ko.pureComputed(function () {
+        var roles = [];
+        for (var i = 0; i < dataModel.personelTypeList().length; i++) {
+            if ((dataModel.selectedTask().attachablepersoneltype & dataModel.personelTypeList()[i].typeid) == dataModel.personelTypeList()[i].typeid)
+                roles.push(dataModel.personelTypeList()[i].typeid);
+        }
+        return roles;
+    }),
     saveTask: function () {
         var self = this;
         if ($("#gorevli").val() && $("#gorevli").val().length > 1) {
@@ -184,13 +201,11 @@ var dataModel = {
     },
     insertTask: function () {
         var self = this;
-        var ttypes;
-        var otypes;
         if ($("#newgorevli").val() && $("#newgorevli").val().length > 1) 
             self.newpersoneltype(parseInt($("#newgorevli").val()[0] | $("#newgorevli").val()[1]));
         else
             self.newpersoneltype(parseInt($("#newgorevli").val()[0]));
-        if ($("#newilgi").val() &&$("#newilgi").val().length > 1) 
+        if ($("#newilgi").val() && $("#newilgi").val().length > 1) 
             self.newobjecttype(parseInt(("#newilgi").val()[0] | $("#newilgi").val()[1]));
         else
             self.newobjecttype(parseInt($("#newilgi").val()[0]));

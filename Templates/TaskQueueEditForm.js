@@ -98,6 +98,7 @@ var dataModel = {
     customergsm: ko.observable(),
     customerstatus: ko.observable(),
     description: ko.observable(),
+    descwrite: ko.observable(),
     descriptionControl:ko.observable(),
     dateoption: ko.observable(),
     gecicitaskstatuslist: ko.observableArray([]),
@@ -453,13 +454,16 @@ var dataModel = {
         crmAPI.getTaskStatus(data, function (a, b, c) {
             var list = a;
             for (var i = 0; i < list.length; i++) {
-                if (!self.perOfBayiOrKoc() && list[i].taskstateid == 9169)
+                if (!self.perOfBayiOrKoc() && (list[i].taskstateid == 9169 || list[i].taskstateid == 9171)) // ata akışından geldi || koç personel onayı
                     self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
                 else
                     self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(false) });
             }
             self.taskstatuslist(self.gecicitaskstatuslist());
             self.taskstatus(statusVal);
+            if (dataModel.taskstatus() != undefined && dataModel.taskstatus() != 0) {
+                dataModel.eskiserial(null);
+            } // task kapatılmışsa eski seri görülmesin
             $("#taskdurumu").multiselect({
                  includeSelectAllOption: true,
                  selectAllValue: 'select-all-value',
@@ -571,6 +575,7 @@ var dataModel = {
                     window.location.href = "app.html";
                 }, 2000);
             }, null, null);
+        self.description() != null ? self.description(self.description() + " " + $.trim(self.descwrite())) : self.description($.trim(self.descwrite()));
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
@@ -655,6 +660,11 @@ var dataModel = {
     saveTaskQueues: function () {
         $('.btn').prop('disabled', true);
         var self = this;
+        if (self.personelid() == 1393) {
+            alert("Kurulum veya Evrak Personel Ataması Yapınız !")
+            $('.btn').prop('disabled', false);
+            return;
+        }
         self.resSaveCustomer(null);
         self.isClickKaydet(false);
         // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
@@ -693,6 +703,7 @@ var dataModel = {
         }
     },
     saveTaskQueueDesc: function () {
+        self.description() != null ? self.description(self.description() + " " + $.trim(self.descwrite())) : self.description($.trim(self.descwrite()));
         data = {
             taskorderno: self.taskorderno(),
             task: { taskid: self.taskid() },
@@ -1054,9 +1065,6 @@ dataModel.stockmovement.subscribe(function (v) {
             }
         }, null, null);
     }
-    else if (dataModel.taskid() != 51 && dataModel.taskid() != 116) {
-        dataModel.eskiserial(null);
-    }
 });
 dataModel.uploadControl.subscribe(function (v) {
     if(v==true)
@@ -1090,27 +1098,16 @@ dataModel.regionKimlik.subscribe(function (v) {
     }
 });
 dataModel.taskid.subscribe(function (v) {
-    if (v == 51) {
-        var data = {
-            stockcardid: 1117,
-            fromobject: dataModel.customerid(),
-        };
-        crmAPI.getSerialOnCustomer(data, function (a, b, c) {
-            dataModel.eskiserial(a[0]);
-            if (dataModel.eskiserial() == null || dataModel.eskiserial() == "")
-                dataModel.baglantiKontrol(true);
-        }, null, null);
-    }
-    else if (v == 116) {
+    if (v == 51 || v == 116 || v == 41 || v == 59 || v == 153) {
         dataModel.baglantiKontrol(false);
-        console.log("FFFF");
         var data = {
             stockcardid: 1117,
             fromobject: dataModel.customerid(),
         };
         crmAPI.getSerialOnCustomer(data, function (a, b, c) {
             dataModel.eskiserial(a[0]);
-            console.log(a[0]);
+            if (v == 51 && (dataModel.eskiserial() == null || dataModel.eskiserial() == ""))
+                dataModel.baglantiKontrol(true);
         }, null, null);
     }
 });

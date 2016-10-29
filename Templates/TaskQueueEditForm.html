@@ -156,27 +156,30 @@
                     <div class="col-xs-12 col-sm-8 col-md-9">
                         <div class="col-xs-4 col-sm-4 col-md-1">Açıklama</div>
                         <div class="col-xs-2 col-sm-2 col-md-1 ">:</div>
-                        <div class="col-xs-6 col-sm-6 col-md-10">
-                            <textarea data-bind="value:description" class="form-control" rows="3"></textarea>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <textarea data-bind="value:description, enable: false" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <textarea data-bind="value:descwrite" placeholder="Taska açıklama eklemek için kullanınız..." class="form-control" rows="3"></textarea>
                         </div>
                     </div>
                     <div data-bind="visible:eskiserial() || baglantiKontrol()" class="col-xs-12 col-sm-12 col-md-12">
                         
                     </div>
                     <div data-bind="visible:eskiserial()" class="col-xs-12 col-sm-12 col-md-12 label-warning">
-                        <div class="col-xs-6 col-sm-6 col-md-6"><strong>Müşteriden Alınacak Olan Modem Seri</strong></div>
-                        <div class="col-xs-1 col-sm-1 col-md-1"><strong>:</strong></div>
-                        <div class="col-xs-5 col-sm-5 col-md-5" data-bind="text:eskiserial"></div>
+                        <div class="col-xs-3 col-sm-3 col-md-3"><strong>Müşteride Bulunan Modem Seri :</strong></div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 pull-left" data-bind="text:eskiserial"></div>
+                        <div class="col-xs-7 col-sm-7 col-md-7"></div>
                     </div>
                     <div data-bind="visible:eskiserial() || baglantiKontrol()" class="col-xs-12 col-sm-12 col-md-12">
 
                     </div>
                     <div data-bind="visible:baglantiKontrol()" class="col-xs-12 col-sm-12 col-md-12 label-warning">
-                        <div class="col-xs-6 col-sm-6 col-md-6"><strong>Müşteriden Alınacak Olan Modem Seri</strong></div>
-                        <div class="col-xs-1 col-sm-1 col-md-1"><strong>:</strong></div>
-                        <div class="col-xs-5 col-sm-5 col-md-5">
+                        <div class="col-xs-3 col-sm-3 col-md-3"><strong>Müşteride Bulunan Modem Seri :</strong></div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">
                             <input type="text" id="seri" class="form-control" data-bind="value:eskiserial">
                         </div>
+                        <div class="col-xs-7 col-sm-7 col-md-7"></div>
                     </div>
                 </div>
             </div>
@@ -260,7 +263,7 @@
                                                     <tbody data-bind="foreach:{ data:stockmovement , as:'sm'}">
                                                         <tr class="cls_line" onclick="">
                                                             <td data-bind="text:moment(movementdate).format('lll')"></td>
-                                                            <td data-bind="text:$root.taskid() == 142 ? $root.customername : $root.personelname"></td>
+                                                            <td data-bind="text:$root.taskid() == 142 ? $root.customername : $root.personelname"></td> <!--142 modem müşteriden alınacak taskı-->
                                                             <td data-bind="text:$root.taskid() == 142 ? $root.personelname : $root.customername"></td>
                                                             <td data-bind="text:sm.stockcard.productname"></td>
                                                             <td>

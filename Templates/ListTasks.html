@@ -113,9 +113,9 @@
 															<input type="checkbox" />															
 														</td>
 														<td data-bind="text:taskname"></td>
-                                                        <td data-bind="text:personeltypes ?personeltypes.typname:null"></td>
+                                                        <td data-bind="text:attachablepersoneltype ? (personeltypes ? personeltypes.typname:'Çoklu Seçim') :  null"></td>
                                                         <td data-bind="text:tasktypes ? tasktypes.TaskTypeName:null"></td>
-                                                        <td data-bind="text:objecttypes ?objecttypes.typname:null"></td>
+                                                        <td data-bind="text:attachableobjecttype ? (objecttypes ?objecttypes.typname:'Çoklu Seçim') : null"></td>
                                                         <td data-bind="text:performancescore"></td>
 													</tr>
                                                     <!-- /ko-->
@@ -167,7 +167,7 @@
                             <p>Görevli</p>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                            <select id="newgorevli" data-bind="options:personelTypeList,optionsText:'typname',optionsValue:'typeid',optionsCaption:'Seçiniz'" class="form-control" multiple="multiple">
+                            <select id="newgorevli" data-bind="options:personelTypeList,optionsText:'typname',optionsValue:'typeid',optionsCaption:'Seçiniz'" multiple="multiple" class="form-control">
 
                             </select>
                         </div>
@@ -182,7 +182,7 @@
                             <p>İlgi</p>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                            <select id="newilgi"  data-bind="options:personelTypeList,optionsText:'typname',optionsValue:'typeid',optionsCaption:'Seçiniz'" class="form-control" multiple="multiple">                              
+                            <select id="newilgi"  data-bind="options:personelTypeList,optionsText:'typname',optionsValue:'typeid',optionsCaption:'Seçiniz'" multiple="multiple" class="form-control">                              
                             </select>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
@@ -235,7 +235,7 @@
                             <p>Görevli</p>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                            <select id="gorevli"  data-bind="options:$root.personelTypeList,optionsText:'typname',optionsValue:'typeid',value:personeltypes ?personeltypes.typeid :null,optionsCaption:'Seçiniz'" class="form-control" multiple="multiple">
+                            <select id="gorevli"  data-bind="selectedOptions: $root.getGTypes(), options:$root.personelTypeList,optionsText:'typname',optionsValue:'typeid', optionsCaption:'Seçiniz'" multiple="multiple" class="form-control">
                                
                             </select>
                         </div>
@@ -250,7 +250,7 @@
                             <p>İlgi</p>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                            <select id="ilgi" data-bind="options: $root.personelTypeList, optionsText:'typname',optionsValue:'typeid',value:objecttypes?objecttypes.typeid :null,optionsCaption:'Seçiniz'" class="form-control" multiple="multiple">
+                            <select id="ilgi" data-bind="selectedOptions: $root.getITypes(), options: $root.personelTypeList, optionsText:'typname',optionsValue:'typeid', optionsCaption:'Seçiniz'" multiple="multiple" class="form-control">
                              
                             </select>
                         </div>

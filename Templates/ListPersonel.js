@@ -329,7 +329,7 @@ dataModel.selectedPersonel.subscribe(function (v) {
     if (v != null && v.responseregions != null)
         dataModel.responseIlces(v.responseregions.split(","));
     else
-        dataModel.responseIlces(null);
+        dataModel.responseIlces([]);
 });
 dataModel.ilceResList.subscribe(function (v) {
     if (v != null && v.length > 0) {
@@ -348,4 +348,8 @@ dataModel.ilceResList.subscribe(function (v) {
             }
         }
     }
+});
+dataModel.selectedIl.subscribe(function (v) {
+    dataModel.ilceList([]);
+    dataModel.getIlce(v);
 });

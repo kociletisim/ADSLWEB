@@ -10,7 +10,7 @@ var dataModel = {
     lastStatus: ko.observable(),
     typeHeadTagIds: "#site",
     flag: ko.observable(),
-    firstLoad:ko.observable(),
+    firstLoad: ko.observable(),
     pageCount: ko.observable(),
     pageNo: ko.observable(tqlFilter.pageNo || 1),
     rowsPerPage: ko.observable(tqlFilter.rowsPerPage || 20),
@@ -22,6 +22,7 @@ var dataModel = {
     selectedtaskorderno: ko.observableArray([]),
     selectedTaskRole: ko.observable(),
     customername: ko.observable(tqlFilter.customer && tqlFilter.customer.value),
+    custid: ko.observable(),
     superonlineNo: ko.observable(),
     customerstatus: ko.observable(),
     selectedIss: ko.observable(),
@@ -41,7 +42,7 @@ var dataModel = {
     personellist: ko.observableArray([]),
     personellist: ko.observableArray([]),
     attacheablePersonelList: ko.observableArray([]),
-    attachedobjectid:ko.observable(),
+    attachedobjectid: ko.observable(),
     sureclist: ko.observableArray([]),
     taskqueuelist: ko.observableArray([]),
     totalpagecount: ko.observable(0),
@@ -57,9 +58,10 @@ var dataModel = {
     ilceList: ko.observableArray(),
     bucakList: ko.observableArray([]),
     mahalleList: ko.observableArray([]),
-    selectedCustomer:ko.observable(),
+    selectedCustomer: ko.observable(),
     user: ko.observable(),
     perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
+    backofficePersonel: ko.observable(false),
     BayiOrKoc: function () {
         var self = this;
         if (self.user() != null || self.user() != "") {
@@ -70,17 +72,27 @@ var dataModel = {
                 self.perOfBayiOrKoc(false);
         }
     },
-   
+    BackOrPer: function () {
+        var self = this;
+        if (self.user() != null || self.user() != "") {
+            var ss = self.user().userRole & 4;
+            if (ss == 4)
+                self.backofficePersonel(true);
+            else
+                self.backofficePersonel(false);
+        }
+    },
+
     queryButtonClick: function () {
         var self = this;
         self.getFilter(1, dataModel.rowsPerPage());
     },
-    getTasks: function() {
+    getTasks: function () {
         var self = this;
         var data = {
             task: { fieldName: "taskname", op: 6, value: "" },
         };
-        crmAPI.getTaskFilter(data, function(a, b, c) {
+        crmAPI.getTaskFilter(data, function (a, b, c) {
             self.tasks(a);
             $("#taskNameFilter").multiselect({
                 includeSelectAllOption: true,
@@ -97,9 +109,9 @@ var dataModel = {
         }, null, null);
 
     },
-    getCustomerStatus: function() {
+    getCustomerStatus: function () {
         var self = this;
-        crmAPI.getCustomerStatus(function(a, b, c) {
+        crmAPI.getCustomerStatus(function (a, b, c) {
             self.ctstatuslist(a);
             $("#abonedurumu").multiselect({
                 includeSelectAllOption: true,
@@ -115,9 +127,9 @@ var dataModel = {
             });
         }, null, null)
     },
-    getisslist: function() {
+    getisslist: function () {
         var self = this;
-        crmAPI.getIssStatus(function(a, b, c) {
+        crmAPI.getIssStatus(function (a, b, c) {
             self.isslist(a);
             $("#servissaglayici").multiselect({
                 includeSelectAllOption: true,
@@ -133,12 +145,12 @@ var dataModel = {
             });
         }, null, null)
     },
-    gettaskstatus: function() {
+    gettaskstatus: function () {
         var self = this;
         var data = {
             taskstate: { fieldName: "taskstate", op: 6, value: "" },
         };
-        crmAPI.getTaskStatus(data, function(a, b, c) {
+        crmAPI.getTaskStatus(data, function (a, b, c) {
             self.taskstatuslist(a);
             //self.defaultstatus('0');
             $("#taskdurumu").multiselect({
@@ -168,9 +180,9 @@ var dataModel = {
             });
         }, null, null)
     },
-    getpersonel: function() {
+    getpersonel: function () {
         var self = this;
-        crmAPI.getPersonel(function(a, b, c) {
+        crmAPI.getPersonel(function (a, b, c) {
             self.personellist(a);
             $("#personel").multiselect({
                 includeSelectAllOption: true,
@@ -186,46 +198,46 @@ var dataModel = {
             });
         }, null, null)
     },
-    getAttachablePersonelList: function() {
+    getAttachablePersonelList: function () {
         var self = this;
         var data = {
             taskorderno: parseInt(self.selectedtaskorderno()[0]),
         };
-        crmAPI.getAttacheablePersonel(data, function (a, b, c) {           
+        crmAPI.getAttacheablePersonel(data, function (a, b, c) {
             self.attacheablePersonelList(a);
             $('#personelatamacombo').multiselect('select', self.attacheablePersonelList()).multiselect('rebuild');
         }, null, null);
 
     },
-    attacheablecontrol: function() {
+    attacheablecontrol: function () {
         var self = this;
         var data = {
             ids: self.selectedtaskorderno(),
             personelid: self.selectedAttachmentPersonelid(),
         };
-        crmAPI.personelattachment(data, function(a, b, c) {
+        crmAPI.personelattachment(data, function (a, b, c) {
             self.errormessage(a.errorMessage);
             self.errorcode(a.errorCode);
-            if(a.errorCode!=0)
-            window.setTimeout(function () {
-                $('#personelata').modal('hide');
-                self.getFilter(1, dataModel.rowsPerPage());
-            }, 1000);
+            if (a.errorCode != 0)
+                window.setTimeout(function () {
+                    $('#personelata').modal('hide');
+                    self.getFilter(1, dataModel.rowsPerPage());
+                }, 1000);
             self.getAttachablePersonelList();
 
         }, null, null);
     },
-    attachmentpersonel: function() {
+    attachmentpersonel: function () {
         var self = this;
         var data = {
             ids: self.selectedtaskorderno(),
             personelid: self.selectedAttachmentPersonelid(),
         };
-        crmAPI.personelattachment(data, function(a, b, c) {
+        crmAPI.personelattachment(data, function (a, b, c) {
             self.errormessage(a.errorMessage);
             self.errorcode(a.errorCode);
             self.flag(true);
-            window.setTimeout(function() {
+            window.setTimeout(function () {
                 $('#personelata').modal('hide');
                 self.getFilter(1, dataModel.rowsPerPage());
             }, 1000);
@@ -387,6 +399,7 @@ var dataModel = {
         self.appointmentDate(null);
         self.il(null);
         self.lastStatus(null);
+        self.custid(null),
         self.ilce(null);
         self.attachmentDate(null);
         self.customername(null);
@@ -401,14 +414,14 @@ var dataModel = {
         self.selectedTaskstatus('');
         self.getFilter(dataModel.pageNo(), dataModel.rowsPerPage());
     },
-    enterfilter: function(d, e) {
+    enterfilter: function (d, e) {
         var self = this;
         if (e && (e.which == 1 || e.which == 13)) {
             self.getFilter(1, self.rowsPerPage());
         }
         return true;
     },
-    getFilter: function(pageno, rowsperpage) {
+    getFilter: function (pageno, rowsperpage) {
         var self = this;
         self.errormessage(null);
         self.errorcode(null);
@@ -421,7 +434,7 @@ var dataModel = {
         self.il($.trim(self.il()));
         self.ilce($.trim(self.ilce()));
         self.selectedAttachmentPersonelid(null);
-        self.selectedTaskname($("#taskNameFilter").val()?$("#taskNameFilter").val():'');
+        self.selectedTaskname($("#taskNameFilter").val() ? $("#taskNameFilter").val() : '');
         self.selectedTaskstatus($("#taskdurumu").val() ? $("#taskdurumu").val() : null);
         self.selectedPersonelname($("#personel").val() ? $("#personel").val() : '');
         var data = {
@@ -429,7 +442,7 @@ var dataModel = {
             rowsPerPage: rowsperpage,
             il: self.il() ? { fieldName: "ad", op: 6, value: self.il() } : null,
             ilce: self.ilce() ? { fieldName: "ad", op: 6, value: self.ilce() } : null,
-            customer: self.customername() ? { fieldName: "customername", op: 6, value: self.customername() } : null,
+            customer: self.custid() ? { fieldName: "customerid", op: 2, value: self.custid() } : self.customername() ? { fieldName: "customername", op: 6, value: self.customername() } : null,
             superonline: self.superonlineNo() ? { fieldName: 'superonlineCustNo', op: 2, value: self.superonlineNo() } : null,
             task: self.selectedTaskname().length > 0 ? { fieldName: "taskid", op: 7, value: self.selectedTaskname() } : null,
             personel: self.selectedPersonelname().length > 0 ? (self.selectedPersonelname() == "0" ? { fieldName: "personelname", op: 8, value: null } : { fieldName: "personelid", op: 7, value: self.selectedPersonelname() }) : null,
@@ -443,20 +456,26 @@ var dataModel = {
         };
 
         crmAPI.setCookie("tqlFilter", data);
-
-        crmAPI.getTaskQueues(data, function(a, b, c) {
-            self.taskqueuelist(a.data.rows);
+        crmAPI.getTaskQueues(data, function (a, b, c) {
+            var list = a.data.rows;
             self.pageCount(a.data.pagingInfo.pageCount);
             self.querytime(a.performance.TotalResponseDuration);
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].description && list[i].description.length > 50)
+                    list[i].desc = list[i].description.substring(0, 50) + "....";
+                else
+                    list[i].desc = list[i].description;
+            }  // taskqueuelist açıklamanın bir kısmını göster üzerine gelince tamamı görünsün (Hüseyin KOZ) 29.10.2016
+            self.taskqueuelist(list);
             self.totalRowCount(a.data.pagingInfo.totalRowCount);
             self.isLoading(false);
             self.errormessage(null);
             self.errorcode(null);
             self.firstLoad(false);
             //self.defaultstatus(0);
-            $('.sel').change(function() {
+            $('.sel').change(function () {
                 var ids = [];
-                $('.sel').each(function() {
+                $('.sel').each(function () {
                     if ($(this).is(':checked')) {
                         var id = $(this).val();
                         ids.push(id);
@@ -464,27 +483,51 @@ var dataModel = {
                 });
                 self.selectedtaskorderno(ids);
             });
+            $('.sel').click(function () {
+                var id = $(this).index();
+                if ($(".sel")[id - 1].checked != true) {
+                    $(".sel")[id - 1].checked = true;
+                    $(".sel").change();
+                }
+                else {
+                    $(".sel")[id - 1].checked = false;
+                    $(".sel").change();
+                }
+            });
+            $('.satir').click(function () {
+                var checkedids = [];
+                var id = $(this).index();
+                if ($(".sel")[id - 1].checked != true) {
+                    $(".sel")[id - 1].checked = true;
+                    $(".sel").change();
+                    checkedids.push(id);
+                }
+                else {
+                    $(".sel")[id - 1].checked = false;
+                    $(".sel").change();
+                }
+            });
             $(".customer").click(function () {
                 self.getCustomerCard($(this).val());
             });
         }, null, null);
-
     },
-    select: function(d, e) {
+    select: function (d, e) {
         var self = this;
         $("#taskquetable tr").removeClass("selected");
         $(e.currentTarget).addClass("selected");
         self.selectedtaskorderno(d.taskorderno);
 
     },
-    redirect: function() {
+    redirect: function () {
         window.location.href = "app.html";
     },
-    getUserInfo: function() {
+    getUserInfo: function () {
         var self = this;
-        crmAPI.userInfo(function(a, b, c) {
+        crmAPI.userInfo(function (a, b, c) {
             self.user(a);
             self.BayiOrKoc();
+            self.BackOrPer();
         }, null, null)
     },
     ara: function (custid) {
@@ -499,30 +542,31 @@ var dataModel = {
         }, null, null);
     },
     navigate: {
-        gotoPage: function(pageNo) {
+        gotoPage: function (pageNo) {
             if (pageNo === dataModel.pageNo() || pageNo <= 0 || pageNo > dataModel.pageCount()) return;
             dataModel.getFilter(pageNo, dataModel.rowsPerPage());
             dataModel.isLoading(false);
         },
-        gotoFirstPage: function() {
+        gotoFirstPage: function () {
             dataModel.navigate.gotoPage(1);
         },
-        gotoLastPage: function() {
+        gotoLastPage: function () {
             dataModel.navigate.gotoPage(dataModel.pageCount());
         },
-        gotoNextPage: function() {
+        gotoNextPage: function () {
             var pc = dataModel.pageNo() + 1;
             if (pc >= dataModel.pageCount()) return;
             dataModel.navigate.gotoPage(pc);
         },
-        gotoBackPage: function() {
+        gotoBackPage: function () {
             var pc = dataModel.pageNo() - 1;
             if (pc <= 0) return;
             dataModel.navigate.gotoPage(pc);
         },
     },
-    renderBindings: function() {
+    renderBindings: function () {
         var self = this;
+        self.getUserInfo();
         self.firstLoad(true);
         $("#blokadi").multiselect({
             includeSelectAllOption: true,
@@ -537,7 +581,7 @@ var dataModel = {
             filterPlaceholder: 'Ara'
 
         })
-        $(function() {
+        $(function () {
             $('#datetimepicker1,#datetimepicker2,#datetimepicker3').datetimepicker();
         });
         $('#daterangepicker1,#daterangepicker2,#daterangepicker3').daterangepicker({
@@ -562,7 +606,6 @@ var dataModel = {
                 "format": 'MM/DD/YYYY h:mm A',
             },
         });
-        self.getUserInfo();
         self.getisslist();
         self.gettaskstatus();
         self.getTasks();
