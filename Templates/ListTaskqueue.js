@@ -7,6 +7,8 @@ var tqlFilter = crmAPI.getCookie("tqlFilter");
 var dataModel = {
     multiSelectTagIds: "#blokadi,#taskNameFilter,#servissaglayici,#abonedurumu,#personel,#taskdurumu",
     lastStatusList: ko.observableArray([{ id: null, name: "Süreç Durumu Seçiniz" }, { id: 0, name: "Bekleyen" }, { id: 1, name: "Tamamlanan" }, { id: 2, name: "İptal Edilen" }, { id: 3, name: "Ertelenen" }]),
+    rankingList: ko.observableArray([{ id: "taskorderno", name: "Oluşma Tarihi" }, { id: "lastupdated", name: "Son Güncelleme Tarihi" }, { id: "attachmentdate", name: "Atanma Tarihi" }]),
+    selectedRanking: ko.observable(),
     lastStatus: ko.observable(),
     typeHeadTagIds: "#site",
     flag: ko.observable(),
@@ -71,6 +73,7 @@ var dataModel = {
                 self.perOfBayiOrKoc(false);
         }
     },
+    readyCollectiveList: ko.observableArray([]), // toplu sonlandırılacaklar listesi
 
     queryButtonClick: function () {
         var self = this;
@@ -83,6 +86,11 @@ var dataModel = {
         };
         crmAPI.getTaskFilter(data, function (a, b, c) {
             self.tasks(a);
+            var select = [];
+            for (var i = 0; i < self.tasks().length; i++) {
+                if (self.tasks()[i].taskid != 43)
+                    select.push(self.tasks()[i].taskid);
+            }
             $("#taskNameFilter").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
@@ -95,6 +103,7 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
+            $("#taskNameFilter").multiselect('select', select);
         }, null, null);
 
     },
@@ -167,6 +176,18 @@ var dataModel = {
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
             });
+            $("#ranking").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: 'Süreç Durumunu Seçiniz',
+                nSelectedText: 'Süreç Durumu Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            }).multiselect('rebuild');
         }, null, null)
     },
     getpersonel: function () {
@@ -395,8 +416,9 @@ var dataModel = {
         self.superonlineNo(null);
         self.consummationDate(null);
         self.selectedCustomerstatus(null);
+        self.selectedRanking("taskorderno");
         $("#taskNameFilter,#abonedurumu,#servissaglayici,#taskdurumu,#personel,#personelatamacombo").multiselect('deselectAll', false);
-        $("#taskNameFilter,#abonedurumu,#servissaglayici,#taskdurumu,#laststate,#personel,#personelatamacombo").multiselect('refresh');
+        $("#taskNameFilter,#abonedurumu,#servissaglayici,#ranking,#taskdurumu,#laststate,#personel,#personelatamacombo").multiselect('refresh');
         self.selectedPersonelname(null);
         self.selectedIss(null);
         self.selectedTaskname('');
@@ -442,6 +464,7 @@ var dataModel = {
             appointmentDate: self.appointmentDate() ? self.appointmentDate() : null,
             consummationDate: self.consummationDate() ? self.consummationDate() : null,
             laststatus: self.lastStatus(),
+            ranking: self.selectedRanking(), // task listesinin sıralanması için database'deki alan isimlerini yaz
         };
 
         crmAPI.setCookie("tqlFilter", data);
@@ -471,17 +494,6 @@ var dataModel = {
                     }
                 });
                 self.selectedtaskorderno(ids);
-            });
-            $('.sel').click(function () {
-                var id = $(this).index();
-                if ($(".sel")[id - 1].checked != true) {
-                    $(".sel")[id - 1].checked = true;
-                    $(".sel").change();
-                }
-                else {
-                    $(".sel")[id - 1].checked = false;
-                    $(".sel").change();
-                }
             });
             $('.satir').click(function () {
                 var checkedids = [];
@@ -552,23 +564,34 @@ var dataModel = {
             dataModel.navigate.gotoPage(pc);
         },
     },
+    readyCollective: function () {
+        var self = this;
+        var select = [];
+        for (var i = 0; i < self.taskqueuelist().length; i++) {
+            for (var j = 0; j < self.selectedtaskorderno().length; j++) {
+                if (self.taskqueuelist()[i].taskorderno == self.selectedtaskorderno()[j] && self.taskqueuelist()[i].task.tasktypes.TaskTypeId == 0) {
+                    select.push(self.taskqueuelist()[i]);
+                }
+            }
+        } // tipi diğer olan tasklardan aynı taskid'li tasklar toplu kapatılabilsin. DEVAM EDECEK
+        self.readyCollectiveList(select);
+    },
     renderBindings: function () {
         var self = this;
         self.getUserInfo();
         self.firstLoad(true);
-        $("#blokadi").multiselect({
+        $("#ranking").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
             buttonWidth: '100%',
-            nonSelectedText: 'Blok Seçiniz',
-            nSelectedText: 'Blok Seçildi!',
+            nonSelectedText: 'Seçiniz',
+            nSelectedText: 'Seçildi!',
             numberDisplayed: 2,
             selectAllText: 'Tümünü Seç!',
             enableFiltering: true,
             filterPlaceholder: 'Ara'
-
-        })
+        });
         $(function () {
             $('#datetimepicker1,#datetimepicker2,#datetimepicker3').datetimepicker();
         });

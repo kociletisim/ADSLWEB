@@ -461,7 +461,7 @@ var dataModel = {
             }
             self.taskstatuslist(self.gecicitaskstatuslist());
             self.taskstatus(statusVal);
-            if (dataModel.taskstatus() != undefined && dataModel.taskstatus() != 0) {
+            if ((dataModel.taskid() == 66 || dataModel.taskid() == 152 || dataModel.taskid() == 156) && dataModel.taskstatus() != undefined && dataModel.taskstatus() != 0) {
                 dataModel.eskiserial(null);
             } // task kapatılmışsa eski seri görülmesin
             $("#taskdurumu").multiselect({
@@ -569,11 +569,17 @@ var dataModel = {
         self.flag(false);
         if (!dataModel.modelIsValid())
             crmAPI.saveTaskQueues(data, function (a, b, c) {
-                self.message(a);
-                window.setTimeout(function () {
-                    $("#id_alert").alert('close');
-                    window.location.href = "app.html";
-                }, 2000);
+                if (a == "ok") {
+                    self.message(a);
+                    window.setTimeout(function () {
+                        $("#id_alert").alert('close');
+                        window.location.href = "app.html";
+                    }, 2000);
+                }
+                else {
+                    $('.btn').prop('disabled', false);
+                    alert(a);
+                }
             }, null, null);
         self.description() != null ? self.description(self.description() + " " + $.trim(self.descwrite())) : self.description($.trim(self.descwrite()));
         data = {
@@ -617,11 +623,17 @@ var dataModel = {
                     return alert("Tüm Belgeleri Yükleyiniz...");
                 else
                     crmAPI.saveTaskQueues(data, function (a, b, c) {
-                        self.message(a);
-                        window.setTimeout(function () {
-                            $("#id_alert").alert('close');
-                            window.location.href = "app.html";
-                        }, 2000);
+                        if (a == "ok") {
+                            self.message(a);
+                            window.setTimeout(function () {
+                                $("#id_alert").alert('close');
+                                window.location.href = "app.html";
+                            }, 2000);
+                        }
+                        else {
+                            $('.btn').prop('disabled', false);
+                            alert(a);
+                        }
                     }, null, null);
             }
 
@@ -629,11 +641,17 @@ var dataModel = {
         }
         else {
             crmAPI.saveTaskQueues(data, function (a, b, c) {
-                self.message(a);
-                window.setTimeout(function () {
-                    $("#id_alert").alert('close');
-                    window.location.href = "app.html";
-                }, 2000);
+                if (a == "ok") {
+                    self.message(a);
+                    window.setTimeout(function () {
+                        $("#id_alert").alert('close');
+                        window.location.href = "app.html";
+                    }, 2000);
+                }
+                else {
+                    $('.btn').prop('disabled', false);
+                    alert(a);
+                }
             }, null, null);
         }
     },
@@ -683,7 +701,7 @@ var dataModel = {
                 }
             }, null, null);
         }
-        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno() && !self.baglantiKontrol()) {
+        if (self.perOfBayiOrKoc() == true && self.smnoCustomer() && self.smno() && !self.baglantiKontrol() && self.smnoCustomer().superonlineCustNo != self.smno()) {
             self.isClickKaydet(true);
             self.saveCustomer();
             dataModel.resSaveCustomer.subscribe(function (v) {
@@ -1070,7 +1088,7 @@ dataModel.uploadControl.subscribe(function (v) {
     if(v==true)
         $('.fileinput-upload-button').click()
 });
-dataModel.description.subscribe(function () {
+dataModel.descwrite.subscribe(function () {
     dataModel.descriptionControl() == false ? dataModel.descriptionControl(true) : dataModel.descriptionControl(false);
 });
 dataModel.ilKimlik.subscribe(function (v) {
@@ -1098,7 +1116,7 @@ dataModel.regionKimlik.subscribe(function (v) {
     }
 });
 dataModel.taskid.subscribe(function (v) {
-    if (v == 51 || v == 116 || v == 41 || v == 59 || v == 153) {
+    if (v == 51 || v == 116 || v == 41 || v == 59 || v == 152 || v == 156) {
         dataModel.baglantiKontrol(false);
         var data = {
             stockcardid: 1117,
