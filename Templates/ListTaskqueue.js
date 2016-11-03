@@ -41,6 +41,7 @@ var dataModel = {
     ctstatuslist: ko.observableArray([]),
     isslist: ko.observableArray([]),
     taskstatuslist: ko.observableArray([]),
+    taskstatuslistforcollective: ko.observableArray([{ taskstateid: -1, taskstate: "Bekleyiniz" }]),
     personellist: ko.observableArray([]),
     personellist: ko.observableArray([]),
     attacheablePersonelList: ko.observableArray([]),
@@ -469,6 +470,7 @@ var dataModel = {
 
         crmAPI.setCookie("tqlFilter", data);
         crmAPI.getTaskQueues(data, function (a, b, c) {
+            console.log(a);
             var list = a.data.rows;
             self.pageCount(a.data.pagingInfo.pageCount);
             self.querytime(a.performance.TotalResponseDuration);
@@ -564,17 +566,120 @@ var dataModel = {
             dataModel.navigate.gotoPage(pc);
         },
     },
-    readyCollective: function () {
+    setOptionDisable: function (option, item) {
+        if (dataModel.taskstatuslistforcollective().length > 0 && item != null && item != undefined) {
+            ko.applyBindingsToNode(option, { disable: item.disable }, item);
+        }
+    },
+    gettaskstatusForCollective: function (taskid) {
         var self = this;
+        self.taskstatuslistforcollective([]);
         var select = [];
+        var data = {
+            task: { fieldName: "taskid", op: 2, value: taskid },
+            taskstate: { fieldName: "taskstate", op: 6, value: '' },
+        };
+        crmAPI.getTaskStatus(data, function (a, b, c) {
+            var list = a;
+            for (var i = 0; i < list.length; i++) {
+                if (!self.perOfBayiOrKoc() && (list[i].taskstateid == 9169 || list[i].taskstateid == 9171)) // ata akışından geldi || koç personel onayı
+                    select.push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
+                else
+                    select.push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(false) });
+            }
+            self.taskstatuslistforcollective(select);
+            $("#statecombo").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: 'Seçiniz',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            }).multiselect('refresh');
+        }, null, null)
+    },
+    readyCollective: function () {
+        document.getElementById("uyari_state").style.display = 'none';
+        document.getElementById("uyari_ayni").style.display = 'none';
+        document.getElementById("uyari_bekle").style.display = 'none';
+        document.getElementById("uyari_surec").style.display = 'none';
+        document.getElementById("tamam").style.display = 'none';
+        var self = this;
+        self.readyCollectiveList([]);
+        var select = [];
+        var taskid = 0;
         for (var i = 0; i < self.taskqueuelist().length; i++) {
             for (var j = 0; j < self.selectedtaskorderno().length; j++) {
                 if (self.taskqueuelist()[i].taskorderno == self.selectedtaskorderno()[j] && self.taskqueuelist()[i].task.tasktypes.TaskTypeId == 0) {
+                    if (taskid != 0 && self.taskqueuelist()[i].task.taskid != taskid) {
+                        $('#kaydetcol').prop('disabled', true);
+                        document.getElementById("uyari_ayni").style.display = 'block';
+                        window.setTimeout(function () {
+                            $('#sonlandir').modal('hide');
+                            $('#kaydetcol').prop('disabled', false);
+                        }, 2000);
+                        return;
+                    }
+                    taskid = self.taskqueuelist()[i].task.taskid;
                     select.push(self.taskqueuelist()[i]);
                 }
             }
-        } // tipi diğer olan tasklardan aynı taskid'li tasklar toplu kapatılabilsin. DEVAM EDECEK
-        self.readyCollectiveList(select);
+        } // tipi diğer olan tasklardan aynı taskid'li tasklar toplu kapatılabilsin.
+        if (select.length == 0) {
+            $('#kaydetcol').prop('disabled', true);
+            document.getElementById("uyari_surec").style.display = 'block';
+            window.setTimeout(function () {
+                $('#sonlandir').modal('hide');
+                $('#kaydetcol').prop('disabled', false);
+            }, 2000);
+            return;
+        }
+        else if (taskid != 0) {
+            self.readyCollectiveList(select);
+            self.gettaskstatusForCollective(taskid);
+        }
+    },
+    saveTaskCollective: function () {
+        var self = this;
+        document.getElementById("uyari_state").style.display = 'none';
+        document.getElementById("uyari_bekle").style.display = 'none';
+        document.getElementById("tamam").style.display = 'none';
+        $('#kaydetcol').prop('disabled', true);
+        if ($('#statecombo').val() == "") {
+            document.getElementById("uyari_state").style.display = 'block';
+            $('#kaydetcol').prop('disabled', false);
+            return;
+        }
+        else {
+            document.getElementById("uyari_bekle").style.display = 'block';
+            var list = [];
+            for (var i = 0; i < self.readyCollectiveList().length; i++) {
+                var desc = self.readyCollectiveList()[i].description ? (self.readyCollectiveList()[i].description + " Çoklu task kapama ile kaydedildi. " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")") : ("Çoklu task kapama ile kaydedildi. " + moment().format('DD MMMM, h:mm') + "(" + self.user().userFullName + ")");
+                var data = {
+                    taskorderno: self.readyCollectiveList()[i].taskorderno,
+                    task: { taskid: self.readyCollectiveList()[i].task.taskid },
+                    taskstatepool: { taskstateid: $('#statecombo').val(), taskstate: $("#statecombo option:selected").text() ? $("#statecombo option:selected").text() : null },
+                    stockmovement: [],
+                    description: desc,
+                    // eğer müşterinin kampanyası varsa campanya id gönderiyorum kampanyasına döküman tanımlı mı öğrenmek için (Hüseyin KOZ) 03.11.2016
+                    customerproduct: self.readyCollectiveList()[i].customerproduct.length > 0 ? [self.readyCollectiveList()[i].customerproduct[0].campaignid] : [],
+                }
+                list.push(data);
+            }
+            console.log(list);
+            crmAPI.saveTaskCollective(list, function (a, b, c) {
+                document.getElementById("uyari_bekle").style.display = 'none';
+                document.getElementById("tamam").style.display = 'block';
+                window.setTimeout(function () {
+                    $('#sonlandir').modal('hide');
+                    $('#kaydetcol').prop('disabled', false);
+                    self.getFilter(dataModel.pageNo(), dataModel.rowsPerPage());
+                }, 2000);
+            }, null, null);
+        }
     },
     renderBindings: function () {
         var self = this;

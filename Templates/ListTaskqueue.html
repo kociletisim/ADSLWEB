@@ -304,6 +304,38 @@
         </div>
     </div>
 
+    <!-- toplu task sonlandır işlemi start -->
+    <div class="modal fade" id="sonlandir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-dialog" role="document" style="margin-top: 50px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Toplu Task Sonlandırma</h4>
+                </div>
+                <div class="modal-body" data-bind="with:readyCollectiveList().length > 0 ? readyCollectiveList()[0] : null" style="min-height: 80px;">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="margin-top: 5px; margin-bottom: 5px;">
+                        <p><label data-bind="text:$root.readyCollectiveList().length + ' Adet ' + task.taskname + ' Taskı Seçildi'"></label></p>
+                    </div> 
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <select id="statecombo" data-bind="options: $root.taskstatuslistforcollective, optionsText:'taskstate', optionsValue:'taskstateid', optionsAfterRender: $root.setOptionDisable ,optionsCaption:'Seçiniz'" class="form-control"></select>
+                    </div>
+                </div>
+                <div>
+                    <span id="uyari_state" class="label label-danger">Durum Seçiniz...</span>
+                    <span id="uyari_ayni" class="label label-danger">Toplu Task Kapatmak İçin Task Adı Aynı Olan Taskları Seçiniz..</span>
+                    <span id="uyari_surec" class="label label-danger">İşlem Süreç Tasklarının Haricinde Tasklar Seçiniz...</span>
+                    <span id="uyari_bekle" class="label label-warning">Lütfen İşlemin Tamamlanmasını Bekleyiniz...</span>
+                    <span id="tamam" class="label label-success">İşlem Başarılı...</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                    <button id="kaydetcol" type="button" data-bind="click:saveTaskCollective" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- toplu task sonlandır işlemi finish -->
 
     <!-- İşlemler *personel atama* For Modal Start -->
     <div class="modal fade" id="personelata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

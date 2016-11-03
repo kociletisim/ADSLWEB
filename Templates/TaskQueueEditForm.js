@@ -538,7 +538,7 @@ var dataModel = {
             stateid: dataModel.taskstatus(),
             campaignid: dataModel.campaignid(),
             customerproducts: dataModel.selectedProductIds(),
-            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9)
+            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 7)
         };
         crmAPI.getTQDocuments(data, function (a, b, c) {
             $.each(a, function (index, doc) {
@@ -895,6 +895,7 @@ var dataModel = {
             });
             var data = { taskOrderNo: hashSearches[1] };
             crmAPI.getTaskQueues(data, function (a, b, c) {
+                console.log(a);
                 self.taskorderno(a.data.rows[0].taskorderno);
                 self.fault(a.data.rows[0].fault);
                 $("#kaynak").multiselect("setOptions", self.faultList()).multiselect("rebuild");
