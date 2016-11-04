@@ -895,7 +895,6 @@ var dataModel = {
             });
             var data = { taskOrderNo: hashSearches[1] };
             crmAPI.getTaskQueues(data, function (a, b, c) {
-                console.log(a);
                 self.taskorderno(a.data.rows[0].taskorderno);
                 self.fault(a.data.rows[0].fault);
                 $("#kaynak").multiselect("setOptions", self.faultList()).multiselect("rebuild");

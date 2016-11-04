@@ -156,7 +156,6 @@ var dataModel = {
         crmAPI.getTaskDefination(data, function (a, b, c) {
             self.getObjectType();
             self.getPersonelType();
-            console.log(a[0]);
             self.selectedTask(a[0]);
         }, null, null);
     },

@@ -25,7 +25,6 @@ var dataModel = {
             personelid: self.user() != null ? self.user().userId : null,
         };
         crmAPI.getStocksOnPersonel(data, function (a, b, c) {
-            console.log(a);
             self.movementList(a);
         }, null, null);
     },

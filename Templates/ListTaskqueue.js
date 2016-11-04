@@ -407,6 +407,8 @@ var dataModel = {
     },
     clean: function () {
         var self = this;
+        self.pageNo(1);
+        self.rowsPerPage(20);
         self.appointmentDate(null);
         self.il(null);
         self.lastStatus(null);
@@ -424,7 +426,7 @@ var dataModel = {
         self.selectedIss(null);
         self.selectedTaskname('');
         self.selectedTaskstatus('');
-        self.getFilter(dataModel.pageNo(), dataModel.rowsPerPage());
+        self.getFilter(self.pageNo(), self.rowsPerPage());
     },
     enterfilter: function (d, e) {
         var self = this;
@@ -470,7 +472,6 @@ var dataModel = {
 
         crmAPI.setCookie("tqlFilter", data);
         crmAPI.getTaskQueues(data, function (a, b, c) {
-            console.log(a);
             var list = a.data.rows;
             self.pageCount(a.data.pagingInfo.pageCount);
             self.querytime(a.performance.TotalResponseDuration);
@@ -669,7 +670,6 @@ var dataModel = {
                 }
                 list.push(data);
             }
-            console.log(list);
             crmAPI.saveTaskCollective(list, function (a, b, c) {
                 document.getElementById("uyari_bekle").style.display = 'none';
                 document.getElementById("tamam").style.display = 'block';
