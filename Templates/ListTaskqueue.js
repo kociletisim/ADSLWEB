@@ -78,7 +78,7 @@ var dataModel = {
 
     queryButtonClick: function () {
         var self = this;
-        self.getFilter(1, dataModel.rowsPerPage());
+        self.getFilter(1, self.rowsPerPage());
     },
     getTasks: function () {
         var self = this;

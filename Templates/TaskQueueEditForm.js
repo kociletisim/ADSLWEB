@@ -678,7 +678,7 @@ var dataModel = {
     saveTaskQueues: function () {
         $('.btn').prop('disabled', true);
         var self = this;
-        if (self.personelid() == 1393) {
+        if (self.personelid() == 1393 && self.taskstatetype() != 2) { // 1393: Koç Yazılım, bu personel üzerindeki tasklar devam ettirilemez atanmalı; iptal edilebilir.
             alert("Kurulum veya Evrak Personel Ataması Yapınız !")
             $('.btn').prop('disabled', false);
             return;
@@ -993,6 +993,12 @@ dataModel.campaignid.subscribe(function (v) {
     dataModel.getproduct();
 });
 dataModel.taskstatus.subscribe(function (v) {
+    for (var i = 0; i < dataModel.taskstatuslist().length; i++) {
+        if (v == dataModel.taskstatuslist()[i].taskstateid) {
+            dataModel.taskstatetype(dataModel.taskstatuslist()[i].statetype);
+            break;
+        }
+    }
     dataModel.errormessage(null);
     var data = {
         taskorderno: dataModel.taskorderno(),
@@ -1002,7 +1008,7 @@ dataModel.taskstatus.subscribe(function (v) {
         customerproducts: dataModel.selectedProductIds(),
         isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9)
     };
-    if (dataModel.taskid() == 142)
+    if (dataModel.taskid() == 142 || dataModel.taskid() == 165)
         crmAPI.getStockMovementsForCustomer(data, function (a, b, c) {
             if (a.errorMessage) dataModel.errormessage(a.errorMessage);
             $.each(a, function (index, stockmovement) {
