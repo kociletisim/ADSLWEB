@@ -51,7 +51,7 @@ var dataModel = {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
     kaydetEnable: ko.pureComputed(function () {
-        return dataModel.selectedNet() && dataModel.fault() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && dataModel.yalin() != null && ((dataModel.perOfBayiOrKoc() == false) || (dataModel.salespersonel() && dataModel.skaynak() && ((dataModel.skaynak() == 2 && dataModel.smno() && dataModel.appointmentdate() && dataModel.appointmentdate() != "") || dataModel.skaynak() == 1)));
+        return dataModel.selectedNet() && dataModel.fault() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && dataModel.yalin() != null && ((dataModel.perOfBayiOrKoc() == false) || ((!dataModel.isAutorized() || (dataModel.salespersonel() > 0 && dataModel.skaynak())) && ((dataModel.skaynak() == 2 && dataModel.smno() && dataModel.appointmentdate() && dataModel.appointmentdate() != "") || dataModel.skaynak() == 1)));
     }),
 
     smno: ko.observable(), // süperonline müşteri no 
@@ -103,6 +103,8 @@ var dataModel = {
             self.user(a);
             self.BayiOrKoc();
             self.isAutorized((a.userRole & 67108896) == 67108896);
+            if (!self.isAutorized())
+                self.fault("Bayi");
         }, null, null)
     },
     getpersonel: function () {

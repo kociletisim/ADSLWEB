@@ -59,7 +59,7 @@
     selectedNet: ko.observable(""),
     selectedSes: ko.observable(),
     isSelectedKaynak: ko.pureComputed(function () {
-        return (((dataModel.isSirketPersonel() == true && dataModel.salespersonel() > 0 && dataModel.fault() != '' && dataModel.fault() != null && (dataModel.cc() == true && dataModel.appointmentdate() != "" || dataModel.cc() == false)) || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0 && dataModel.selectedMahalle() != "" && dataModel.selectedMahalle() != null);
+        return (((dataModel.isSirketPersonel() == true && (!dataModel.isAutorized() || dataModel.salespersonel() > 0) && dataModel.fault() != '' && dataModel.fault() != null && (dataModel.cc() == true && dataModel.appointmentdate() != "" || dataModel.cc() == false)) || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0 && dataModel.selectedMahalle() != "" && dataModel.selectedMahalle() != null);
     }),
     errorControl:ko.pureComputed(function(){
         return  (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
@@ -102,6 +102,8 @@
                 self.fault("Bayi");
             }
             self.isAutorized((a.userRole & 67108896) == 67108896);
+            if (!self.isAutorized())
+                self.fault("Bayi");
         }, null, null)
     },
     getpersonel: function () {
