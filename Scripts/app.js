@@ -83,13 +83,13 @@ $(window).bind("hashchange", function () {
                     $("#kgsl").text("Geçen Ay Koç SL = " + a[1]);
                 }, null, null);
             }
-            var arr = a.userName.split('@');
-            if (arr[1] == 'kociletisim.com.tr') {
-                $("#newtask").show();
-            }
-            else {
-                $("#newtask").hide();
-            }
+            //var arr = a.userName.split('@');
+            //if (arr[1] == 'kociletisim.com.tr') {
+            //    $("#newtask").show();
+            //}
+            //else {
+            //    $("#newtask").hide();
+            //}
             var data = {
                 personel: { fieldName: 'personelid', op: 2, value: pid },
             };
