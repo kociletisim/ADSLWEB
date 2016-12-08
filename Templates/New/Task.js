@@ -47,11 +47,20 @@ var dataModel = {
     selectedTasks: ko.observableArray([]),
     isTcValid: ko.observable(),
     krmcheck: ko.observable(false),
+    isSirketPersonel: ko.observable(),
     getUserInfo: function () {
         var self = this;
         crmAPI.userInfo(function (a, b, c) {
             self.user(a);
+            var arr = self.user().userName.split('@');
+            if (arr[1] == 'kociletisim.com.tr') {
+                self.isSirketPersonel(true);
+            }
+            else {
+                self.isSirketPersonel(false);
+            }
             self.isAutorized((a.userRole & 67108896) == 67108896);
+            self.getTasks();
         }, null, null)
     },
    
@@ -122,11 +131,14 @@ var dataModel = {
     },
     getTasks: function () {
         var self = this;
-        self.selectedTasks().push(51)
-        self.selectedTasks().push(53)
-        self.selectedTasks().push(54)
-        self.selectedTasks().push(88)
-        self.selectedTasks().push(93)
+        if (self.isSirketPersonel()) {
+            self.selectedTasks().push(51)
+            self.selectedTasks().push(53)
+            self.selectedTasks().push(54)
+            self.selectedTasks().push(88)
+            self.selectedTasks().push(93)
+        }
+        self.selectedTasks().push(166)
         var data = {
             task: { fieldName: "taskid", op: 7, value: self.selectedTasks() },
         };
@@ -268,8 +280,8 @@ var dataModel = {
     },
     renderBindings: function () {
         var self = this;
-        self.clean();
         self.getUserInfo();
+        self.clean();
         $("#optionIl,#optionIlce,#optionBucak,#optionMahalle").multiselect({
             includeSelectAllOption: false,
             selectAllValue: 'select-all-value',
@@ -347,7 +359,6 @@ var dataModel = {
             filterPlaceholder: 'Ara'
         });
         self.getIl();
-        self.getTasks();
         ko.applyBindings(dataModel, $("#bindingmodal")[0]);
 
     }
