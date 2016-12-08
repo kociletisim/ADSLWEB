@@ -678,7 +678,7 @@ var dataModel = {
     saveTaskQueues: function () {
         $('.btn').prop('disabled', true);
         var self = this;
-        if (self.personelid() == 1393 && self.taskstatetype() != 2) { // 1393: Koç Yazılım, bu personel üzerindeki tasklar devam ettirilemez atanmalı; iptal edilebilir.
+        if (self.personelid() == 1393 && !(self.taskstatetype() == 2 || self.taskstatetype() == null)) { // 1393: Koç Yazılım, bu personel üzerindeki tasklar devam ettirilemez atanmalı; iptal edilebilir.
             alert("Kurulum veya Evrak Personel Ataması Yapınız !")
             $('.btn').prop('disabled', false);
             return;
