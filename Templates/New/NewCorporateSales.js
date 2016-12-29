@@ -388,7 +388,7 @@ dataModel.selectedIl.subscribe(function (v) {
     dataModel.selectedBucak(null);
     dataModel.selectedMahalle(null);
     dataModel.getIlce(v);
-
+    dataModel.tckimlikno($("#tc").val());
 });
 dataModel.selectedIlce.subscribe(function (v) {
     if (v != null) {
@@ -413,11 +413,13 @@ dataModel.subcategory.subscribe(function (v) {
     dataModel.productlist([]);
     if (v)
         dataModel.getcamapign();
-}); 
+    dataModel.tckimlikno($("#tc").val());
+});
 dataModel.campaignid.subscribe(function (v) {
     dataModel.productlist([]);
     if (v)
         dataModel.getproduct();
+    dataModel.tckimlikno($("#tc").val());
 });
 dataModel.skaynak.subscribe(function (v) {
     if (v == 1) // Koç kurumsal Satılı
