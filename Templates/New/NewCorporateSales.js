@@ -100,8 +100,13 @@ var dataModel = {
             self.user(a);
             self.BayiOrKoc();
             self.isAutorized((a.userRole & 67108896) == 67108896);
-            if (!self.isAutorized())
+            if (!self.isAutorized()) {
+                self.skaynak(1);
+                $("#satisk").prop('disabled', true);
+                self.getpersonel();
                 self.fault("Bayi");
+                self.salespersonel(self.user().userId);
+            }
         }, null, null)
     },
     getpersonel: function () {
@@ -109,6 +114,10 @@ var dataModel = {
         $("#satisk").multiselect("setOptions", self.skaynakList()).multiselect("rebuild");
         crmAPI.getPersonel(function (a, b, c) {
             self.personellist(a);
+            if (!self.isAutorized()) {
+                self.salespersonel(self.user().userId);
+                $("#salesPersonel").prop('disabled', true);
+            }
             $("#salesPersonel").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
@@ -120,7 +129,7 @@ var dataModel = {
                 selectAllText: 'Tümünü Seç!',
                 enableFiltering: true,
                 filterPlaceholder: 'Ara'
-            });
+            }).multiselect('refresh');
         }, null, null)
     },
     getIl: function () {
