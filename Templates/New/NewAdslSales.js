@@ -176,10 +176,10 @@
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             self.categorylist([{ category: 'ADSL' }, { category : 'VDSL'}]);
-            $("#kategori").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
+            $("#kategorinat").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
 
             self.category(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.category : null);
-            $("#kategori").multiselect("rebuild");
+            $("#kategorinat").multiselect("rebuild");
 
 
         }, null, null)
@@ -193,9 +193,9 @@
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             self.subcategorylist(a);
-            $("#urun").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
+            $("#urunnat").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
             self.subcategory(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.subcategory : null);
-            $("#urun").multiselect("refresh");
+            $("#urunnat").multiselect("refresh");
         }, null, null)
     },
     getcamapign: function () {
@@ -208,9 +208,9 @@
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             self.campaignlist(a);
-            $("#kampanya").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
+            $("#kampanyanat").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
             self.campaignid(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.id : null);
-            $("#kampanya").multiselect("refresh");
+            $("#kampanyanat").multiselect("refresh");
         }, null, null)
     },
     getproduct: function () {
@@ -327,7 +327,7 @@
     renderBindings: function () {
         var self = this;
         self.getUserInfo();
-        $("#kategori").multiselect({
+        $("#kategorinat").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -339,7 +339,7 @@
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#urun,#kaynak").multiselect({
+        $("#urunnat,#kaynak").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -351,7 +351,7 @@
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#kampanya,#kampanyaturu,#internetturu").multiselect({
+        $("#kampanyanat,#kampanyaturu,#internetturu").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,

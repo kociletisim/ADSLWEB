@@ -186,10 +186,10 @@ var dataModel = {
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             self.categorylist([{ category: 'ADSL' }, { category: 'VDSL' }]);
-            $("#kategori").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
+            $("#kategorinat").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
 
             self.category(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.category : null);
-            $("#kategori").multiselect("refresh");
+            $("#kategorinat").multiselect("refresh");
 
 
         }, null, null)
@@ -203,9 +203,9 @@ var dataModel = {
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             self.subcategorylist(a);
-            $("#urun").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
+            $("#urunnat").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
             self.subcategory(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.subcategory : null);
-            $("#urun").multiselect("refresh");
+            $("#urunnat").multiselect("refresh");
         }, null, null)
     },
     getcamapign: function () {
@@ -218,9 +218,9 @@ var dataModel = {
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
             self.campaignlist(a);
-            $("#kampanya").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
+            $("#kampanyanat").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
             self.campaignid(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.id : null);
-            $("#kampanya").multiselect("refresh");
+            $("#kampanyanat").multiselect("refresh");
         }, null, null)
     },
     getproduct: function () {
@@ -300,7 +300,7 @@ var dataModel = {
         self.getUserInfo();
         $('#adsl').css({ width: '48%' });
         $('#churn').css({ width: '48%' });
-        $("#kategori").multiselect({
+        $("#kategorinat").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -312,7 +312,7 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#urun,#kaynak").multiselect({
+        $("#urunnat,#kaynak").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -335,7 +335,7 @@ var dataModel = {
                 "format": 'MM/DD/YYYY h:mm A',
             },
         });
-        $("#kampanya,#satisk").multiselect({
+        $("#kampanyanat,#satisk").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,

@@ -120,19 +120,19 @@
                     <p>Kategori</p>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="kategori" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Kategori Seçiniz...'"></select>
+                    <select id="kategorinat" data-bind="options:categorylist,optionsText:'category',optionsValue:'category',value:category,optionsCaption: 'Kategori Seçiniz...'"></select>
                 </div>
                 <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Altkategori</p>
                 </div>
                 <div data-bind="visible:category" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="urun" data-bind="options:subcategorylist,optionsText:'subcategory',optionsValue:'subcategory',value:subcategory,optionsCaption: 'Alt Kategori Seçiniz...'"></select>
+                    <select id="urunnat" data-bind="options:subcategorylist,optionsText:'subcategory',optionsValue:'subcategory',value:subcategory,optionsCaption: 'Alt Kategori Seçiniz...'"></select>
                 </div>
                 <div data-bind="visible:subcategory" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Kampanya</p>
                 </div>
                 <div data-bind="visible:subcategory" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="kampanya" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
+                    <select id="kampanyanat" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
                 </div>
                 <div data-bind="visible: productlist().length" class="col-md-12 text-center"><h3>Ürünü Liste(ler)den Seçiniz !!</h3></div>
                 <div class="row" data-bind="foreach:{ data: productlist, as:'categories'}">

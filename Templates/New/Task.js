@@ -20,7 +20,8 @@ var dataModel = {
     selectedBucak: ko.observable(),
     selectedMahalle: ko.observable(),
     taskList: ko.observableArray([]),
-    taskid:ko.observable(),
+    taskid: ko.observable(),
+    tasktype: ko.observable(),
     isAutorized: ko.observable(),
     confirmMessage: ko.observable(),
     confirmedCustomer: ko.observable(),
@@ -43,6 +44,9 @@ var dataModel = {
             return true;
         else return false;
     }),
+    campaignEnable: ko.pureComputed(function () {
+        return (dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9) || (dataModel.tasktype() === 12);
+    }), // campanya içeren tasklarda kampanya ekranını aç
     loadingmessage: ko.observable(0),
     selectedTasks: ko.observableArray([]),
     isTcValid: ko.observable(),
@@ -63,7 +67,86 @@ var dataModel = {
             self.getTasks();
         }, null, null)
     },
-   
+
+    /* KAMPANYA İÇEREN TASKLARIN KAMPANYA SEÇİMLERİ */
+    subcategorylist: ko.observableArray([]),
+    categorylist: ko.observableArray([]),
+    campaignlist: ko.observableArray([]),
+    category: ko.observable(),
+    subcategory: ko.observable(),
+    campaignid: ko.observable(),
+    customerProductList: ko.observableArray([]),
+    productlist: ko.observableArray([]),
+    pids: ko.observableArray([]),
+    getcategory: function () {
+        var self = this;
+        data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
+            category: { fieldName: 'category', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.categorylist([{ category: 'ADSL' }, { category: 'VDSL' }]);
+            $("#kategorint").multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                maxHeight: 250,
+                buttonWidth: '100%',
+                nonSelectedText: ' Seçiniz',
+                nSelectedText: ' Seçildi!',
+                numberDisplayed: 2,
+                selectAllText: 'Tümünü Seç!',
+                enableFiltering: true,
+                filterPlaceholder: 'Ara'
+            });
+            $("#kategorint").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
+
+            self.category(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.category : null);
+            $("#kategorint").multiselect("rebuild");
+        }, null, null)
+    },
+    getsubcategory: function () {
+        var self = this;
+        data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
+            category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
+            subcategory: { fieldName: 'subcategory', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.subcategorylist(a);
+            $("#urunnt").multiselect("setOptions", self.subcategorylist()).multiselect("rebuild");
+            self.subcategory(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.subcategory : null);
+            $("#urunnt").multiselect("refresh");
+        }, null, null)
+    },
+    getcamapign: function () {
+        var self = this;
+        data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
+            category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
+            subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
+            campaign: { fieldName: 'name', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.campaignlist(a);
+            $("#kampanyant").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
+            self.campaignid(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.id : null);
+            $("#kampanyant").multiselect("refresh");
+        }, null, null)
+    },
+    getproduct: function () {
+        var self = this;
+        data = {
+            deleted: { fieldName: "deleted", op: 2, value: 0 },
+            category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
+            subcategory: { fieldName: 'subcategory', op: 6, value: self.subcategory() ? self.subcategory() : '' },
+            campaign: { fieldName: 'id', op: 2, value: self.campaignid() },
+            products: { fieldName: 'productname', op: 6, value: '' }
+        },
+        crmAPI.getCampaignInfo(data, function (a, b, c) {
+            self.productlist(a);
+        }, null, null)
+    },
+
     getIl: function () {
         self = this;
         var data = {
@@ -167,10 +250,21 @@ var dataModel = {
     },
     insert: function () {
         var self = this;
+        $('.btn-success').prop('disabled', true);
+
         if (self.confirmMessage() == null) {
+            var res = [];
+            for (var i = 0; i < self.pids().length; i++) {
+                res.push({
+                    productid: self.pids()[i],
+                    campaignid: self.campaignid(),
+                });
+            }
+
             var data = {
                 attachedcustomer: { customerid: self.confirmedCustomer().customerid },
                 task: { taskid: self.taskid() },
+                customerproduct: res
             };
             crmAPI.insertTaskqueue(data, function (a, b, c) {
                 if (self.newmovement()) {
@@ -194,6 +288,8 @@ var dataModel = {
                 description: self.fulladdress(),
                 taskid: self.taskid(),
                 email: self.email(),
+                campaignid: self.campaignid(),
+                productids: self.pids(),
                 superonlineCustNo: $.trim(self.smno()),
             };
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {
@@ -213,7 +309,25 @@ var dataModel = {
     },
     insertAdslSalesTask: function () {
         var self = this;
-        //self.insert();
+        self.pids([]);
+        if (self.campaignEnable()) {
+            for (i = 0; i < self.productlist().length; i++) {
+                if (self.productlist()[i].selectedProduct == "" || self.productlist()[i].selectedProduct == null) {
+                    $('.btn-success').prop('disabled', false);
+                    alert("Ürünleri Seçiniz...");
+                    return;
+                }
+                else {
+                    self.pids().push(self.productlist()[i].selectedProduct);
+                }
+            }
+            if (self.pids().length == 0) {
+                $('.btn-success').prop('disabled', false);
+                alert("Ürünleri Seçiniz...");
+                return;
+            }
+        }
+
         if (self.serial() != null) {
             if (self.confirmedCustomer() != null) {
                 var data = {
@@ -306,18 +420,6 @@ var dataModel = {
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#kategori").multiselect({
-            includeSelectAllOption: true,
-            selectAllValue: 'select-all-value',
-            maxHeight: 250,
-            buttonWidth: '100%',
-            nonSelectedText: ' Seçiniz',
-            nSelectedText: ' Seçildi!',
-            numberDisplayed: 2,
-            selectAllText: 'Tümünü Seç!',
-            enableFiltering: true,
-            filterPlaceholder: 'Ara'
-        });
         $('#tc').maxlength({
             threshold: 10,
             warningClass: "label label-danger",
@@ -334,19 +436,7 @@ var dataModel = {
             validate: true,
             customMaxAttribute: "10"
         });
-        $("#urun").multiselect({
-            includeSelectAllOption: true,
-            selectAllValue: 'select-all-value',
-            maxHeight: 250,
-            buttonWidth: '100%',
-            nonSelectedText: ' Seçiniz',
-            nSelectedText: ' Seçildi!',
-            numberDisplayed: 2,
-            selectAllText: 'Tümünü Seç!',
-            enableFiltering: true,
-            filterPlaceholder: 'Ara'
-        });
-        $("#kampanya,#product,#ses").multiselect({
+        $("#kampanyant,#product,#ses,#kategorint,#urunnt").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -365,6 +455,7 @@ var dataModel = {
 }
 dataModel.returntaskorderno.subscribe(function (v) {
     if (v == "Girilen TC Numarası Başkasına Aittir") {
+        $('.btn-success').prop('disabled', false);
         alert(v);
     }
     else {
@@ -422,7 +513,28 @@ dataModel.kritersec.subscribe(function (v) {
     dataModel.confirmedCustomer(null);
     dataModel.confirmMessage(null);
 });
-$(document).ready(function () {
+dataModel.taskid.subscribe(function (v) {
+    for (var i in dataModel.taskList()) {
+        if (dataModel.taskList()[i].taskid == v) {
+            dataModel.getcategory();
+            dataModel.tasktype(dataModel.taskList()[i].tasktype);
+            break;
+        }
+    }
+});
+dataModel.category.subscribe(function (v) {
+    dataModel.getsubcategory();
+});
+dataModel.subcategory.subscribe(function (v) {
+    dataModel.productlist([]);
+    if (v)
+        dataModel.getcamapign();
+});
+dataModel.campaignid.subscribe(function (v) {
+    dataModel.productlist([]);
+    if (v)
+        dataModel.getproduct();
+}); $(document).ready(function () {
     $('input[type=radio][name=kriter]').change(function () {
         dataModel.kritersec(this.value);
     });
