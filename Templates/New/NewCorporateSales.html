@@ -134,17 +134,19 @@
                 <div data-bind="visible:subcategory" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
                     <select id="kampanya" data-bind="options:campaignlist,optionsText:'name',optionsValue:'id',value:campaignid,optionsCaption: 'Kampanya Seçiniz...'"></select>
                 </div>
-                <div data-bind="visible:campaignid" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                    <p>Net</p>
-                </div>
-                <div data-bind="visible:campaignid" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="product" data-bind="options:productlist,optionsValue:'productid',optionsText:'productname',value:selectedNet,optionsCaption:'Net Seçiniz..'"></select>
-                </div>
-                <div data-bind="visible: sesList &&sesList().length>0" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
-                    <p>Ses</p>
-                </div>
-                <div data-bind="visible:sesList && sesList().length>0" class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px;">
-                    <select id="ses" data-bind="options:sesList,optionsValue:'productid',optionsText:'productname',value:selectedSes,optionsCaption:'Ses Seçiniz..'"></select>
+                <div data-bind="visible: productlist().length" class="col-md-12 text-center"><h3>Ürünü Liste(ler)den Seçiniz !!</h3></div>
+                <div class="row" data-bind="foreach:{ data: productlist, as:'categories'}">
+                    <div class="col-md-4 right">
+                        <div class="list-group">
+                            <h4 data-bind="text:categories.category" class="list-group-item active"></h4>
+                            <!-- ko foreach:{ data: categories.products, as: 'product'} -->
+                            <label class="list-group-item">
+                                <input data-bind="attr:{name: ('category' + $parentContext.$index()), value: product.productid},checked:categories.selectedProduct" type="radio" name="optradio1">
+                                <span data-bind="text: product.productname"></span>
+                            </label>
+                            <!-- /ko -->
+                        </div>
+                    </div>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 cls-padding-0px" style="margin-top: 3px; padding: 4px 0 0 0">
                     <p>Task Açıklama</p>

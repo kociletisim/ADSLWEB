@@ -55,11 +55,8 @@
     customerProductList: ko.observableArray([]),
     productlist: ko.observableArray([]),
     pids: ko.observableArray([]),
-    sesList: ko.observableArray([]),
-    selectedNet: ko.observable(""),
-    selectedSes: ko.observable(),
     isSelectedKaynak: ko.pureComputed(function () {
-        return (((dataModel.isSirketPersonel() == true && (!dataModel.isAutorized() || dataModel.salespersonel() > 0) && dataModel.fault() != '' && dataModel.fault() != null && (dataModel.cc() == true && dataModel.appointmentdate() != "" || dataModel.cc() == false)) || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedNet() > 0 && dataModel.selectedMahalle() != "" && dataModel.selectedMahalle() != null);
+        return (((dataModel.isSirketPersonel() == true && (!dataModel.isAutorized() || dataModel.salespersonel() > 0) && dataModel.fault() != '' && dataModel.fault() != null && (dataModel.cc() == true && dataModel.appointmentdate() != "" || dataModel.cc() == false)) || dataModel.isSirketPersonel() == false) && dataModel.tckimlikno() != "" && dataModel.gsm() != "" && dataModel.fulladdress() != "" && dataModel.customername() != "" && dataModel.selectedMahalle() != "" && dataModel.selectedMahalle() != null);
     }),
     errorControl:ko.pureComputed(function(){
         return  (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
@@ -226,21 +223,24 @@
             products: { fieldName: 'productname', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
-            self.productlist(a[0].products);
-            if (a[1])
-                self.sesList(a[1].products);
-            $("#product").multiselect("setOptions", self.productlist()).multiselect("rebuild");
-            $("#product").multiselect("refresh");
-            $("#ses").multiselect("setOptions", self.sesList()).multiselect("rebuild");
-            $("#ses").multiselect("refresh");
+            self.productlist(a);
         }, null, null)
     },
     insertAdslSalesTask: function () {
         var self = this;
         self.returntaskorderno(null);
         $('.btn-success').prop('disabled', true);
-        if (self.selectedNet()) self.pids().push(self.selectedNet());
-        if (self.selectedSes()) self.pids().push(self.selectedSes());
+        self.pids([]);
+        for (i = 0; i < self.productlist().length; i++) {
+            if (self.productlist()[i].selectedProduct == "" || self.productlist()[i].selectedProduct == null) {
+                $('.btn-success').prop('disabled', false);
+                alert("Ürünleri Seçiniz...");
+                return;
+            }
+            else {
+                self.pids().push(self.productlist()[i].selectedProduct);
+            }
+        }
 
         if (self.bayi()) {
             if (self.adsl()) {
@@ -302,12 +302,15 @@
             superonlineCustNo: $.trim(self.superonlineCustNo()),
             appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
-        if (data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))
+        if (data.tc != null && data.gsm != null && data.productids.length > 0 && self.selectedIl() && self.selectedIlce() && (self.yalin() || self.churn()))
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {
                 self.returntaskorderno(a);
                 self.redirect();
             }, null, null);
-        else alert("Eksik Bilgi Girdiniz.!");
+        else {
+            $('.btn-success').prop('disabled', false);
+            alert("Eksik Bilgi Girdiniz.!");
+        }
     },
     redirect: function () 
     {
@@ -348,7 +351,7 @@
             enableFiltering: true,
             filterPlaceholder: 'Ara'
         });
-        $("#kampanya,#product,#ses,#kampanyaturu,#internetturu").multiselect({
+        $("#kampanya,#kampanyaturu,#internetturu").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -451,7 +454,6 @@ dataModel.subcategory.subscribe(function (v) {
 });
 dataModel.campaignid.subscribe(function (v) {
     dataModel.productlist([]);
-    dataModel.sesList([]);
     dataModel.tckimlikno($("#tc").val());
     if (v)
         dataModel.getproduct();

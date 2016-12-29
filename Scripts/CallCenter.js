@@ -263,8 +263,8 @@ var dataModel = {
                 self.redirect();
             }, null, null);
         else {
-            alert("Eksik Bilgi Girdiniz.!");
             $('.btn-success').prop('disabled', false);
+            alert("Eksik Bilgi Girdiniz.!");
         }
     },
     redirect: function () {

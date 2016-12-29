@@ -42,16 +42,13 @@ var dataModel = {
     customerProductList: ko.observableArray([]),
     productlist: ko.observableArray([]),
     pids: ko.observableArray([]),
-    sesList: ko.observableArray([]),
-    selectedNet: ko.observable(),
-    selectedSes: ko.observable(),
     skaynak: ko.observable(),
     skaynakList: ko.observableArray([]),
     errorControl: ko.pureComputed(function () {
         return (dataModel.mahalleList() && dataModel.mahalleList() == "-1") || (dataModel.bucakList() && dataModel.bucakList() == "-1");
     }),
     kaydetEnable: ko.pureComputed(function () {
-        return dataModel.selectedNet() && dataModel.fault() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && dataModel.yalin() != null && ((dataModel.perOfBayiOrKoc() == false) || ((!dataModel.isAutorized() || (dataModel.salespersonel() > 0 && dataModel.skaynak())) && ((dataModel.skaynak() == 2 && dataModel.smno() && dataModel.appointmentdate() && dataModel.appointmentdate() != "") || dataModel.skaynak() == 1)));
+        return dataModel.fault() && dataModel.fulladdress() && dataModel.selectedMahalle() && dataModel.gsm() && dataModel.customername() && dataModel.tckimlikno() && dataModel.yalin() != null && ((dataModel.perOfBayiOrKoc() == false) || ((!dataModel.isAutorized() || (dataModel.salespersonel() > 0 && dataModel.skaynak())) && ((dataModel.skaynak() == 2 && dataModel.smno() && dataModel.appointmentdate() && dataModel.appointmentdate() != "") || dataModel.skaynak() == 1)));
     }),
 
     smno: ko.observable(), // süperonline müşteri no 
@@ -227,21 +224,24 @@ var dataModel = {
             products: { fieldName: 'productname', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
-            self.productlist(a[0].products);
-            if (a[1])
-                self.sesList(a[1].products);
-            $("#product").multiselect("setOptions", self.productlist()).multiselect("rebuild");
-            $("#product").multiselect("refresh");
-            $("#ses").multiselect("setOptions", self.sesList()).multiselect("rebuild");
-            $("#ses").multiselect("refresh");
+            self.productlist(a);
         }, null, null)
     },
     insertAdslSalesTask: function () {
         var self = this;
         self.returntaskorderno(null);
         $('.btn').prop('disabled', true);
-        if (self.selectedNet()) self.pids().push(self.selectedNet());
-        if (self.selectedSes()) self.pids().push(self.selectedSes());
+        self.pids([]);
+        for (i = 0; i < self.productlist().length; i++) {
+            if (self.productlist()[i].selectedProduct == "" || self.productlist()[i].selectedProduct == null) {
+                $('.btn').prop('disabled', false);
+                alert("Ürünleri Seçiniz...");
+                return;
+            }
+            else {
+                self.pids().push(self.productlist()[i].selectedProduct);
+            }
+        }
 
         var data = {
             tc: self.tckimlikno(),
@@ -265,12 +265,15 @@ var dataModel = {
             fault: self.fault(),
             appointmentdate: self.appointmentdate() == "" ? null : self.appointmentdate(),
         };
-        if (data.tc != null && data.gsm != null && self.selectedIl() && self.selectedIlce() && self.taskid() != null && self.taskid() != "")
+        if (data.tc != null && data.gsm != null && data.productids.length > 0 && self.selectedIl() && self.selectedIlce() && self.taskid() != null && self.taskid() != "")
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {
                 self.returntaskorderno(a)
                 self.redirect();
             }, null, null);
-        else alert("Eksik Bilgi Girdiniz.! Bilgileri Kontrol Ediniz veya Tarayıcı Geçmişini Temizleyerek Tekrar Deneyiniz !");
+        else {
+            $('.btn').prop('disabled', false);
+            alert("Eksik Bilgi Girdiniz.! Bilgileri Kontrol Ediniz veya Tarayıcı Geçmişini Temizleyerek Tekrar Deneyiniz !");
+        }
     },
     redirect: function () {
         var self = this;
@@ -323,7 +326,7 @@ var dataModel = {
                 "format": 'MM/DD/YYYY h:mm A',
             },
         });
-        $("#kampanya,#product,#ses,#satisk").multiselect({
+        $("#kampanya,#satisk").multiselect({
             includeSelectAllOption: true,
             selectAllValue: 'select-all-value',
             maxHeight: 250,
@@ -404,7 +407,6 @@ dataModel.subcategory.subscribe(function (v) {
 }); 
 dataModel.campaignid.subscribe(function (v) {
     dataModel.productlist([]);
-    dataModel.sesList([]);
     if (v)
         dataModel.getproduct();
 });
