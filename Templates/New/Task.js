@@ -45,7 +45,7 @@ var dataModel = {
         else return false;
     }),
     campaignEnable: ko.pureComputed(function () {
-        return (dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9) || (dataModel.tasktype() === 12);
+        return (dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9) || (dataModel.tasktype() === 11) || (dataModel.tasktype() === 12);
     }), // campanya içeren tasklarda kampanya ekranını aç
     loadingmessage: ko.observable(0),
     selectedTasks: ko.observableArray([]),
@@ -85,7 +85,7 @@ var dataModel = {
             category: { fieldName: 'category', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
-            self.categorylist([{ category: 'ADSL' }, { category: 'VDSL' }]);
+            self.categorylist([{ category: 'ADSL' }, { category: 'VDSL' }, { category: 'MOBİL' }]);
             $("#kategorint").multiselect({
                 includeSelectAllOption: true,
                 selectAllValue: 'select-all-value',
@@ -222,6 +222,7 @@ var dataModel = {
             self.selectedTasks().push(93)
         }
         self.selectedTasks().push(166)
+        self.selectedTasks().push(169)
         var data = {
             task: { fieldName: "taskid", op: 7, value: self.selectedTasks() },
         };
@@ -290,6 +291,7 @@ var dataModel = {
                 email: self.email(),
                 campaignid: self.campaignid(),
                 productids: self.pids(),
+                fault: self.taskid() == 169 ? "Bayi" : null, // Mobil Satış ise fault bayi
                 superonlineCustNo: $.trim(self.smno()),
             };
             crmAPI.saveAdslSalesTask(data, function (a, b, c) {

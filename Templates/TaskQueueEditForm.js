@@ -18,7 +18,7 @@ var dataModel = {
             self.isNetflowDate(true);
             self.dateoption("Netflow Tarihi");
         }
-        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9 || dataModel.tasktype() == 12)
+        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12)
             self.dateoption("Satış Tarihi");
         else if (self.tasktype() == 3)
             self.dateoption("Kurulum Tarihi");
@@ -53,10 +53,10 @@ var dataModel = {
     faultList: ko.observableArray([{ name: "Müşteri Hizmetleri" }, { name: "Ürünler Arası Geçiş" }, { name: "Gatio" }, { name: "Giza" }, { name: "Samline" }, { name: "Jade" }, { name: "Tim" }, { name: "Telekomone" }, { name: "Krea Doğrudan Pazarlama" }, { name: "Mert Yükler" }, { name: "KÇM" }, { name: "Techline İletişim" }, { name: "Bornet" }, { name: "Bayi" }, { name: "Çağrı Merkezi" }, { name: "Diğer" }]),
     startProcces: ko.observable(), // satış kaynağı düzenlenebilir mi ?
     faultEditable: ko.pureComputed(function () {
-        return dataModel.perOfBayiOrKoc() && (dataModel.tasktype() == 1 || dataModel.tasktype() == 9) && (dataModel.editable() || dataModel.fault() == null || dataModel.fault() == "");
+        return dataModel.perOfBayiOrKoc() && (dataModel.tasktype() == 1 || dataModel.tasktype() == 9 || dataModel.tasktype() == 11) && (dataModel.editable() || dataModel.fault() == null || dataModel.fault() == "");
     }),
     isFaultSaved: ko.pureComputed(function () {
-        return !dataModel.perOfBayiOrKoc() || (!(dataModel.tasktype() == 1 || dataModel.tasktype() == 9) || (dataModel.fault() != null && dataModel.fault() != ''));
+        return !dataModel.perOfBayiOrKoc() || (!(dataModel.tasktype() == 1 || dataModel.tasktype() == 9 || dataModel.tasktype() == 11) || (dataModel.fault() != null && dataModel.fault() != ''));
     }),
     baglantiKontrol: ko.observable(false), // Bağlantı problemi taskı içine müşteride eski modem bilgisi yoksa girilmesi lazım kontrolü yapıldı
     bpKaydet: ko.observable(true),
@@ -132,7 +132,7 @@ var dataModel = {
         $.each(dataModel.productlist(), function (index, cp) {
             b &= cp.selectedProduct() == 0;
         });
-        return (dataModel.editable() || b) && ((dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9) || (dataModel.tasktype() === 12));
+        return (dataModel.editable() || b) && ((dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9) || dataModel.tasktype() == 11 || (dataModel.tasktype() === 12));
     }),
     campaignIsValid: ko.pureComputed(function () {
         var b = true;
@@ -538,7 +538,7 @@ var dataModel = {
             stateid: dataModel.taskstatus(),
             campaignid: dataModel.campaignid(),
             customerproducts: dataModel.selectedProductIds(),
-            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 7 || dataModel.tasktype() == 12)
+            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 7 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12)
         };
         crmAPI.getTQDocuments(data, function (a, b, c) {
             $.each(a, function (index, doc) {
@@ -1006,7 +1006,7 @@ dataModel.taskstatus.subscribe(function (v) {
         stateid: dataModel.taskstatus(),
         campaignid: dataModel.campaignid(),
         customerproducts: dataModel.selectedProductIds(),
-        isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 12)
+        isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12)
     };
     if (dataModel.taskid() == 142 || dataModel.taskid() == 165)
         crmAPI.getStockMovementsForCustomer(data, function (a, b, c) {

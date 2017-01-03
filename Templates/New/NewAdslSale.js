@@ -175,7 +175,7 @@
             category: { fieldName: 'category', op: 6, value: '' }
         },
         crmAPI.getCampaignInfo(data, function (a, b, c) {
-            self.categorylist([{ category: 'ADSL' }, { category : 'VDSL'}]);
+            self.categorylist([{ category: 'ADSL' }, { category: 'VDSL' }, { category: 'MOBİL' }]);
             $("#kategorinat").multiselect("setOptions", self.categorylist()).multiselect("rebuild");
 
             self.category(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.category : null);
@@ -245,18 +245,30 @@
         if (self.bayi()) {
             if (self.adsl()) {
                 if (self.yalin()) {
-                    self.taskid(30);
+                    if (self.campaignid() == 7160)
+                        self.taskid(173); // Mobil kampanya seçildiyse mobil adsl yalın satış aç
+                    else
+                        self.taskid(30);
                 }
                 else {
-                    self.taskid(31);
+                    if (self.campaignid() == 7161)
+                        self.taskid(174); // Mobil kampanya seçildiyse mobil adsl churn satış aç
+                    else
+                        self.taskid(31);
                 }
             }
             else {
                 if (self.yalin()) {
-                    self.taskid(58);
+                    if (self.campaignid() == 7160)
+                        self.taskid(183); // Mobil kampanya seçildiyse mobil vdsl yalın satış aç
+                    else
+                        self.taskid(58);
                 }
                 else {
-                    self.taskid(63);
+                    if (self.campaignid() == 7161)
+                        self.taskid(184); // Mobil kampanya seçildiyse mobil vdsl churn satış aç
+                    else
+                        self.taskid(63);
                 }
             }
         }
