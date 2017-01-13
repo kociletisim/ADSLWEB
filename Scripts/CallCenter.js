@@ -228,6 +228,9 @@ var dataModel = {
         if (self.fiber())
             self.taskid(139); // Fiber Satış Taskı
 
+        if (self.subcategory() == "RETENTION")
+            self.taskid(193);
+
         if (self.confirmedCustomer() && self.confirmedCustomer() != "-1")
             self.selectedIl(self.confirmedCustomer().ilKimlikNo);
 
