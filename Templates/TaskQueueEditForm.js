@@ -18,7 +18,7 @@ var dataModel = {
             self.isNetflowDate(true);
             self.dateoption("Netflow Tarihi");
         }
-        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12)
+        else if (self.tasktype() == 1 || self.tasktype() == 8 || self.tasktype() == 9 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12 || dataModel.tasktype() == 13)
             self.dateoption("Satış Tarihi");
         else if (self.tasktype() == 3)
             self.dateoption("Kurulum Tarihi");
@@ -132,7 +132,7 @@ var dataModel = {
         $.each(dataModel.productlist(), function (index, cp) {
             b &= cp.selectedProduct() == 0;
         });
-        return (dataModel.editable() || b) && ((dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9) || dataModel.tasktype() == 11 || (dataModel.tasktype() === 12));
+        return (dataModel.editable() || b) && ((dataModel.tasktype() === 1) || (dataModel.tasktype() === 8) || (dataModel.tasktype() === 9) || dataModel.tasktype() == 11 || (dataModel.tasktype() === 12) || (dataModel.tasktype() === 13));
     }),
     campaignIsValid: ko.pureComputed(function () {
         var b = true;
@@ -538,7 +538,7 @@ var dataModel = {
             stateid: dataModel.taskstatus(),
             campaignid: dataModel.campaignid(),
             customerproducts: dataModel.selectedProductIds(),
-            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 7 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12)
+            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 7 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12 || dataModel.tasktype() == 13)
         };
         crmAPI.getTQDocuments(data, function (a, b, c) {
             $.each(a, function (index, doc) {
@@ -1006,7 +1006,7 @@ dataModel.taskstatus.subscribe(function (v) {
         stateid: dataModel.taskstatus(),
         campaignid: dataModel.campaignid(),
         customerproducts: dataModel.selectedProductIds(),
-        isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12)
+        isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12 || dataModel.tasktype() == 13)
     };
     if (dataModel.taskid() == 142 || dataModel.taskid() == 165)
         crmAPI.getStockMovementsForCustomer(data, function (a, b, c) {
