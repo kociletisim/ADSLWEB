@@ -456,6 +456,8 @@ var dataModel = {
             for (var i = 0; i < list.length; i++) {
                 if (!self.perOfBayiOrKoc() && (list[i].taskstateid == 9169 || list[i].taskstateid == 9171)) // ata akışından geldi || koç personel onayı
                     self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
+                else if (list[i].taskstateid == 10180 && ((self.user().userRole & 256) != 256))
+                    self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
                 else
                     self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(false) });
             }
@@ -1066,7 +1068,7 @@ dataModel.taskstatus.subscribe(function (v) {
     });
     dataModel.customerdocument([]);
     dataModel.taskstatuslist().forEach(function (entry) {
-        if (entry.taskstateid == v && entry.statetype == 1) {
+        if (entry.taskstateid == v && entry.statetype == 1 && v != 10180) {
             dataModel.getTQDocuments();
         }
     });
