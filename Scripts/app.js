@@ -21,7 +21,7 @@ $(window).bind("hashchange", function () {
     $("#templateContainer").loadTemplate("Templates/" + (tempPage || "ListTaskqueue") + ".html");
 
     $("#newadslsatis").click(function () {
-        $("#ModalContainer").loadTemplate("Templates/New/NewAdslSale.html");
+        $("#ModalContainer").loadTemplate("Templates/New/NewAdslSales.html");
     });
     $("#newtask").click(function () {
         $("#ModalContainer").loadTemplate("Templates/New/Task.html");

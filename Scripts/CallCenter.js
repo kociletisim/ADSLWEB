@@ -30,6 +30,7 @@ var dataModel = {
     adsl: ko.observable(),
     vdsl: ko.observable(),
     fiber: ko.observable(),
+    mobil: ko.observable(),
 
     yalin: ko.observable(),
     churn: ko.observable(),
@@ -440,7 +441,7 @@ dataModel.category.subscribe(function (v) {
         dataModel.yalin(false);
         dataModel.churn(false);
     }
-    else {
+    else if (v == 'MOBİL') {
         dataModel.adsl(false);
         dataModel.vdsl(false);
         dataModel.fiber(false);

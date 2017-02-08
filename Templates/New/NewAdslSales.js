@@ -41,7 +41,6 @@
     taskid: ko.observable(),
     user: ko.observable(),
     mail: ko.observable(),
-    isSirketPersonel: ko.observable(),
     taskdescription:ko.observable(),
     personellist: ko.observableArray([]),
     salespersonel: ko.observable(),
@@ -64,7 +63,10 @@
 
     isBayi: function () {
         var self = this;
-        self.fault("Bayi");
+        if (self.isOutCallCenter() && !self.isAutorized())
+            self.fault("Dış Çağrı Merkezi");
+        else
+            self.fault("Bayi");
         self.bayi(true);
         self.cc(false);
     },
@@ -85,6 +87,8 @@
         self.churn(true);
         self.yalin(false);
     },
+    isSirketPersonel: ko.observable(),
+    isOutCallCenter: ko.observable(),
     isAutorized: ko.observable(),
     getUserInfo: function () {
         var self = this;
@@ -101,6 +105,9 @@
             self.isAutorized((a.userRole & 67108896) == 67108896);
             if (!self.isAutorized())
                 self.fault("Bayi");
+            self.isOutCallCenter((a.userRole & 256) == 256);
+            if (self.isOutCallCenter() && !self.isAutorized())
+                self.fault("Dış Çağrı Merkezi");
         }, null, null)
     },
     getpersonel: function () {
@@ -245,30 +252,46 @@
         if (self.bayi()) {
             if (self.adsl()) {
                 if (self.yalin()) {
-                    if (self.campaignid() == 7160)
-                        self.taskid(173); // Mobil kampanya seçildiyse mobil adsl yalın satış aç
-                    else
-                        self.taskid(30);
+                    if (self.isOutCallCenter() && !self.isAutorized())
+                        self.taskid(1196); // dış çağrı satış yalın
+                    else {
+                        if (self.campaignid() == 7160)
+                            self.taskid(173); // Mobil kampanya seçildiyse mobil adsl yalın satış aç
+                        else
+                            self.taskid(30);
+                    }
                 }
                 else {
-                    if (self.campaignid() == 7161)
-                        self.taskid(174); // Mobil kampanya seçildiyse mobil adsl churn satış aç
-                    else
-                        self.taskid(31);
+                    if (self.isOutCallCenter() && !self.isAutorized())
+                        self.taskid(1195); // dış çağrı satış churn
+                    else {
+                        if (self.campaignid() == 7161)
+                            self.taskid(174); // Mobil kampanya seçildiyse mobil adsl churn satış aç
+                        else
+                            self.taskid(31);
+                    }
                 }
             }
             else {
                 if (self.yalin()) {
-                    if (self.campaignid() == 7160)
-                        self.taskid(183); // Mobil kampanya seçildiyse mobil vdsl yalın satış aç
-                    else
-                        self.taskid(58);
+                    if (self.isOutCallCenter() && !self.isAutorized())
+                        self.taskid(1196); // dış çağrı satış yalın
+                    else {
+                        if (self.campaignid() == 7160)
+                            self.taskid(183); // Mobil kampanya seçildiyse mobil vdsl yalın satış aç
+                        else
+                            self.taskid(58);
+                    }
                 }
                 else {
-                    if (self.campaignid() == 7161)
-                        self.taskid(184); // Mobil kampanya seçildiyse mobil vdsl churn satış aç
-                    else
-                        self.taskid(63);
+                    if (self.isOutCallCenter() && !self.isAutorized())
+                        self.taskid(1195); // dış çağrı satış churn
+                    else {
+                        if (self.campaignid() == 7161)
+                            self.taskid(184); // Mobil kampanya seçildiyse mobil vdsl churn satış aç
+                        else
+                            self.taskid(63);
+                    }
                 }
             }
         }

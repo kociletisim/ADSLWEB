@@ -87,10 +87,22 @@ var dataModel = {
             }
         }
         else {
-            if (self.yalin() == true)
-                self.taskid(112); // satış adsl kurumsal
-            else if (self.churn() == true)
-                self.taskid(113); // satış churn kurumsal 
+            if (self.yalin() == true) {
+                if (!self.isAutorized() && (self.user().userRole & 256) == 256) {
+                    self.taskid(1197);
+                    self.fault("Dış Çağrı Merkezi");
+                }
+                else
+                    self.taskid(112); // satış adsl kurumsal
+            }
+            else if (self.churn() == true) {
+                if (!self.isAutorized() && (self.user().userRole & 256) == 256) {
+                    self.taskid(1198);
+                    self.fault("Dış Çağrı Merkezi");
+                }
+                else
+                    self.taskid(113); // satış churn kurumsal
+            }
         }
     },
     isAutorized: ko.observable(),
