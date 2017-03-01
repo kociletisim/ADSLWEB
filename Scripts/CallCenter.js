@@ -151,6 +151,7 @@ var dataModel = {
     getcamapign: function () {
         var self = this;
         self.campaignlist([]);
+        self.geciciListe([]);
         data = {
             deleted: { fieldName: "deleted", op: 2, value: 0 },
             category: { fieldName: 'category', op: 6, value: self.category() ? self.category() : '' },
@@ -172,7 +173,7 @@ var dataModel = {
             }
             else
                 self.campaignlist(a);
-            $("#kampanya").multiselect("setOptions", self.campaignlist()).multiselect("rebuild");
+            $("#kampanya").multiselect("setOptions", dataModel.campaignlist()).multiselect("rebuild");
             self.campaignid(self.customerProductList()[0] ? self.customerProductList()[0].campaigns.id : null);
             $("#kampanya").multiselect("refresh");
             if (self.donanim()) {

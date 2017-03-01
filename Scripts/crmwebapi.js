@@ -54,9 +54,6 @@
              contentType: "application/json",
              async: true,
              beforeSend: function (xhr) {
-                 //Download progress
-                 //$.mobile.loading('show');
-               
                  if (sendData && sendData.username) {
                      xhr.setRequestHeader("X-KOC-UserName", sendData.username);
                      xhr.setRequestHeader("X-KOC-Pass", sendData.password);
