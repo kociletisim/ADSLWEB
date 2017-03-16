@@ -230,8 +230,17 @@ var dataModel = {
         if (self.fiber())
             self.taskid(139); // Fiber Satış Taskı
 
+        if (self.mobil())
+            self.taskid(1209); // çağrı mobil Taskı
+
         if (self.subcategory() == "RETENTION")
             self.taskid(193);
+
+        if ((self.campaignid() == 7161 || self.campaignid() == 7160) && self.churn()) // campanya mobilse işlemi yap
+            self.taskid(1210);
+
+        if ((self.campaignid() == 7161 || self.campaignid() == 7160) && self.yalin()) // campanya mobilse işlemi yap
+            self.taskid(1211);
 
         if (self.confirmedCustomer() && self.confirmedCustomer() != "-1")
             self.selectedIl(self.confirmedCustomer().ilKimlikNo);
@@ -448,6 +457,7 @@ dataModel.category.subscribe(function (v) {
         dataModel.fiber(false);
         dataModel.yalin(false);
         dataModel.churn(false);
+        dataModel.mobil(true);
     }
     $("#kategori").multiselect("refresh");
     dataModel.getsubcategory();

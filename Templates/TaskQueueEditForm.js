@@ -540,7 +540,7 @@ var dataModel = {
             stateid: dataModel.taskstatus(),
             campaignid: dataModel.campaignid(),
             customerproducts: dataModel.selectedProductIds(),
-            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 9 || dataModel.tasktype() == 7 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12 || dataModel.tasktype() == 13)
+            isSalesTask: (dataModel.tasktype() == 1 || dataModel.tasktype() == 8 || dataModel.tasktype() == 7 || dataModel.tasktype() == 11 || dataModel.tasktype() == 12 || dataModel.tasktype() == 13)
         };
         crmAPI.getTQDocuments(data, function (a, b, c) {
             $.each(a, function (index, doc) {
