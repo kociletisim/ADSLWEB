@@ -451,10 +451,13 @@ var dataModel = {
             task: { fieldName: "taskid", op: 2, value:self.taskid()},
             taskstate: { fieldName: "taskstate", op: 6, value: '' },
         };
+        var pilotBayi = [1239, 1026, 1021, 1113, 1198, 1031];
         crmAPI.getTaskStatus(data, function (a, b, c) {
             var list = a;
             for (var i = 0; i < list.length; i++) {
-                if (!self.perOfBayiOrKoc() && (list[i].taskstateid == 9169 || list[i].taskstateid == 9171)) // ata akışından geldi || koç personel onayı
+                if (!self.perOfBayiOrKoc() && list[i].taskstateid == 9169) // ata akışından geldi || koç personel onayı
+                    self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
+                else if (!self.perOfBayiOrKoc() && pilotBayi.indexOf(self.user().userId) < 0 && list[i].taskstateid == 9171)
                     self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
                 else if (list[i].taskstateid == 10180 && ((self.user().userRole & 256) != 256))
                     self.gecicitaskstatuslist().push({ taskstateid: list[i].taskstateid, taskstate: list[i].taskstate, statetype: list[i].statetype, disable: ko.observable(true) });
