@@ -29,6 +29,9 @@ $(window).bind("hashchange", function () {
     $("#mid").click(function () {
         $("#ModalContainer").loadTemplate("Templates/New/ModemChangeReturn.html");
     });
+    $("#akillinkt").click(function () {
+        $("#ModalContainer").loadTemplate("Templates/New/InfoTask.html");
+    });
     $("#worklist").click(function () {
         $("#templateContainer").loadTemplate("Templates/Worklist.html");
     });
@@ -83,6 +86,22 @@ $(window).bind("hashchange", function () {
                     $("#kgsl").text("Geçen Ay Koç SL = " + a[1]);
                 }, null, null);
             }
+            if (a.userId == 4676) {
+                // Akıllı Nokta girişinde sadece kendi taskı açılacak
+                $("#tanimlamalar").hide(true);
+                $("#musteriler").hide(true);
+                $("#kocslort").hide(true);
+                $("#bayisldetay").hide(true);
+                $("#stkhrk").hide(true);
+                $("#newadslsatis").hide(true);
+                $("#newcorporatesales").hide(true);
+                $("#newtask").hide(true);
+                $("#mid").hide(true);
+                $("#apk").hide(true);
+                $("#akillinkt").show();
+            }
+            else { $("#akillinkt").hide(true) };
+            console.log("sd");
             //var arr = a.userName.split('@');
             //if (arr[1] == 'kociletisim.com.tr') {
             //    $("#newtask").show();
