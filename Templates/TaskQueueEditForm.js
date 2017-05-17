@@ -112,6 +112,7 @@ var dataModel = {
     ilceList: ko.observableArray([]),
     bucakList: ko.observableArray([]),
     mahalleList: ko.observableArray([]),
+    gsmOperators: ko.observableArray([]),
     editable: ko.observable(),
     tasktype: ko.observable(),
     errormessage: ko.observable(),
@@ -312,7 +313,7 @@ var dataModel = {
            if (self.regionKimlik() != null)
                self.getMahalle();
            self.mahalleKimlik(self.regionKimlik() && a.data.rows[0].mahalleKimlikNo);
-           $("#ilcombo").multiselect({
+           $("#ilcombo,#operatorcombo").multiselect({
                selectAllValue: 'select-all-value',
                maxHeight: 250,
                buttonWidth: '100%',
@@ -323,7 +324,7 @@ var dataModel = {
                enableFiltering: true,
                filterPlaceholder: 'Ara'
            });
-       },null,null);
+       }, null, null);
     },
     getCustomerSmno: function () {
         // taskın içerisinde Süperonline m. no değişmek için çağrılıp kaydedildiğinde adres bilgilerinde hataya yok açıyor yeni müşteri object'i ve fonksiyonu
@@ -359,6 +360,13 @@ var dataModel = {
            }
        }, null, null);
    },
+    getOperators: function () {
+        self = this;
+        crmAPI.getGsmOperators(function (a, b, c) {
+            self.gsmOperators(a);
+            $("#operatorcombo").multiselect("rebuild");
+        }, null, null)
+    },
     subcategorylist: ko.observableArray([]),
     categorylist: ko.observableArray([]),
     campaignlist: ko.observableArray([]),
@@ -967,6 +975,7 @@ var dataModel = {
                 self.stockcardlist(a.data.rows[0].stockcardlist);
             }, null, null);
             self.getpersonel();
+            self.getOperators();
             self.getCustomerStatus();
             $('#daterangepicker1,#daterangepicker2,#daterangepicker3,#daterangepicker4').daterangepicker({
                 "singleDatePicker": true,

@@ -101,7 +101,6 @@ $(window).bind("hashchange", function () {
                 $("#akillinkt").show();
             }
             else { $("#akillinkt").hide(true) };
-            console.log("sd");
             //var arr = a.userName.split('@');
             //if (arr[1] == 'kociletisim.com.tr') {
             //    $("#newtask").show();

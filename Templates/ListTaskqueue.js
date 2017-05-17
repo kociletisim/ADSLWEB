@@ -61,6 +61,7 @@ var dataModel = {
     ilceList: ko.observableArray(),
     bucakList: ko.observableArray([]),
     mahalleList: ko.observableArray([]),
+    gsmOperators: ko.observableArray([]),
     selectedCustomer: ko.observable(),
     user: ko.observable(),
     perOfBayiOrKoc: ko.observable(false), // Sayfada işlem yapan personel bayi mi yoksa şirket personeli mi ? false : bayi --  true : koc personeli
@@ -276,7 +277,7 @@ var dataModel = {
             if (self.regionKimlik() != null)
                 self.getMahalle();
             self.mahalleKimlik(self.regionKimlik() && a.data.rows[0].mahalleKimlikNo);
-            $("#ilcombo").multiselect({
+            $("#ilcombo,#operatorcombo").multiselect({
                 selectAllValue: 'select-all-value',
                 maxHeight: 250,
                 buttonWidth: '100%',
@@ -314,6 +315,13 @@ var dataModel = {
         crmAPI.getAdress(data, function (a, b, c) {
             self.ilList(a);
             $("#ilcombo").multiselect("setOptions", self.ilList()).multiselect("rebuild");
+        }, null, null)
+    },
+    getOperators: function () {
+        self = this;
+        crmAPI.getGsmOperators(function (a, b, c) {
+            self.gsmOperators(a);
+            $("#operatorcombo").multiselect("rebuild");
         }, null, null)
     },
     getIlce: function () {
@@ -684,6 +692,7 @@ var dataModel = {
     renderBindings: function () {
         var self = this;
         self.getUserInfo();
+        self.getOperators();
         self.firstLoad(true);
         $("#ranking").multiselect({
             includeSelectAllOption: true,

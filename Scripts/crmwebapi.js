@@ -358,5 +358,8 @@
          saveTaskCollective: function (data, onsuccess, onerror, before) {
              getData("POST", "TaskQueues/saveTaskCollective", data, onsuccess, onerror, before)
          },
+         getGsmOperators: function (onsuccess, onerror, before) {
+             getData("POST", "GsmOperator/getGsmOperators", {}, onsuccess, onerror, before)
+         },
      }
  })();
