@@ -233,8 +233,8 @@ var dataModel = {
         if (self.mobil())
             self.taskid(1209); // çağrı mobil Taskı
 
-        if (self.subcategory() == "RETENTION")
-            self.taskid(193);
+        //if (self.subcategory() == "RETENTION")
+        //    self.taskid(193);
 
         if ((self.campaignid() == 7161 || self.campaignid() == 7160) && self.churn()) // campanya mobilse işlemi yap
             self.taskid(1210);
