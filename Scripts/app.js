@@ -88,7 +88,7 @@ $(window).bind("hashchange", function () {
             }
             console.log(a.userRole);
             console.log("Rol " + (a.userRole & 256));
-            if ((a.userRole & 256) == 256 && a.userRole != 2147483647) {
+            if ((a.userRole & 512) == 512 && a.userRole != 2147483647) {
                 console.log("sdsd");
                 // Akıllı Nokta girişinde sadece kendi taskı açılacak
                 $("#tanimlamalar").hide(true);
