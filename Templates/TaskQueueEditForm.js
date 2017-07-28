@@ -14,7 +14,7 @@ var dataModel = {
     NetFlowOrRand: function() {
         var self = this;
         self.isNetflowDate(false);
-        if (self.taskid() == 32 || self.taskid() == 57 || self.taskid() == 34 || self.taskid() == 33 || self.taskid() == 36 || self.taskid() == 64 || self.taskid() == 97 || self.taskid() == 88 || self.taskid() == 56 || self.taskid() == 54 || self.taskid() == 53 || self.taskid() == 93 || self.taskid() == 51 || self.taskid() == 48 || self.taskid() == 91 || self.taskid() == 92) {
+        if (self.taskid() == 32 || self.taskid() == 57 || self.taskid() == 34 || self.taskid() == 33 || self.taskid() == 36 || self.taskid() == 64 || self.taskid() == 97 || self.taskid() == 88 || self.taskid() == 56 || self.taskid() == 54 || self.taskid() == 53 || self.taskid() == 93 || self.taskid() == 51 || self.taskid() == 1234 || self.taskid() == 48 || self.taskid() == 91 || self.taskid() == 92) {
             self.isNetflowDate(true);
             self.dateoption("Netflow Tarihi");
         }
@@ -61,7 +61,7 @@ var dataModel = {
     baglantiKontrol: ko.observable(false), // Bağlantı problemi taskı içine müşteride eski modem bilgisi yoksa girilmesi lazım kontrolü yapıldı
     bpKaydet: ko.observable(true),
     baglantiSeri: ko.pureComputed(function () { // task bağlantı problemi taskı'ysa ve seri yoksa seri girdir
-        return dataModel.taskid() != 51 || (dataModel.eskiserial() != null && dataModel.eskiserial() != "");
+        return (dataModel.taskid() != 51 || dataModel.taskid() != 1234) || (dataModel.eskiserial() != null && dataModel.eskiserial() != "");
     }),
     resSaveCustomer: ko.observable(),
     isClickKaydet: ko.observable(false), // müşteri bilgilerini kaydederken bilgilerin nereden geldiği kontrolü gerekiyor
@@ -699,7 +699,7 @@ var dataModel = {
         self.resSaveCustomer(null);
         self.isClickKaydet(false);
         // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
-        if (self.taskid() == 51 && self.baglantiKontrol() && self.eskiserial() != null && self.eskiserial() != "") {
+        if ((self.taskid() == 51 || self.taskid() == 1234) && self.baglantiKontrol() && self.eskiserial() != null && self.eskiserial() != "") {
             var data = {
                 serialno: { value: self.eskiserial() },
             };
@@ -764,7 +764,7 @@ var dataModel = {
         self.resSaveCustomer(null);
         self.isClickKaydet(false);
         // Bağlantı problemi taskı'ysa ve seri girilmisse movementid -1 yaparak stock hareketi olusumunu sağla
-        if (self.taskid() == 51 && self.baglantiKontrol() && self.eskiserial() != null && self.eskiserial() != "") {
+        if ((self.taskid() == 51 || self.taskid() == 1234) && self.baglantiKontrol() && self.eskiserial() != null && self.eskiserial() != "") {
             self.baglantiKontrol(false);
             self.insertStockMovements(2, 1007, 16777217, self.customer().customerid, self.eskiserial(), -1);
         }
@@ -1136,7 +1136,7 @@ dataModel.regionKimlik.subscribe(function (v) {
     }
 });
 dataModel.taskid.subscribe(function (v) {
-    if (v == 51 || v == 116 || v == 41 || v == 59 || v == 152 || v == 156) {
+    if (v == 1234 || v == 51 || v == 116 || v == 41 || v == 59 || v == 152 || v == 156) {
         dataModel.baglantiKontrol(false);
         var data = {
             stockcardid: 1117,
@@ -1144,7 +1144,7 @@ dataModel.taskid.subscribe(function (v) {
         };
         crmAPI.getSerialOnCustomer(data, function (a, b, c) {
             dataModel.eskiserial(a[0]);
-            if (v == 51 && (dataModel.eskiserial() == null || dataModel.eskiserial() == ""))
+            if ((v == 51 || v == 1234) && (dataModel.eskiserial() == null || dataModel.eskiserial() == ""))
                 dataModel.baglantiKontrol(true);
         }, null, null);
     }

@@ -32,7 +32,7 @@ var dataModel = {
     geciciton: ko.observable(), // yeni stock hareketi oluşmadan sayfa yönlendirme yapmasını engellemek için oluşturuldu (Hüseyin KOZ)
     movement: ko.observable(),
     baglantitask: ko.pureComputed(function () { // modem seri girilicek bölümü göster
-        if (dataModel.taskid() == 51)
+        if (dataModel.taskid() == 51 || dataModel.taskid() == 1234)
             return true;
         else {
             dataModel.serial(null);
@@ -220,6 +220,7 @@ var dataModel = {
             self.selectedTasks().push(54)
             self.selectedTasks().push(88)
             self.selectedTasks().push(93)
+            self.selectedTasks().push(1234)
         }
         self.selectedTasks().push(166)
         self.selectedTasks().push(169)
