@@ -86,10 +86,7 @@ $(window).bind("hashchange", function () {
                     $("#kgsl").text("Geçen Ay Koç SL = " + a[1]);
                 }, null, null);
             }
-            console.log(a.userRole);
-            console.log("Rol " + (a.userRole & 256));
             if ((a.userRole & 512) == 512 && a.userRole != 2147483647) {
-                console.log("sdsd");
                 // Akıllı Nokta girişinde sadece kendi taskı açılacak
                 $("#tanimlamalar").hide(true);
                 $("#musteriler").hide(true);
